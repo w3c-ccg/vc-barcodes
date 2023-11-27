@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Verifiable Barcodes v0.7</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <!--
+      === NOTA BENE ===
+      For the three scripts below, if your spec resides on dev.w3 you can check them
+      out in the same tree and use relative links so that they'll work offline,
+     -->
+    <script src="//www.w3.org/Tools/respec/respec-w3c" class="remove"></script>
+    <script class="remove" src="https://w3c.github.io/vc-data-model/common.js"></script>
+
+    <script type="text/javascript" class="remove">
+      var respecConfig = {
+        subtitle: "Securing legacy barcodes using Verifiable Credentials",
+        // specification status (e.g. WD, LCWD, NOTE, etc.). If in doubt use ED.
+        group: "credentials",
+        specStatus: "CG-DRAFT",
+
+        // the specification's short name, as in http://www.w3.org/TR/short-name/
+        shortName: "verifiable-barcodes",
+
+        // if you wish the publication date to be other than today, set this
+        //publishDate:  "",
+
+        // if there is a previously published draft, uncomment this and set its YYYY-MM-DD date
+        // and its maturity status
+        // previousPublishDate:  "1977-03-15",
+        // previousMaturity:  "WD",
+
+        // if there a publicly available Editor's Draft, this is the link
+        edDraftURI: "https://digitalbazaar.github.io/verifiable-barcodes/",
+        //latestVersion: "",
+
+        // if this is a LCWD, uncomment and set the end of its review period
+        //implementationReportURI: "",
+        //crEnd: "2024-01-17",
+
+        // if you want to have extra CSS, append them to this list
+        // it is recommended that the respec.css stylesheet be kept
+        //extraCSS:             ["spec.css", "prettify.css"],
+
+        // editors, add as many as you like
+        // only "name" is required
+        editors: [{
+          name: "Manu Sporny",
+          url: "https://www.linkedin.com/in/manusporny/",
+          company: "Digital Bazaar",
+          companyURL: "https://digitalbazaar.com/",
+          w3cid: 41758
+        }],
+
+        // authors, add as many as you like.
+        // This is optional, uncomment if you have authors as well as editors.
+        // only "name" is required. Same format as editors.
+
+        authors: [{
+          name: "Manu Sporny", url: "https://www.linkedin.com/in/manusporny/",
+          company: "Digital Bazaar", companyURL: "https://digitalbazaar.com/",
+          w3cid: 41758
+        }],
+
+        // extend the bibliography entries
+        //localBiblio: ccg.localBiblio,
+
+        // name of the WG
+        //wg:           "W3C Credentials Community Group",
+
+        // URI of the public WG page
+        //wgURI:        "https://www.w3.org/community/credentials/",
+
+        // name (with the @w3c.org) of the public mailing to which comments are due
+        //wgPublicList: "public-credentials",
+
+        github: "https://github.com/digitalbazaar/verifiable-barcodes/",
+
+        otherLinks: [],
+
+        // URI of the patent status for this WG, for Rec-track documents
+        // !!!! IMPORTANT !!!!
+        // This is important for Rec-track documents, do not copy a patent URI from a random
+        // document unless you know what you're doing. If in doubt ask your friendly neighbourhood
+        // Team Contact.
+        // wgPatentURI:  "",
+        maxTocLevel: 3,
+        /*preProcess: [ webpayments.preProcess ],
+        alternateFormats: [ {uri: "diff-20111214.html", label: "diff to previous version"} ],
+        */
+        localBiblio: {
+          MULTIBASE: {
+            title: "Multibase",
+            href: "https://datatracker.ietf.org/doc/html/draft-multiformats-multibase-01",
+          },
+          MULTICODEC: {
+            title: "Multicodec",
+            href: "https://github.com/multiformats/multicodec/",
+          }
+        },
+        lint: {"no-unused-dfns": false},
+        postProcess: [restrictRefs],
+        otherLinks: [{
+          key: "Related Specifications",
+          data: [{
+            value: "The Verifiable Credentials Data Model v2.0",
+            href: "https://www.w3.org/TR/vc-data-model-2.0/"
+          }, {
+            value: "Verifiable Credential Data Integrity v1.0",
+            href: "https://www.w3.org/TR/vc-data-integrity/"
+          }, {
+            value: "The Elliptic Curve Digital Signature Algorithm Cryptosuites v1.0",
+            href: "https://www.w3.org/TR/vc-di-ecdsa/"
+          }, {
+            value: "Compact Binary Object Representation for Linked Data v0.7",
+            href: "https://digitalbazaar.github.io/cbor-ld-spec/"
+          }]
+        }]
+      };
+    </script>
+    <style>
+code {
+  color: rgb(199, 73, 0);
+  font-weight: bold;
+}
+pre.nohighlight {
+  overflow-x: auto;
+  white-space: pre-wrap;
+}
+pre .highlight {
+  font-weight: bold;
+  color: green;
+}
+pre .comment {
+  font-weight: bold;
+  color: Gray;
+}
+.color-text {
+  font-weight: bold;
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+ol.algorithm {
+  counter-reset: numsection;
+  list-style-type: none;
+}
+ol.algorithm li {
+  margin: 0.5em 0;
+}
+ol.algorithm li:before {
+  font-weight: bold;
+  counter-increment: numsection;
+  content: counters(numsection, ".") ") ";
+}
+    </style>
+  </head>
+  <body>
+    <section id="abstract">
+      <p>
+This specification describes a mechanism to protect legacy optical barcodes,
+such as those found on driver's licenses (PDF417) and travel documents (MRZ),
+using Verifiable Credentials [[VC-DATA-MODEL-2.0]]. The Verifiable Credential
+representations are compact enough such that they fit in under 140 bytes and
+can thus be integrated with traditional two-dimensional barcodes that are
+printed on physical cards using legacy printing processes.
+      </p>
+    </section>
+
+    <section id="sotd">
+
+      <p>
+This specification is experimental.
+      </p>
+
+    </section>
+
+    <section>
+      <h2>Introduction</h2>
+      <p>
+
+      </p>
+
+      <section id="terminology">
+        <h3>Terminology</h3>
+
+        <div data-include="https://w3c.github.io/vc-data-model/terms.html"></div>
+
+      </section>
+
+      <section id="conformance">
+        <p>
+A <dfn>conforming document</dfn> is any concrete expression of the data model
+that complies with the normative statements in this specification. Specifically,
+all relevant normative statements in Sections
+<a href="#data-model"></a> and <a href="#algorithms"></a>
+of this document MUST be enforced.
+        </p>
+
+        <p>
+A <dfn class="lint-ignore">conforming processor</dfn> is any algorithm realized
+as software and/or hardware that generates or consumes a
+<a>conforming document</a>. Conforming processors MUST produce errors when
+non-conforming documents are consumed.
+        </p>
+
+      	<p>
+This document contains examples of JSON and JSON-LD data. Some of these examples
+are invalid JSON, as they include features such as inline comments (`//`)
+explaining certain portions and ellipses (`...`) indicating the omission of
+information that is irrelevant to the example. Such parts need to be
+removed if implementers want to treat the examples as valid JSON or JSON-LD.
+        </p>
+      </section>
+
+    </section>
+
+    <section>
+      <h2>Data Model</h2>
+
+      <p>
+The following sections outline the data model that is used by this specification
+to express [=verifiable credentials=] that secure optically printed information
+such as barcodes and machine-readable zones on travel documents.
+      </p>
+
+    </section>
+
+    <section>
+      <h2>Algorithms</h2>
+
+      <p>
+The following section describes algorithms for adding and verifying digital
+proofs that protect optical information, such as barcodes and machine-readable
+zones, on physical media, such as driver's licenses and travel documents.
+      </p>
+
+      </section>
+
+    </section>
+
+    <section class="informative">
+      <h2>Security Considerations</h2>
+
+      <p class="advisement">
+Before reading this section, readers are urged to familiarize themselves
+with general security advice provided in the
+<a href="https://www.w3.org/TR/vc-data-integrity/#security-considerations">
+Security Considerations section of the Data Integrity specification</a> as
+well as the specific security advice provided in the
+<a href="https://www.w3.org/TR/vc-di-ecdsa/#security-considerations">
+Security Considerations section of the ECDSA Cryptosuites specification</a>.
+      </p>
+
+      <p>
+In the following sections, we review these important points and direct
+the reader to additional information.
+      </p>
+
+      <p class="todo">
+Add security considerations specific to this specification.
+      </p>
+
+    </section>
+
+    <section>
+      <h2>Privacy Considerations</h2>
+
+      <p class="advisement">
+Before reading this section, readers are urged to familiarize themselves
+with general security advice provided in the
+<a href="https://www.w3.org/TR/vc-data-integrity/#privacy-considerations">
+Security Considerations section of the Data Integrity specification</a> as
+well as the specific security advice provided in the
+<a href="https://www.w3.org/TR/vc-di-ecdsa/#privacy-considerations">
+Security Considerations section of the ECDSA Cryptosuites specification</a>.
+      </p>
+
+      <p>
+The following section describes privacy considerations that developers
+implementing this specification should be aware of in order to avoid violating
+privacy assumptions.
+      </p>
+
+      <p class="todo">
+Add security considerations specific to this specification.
+      </p>
+
+    </section>
+
+    <section class="informative">
+      <h2>Revision History</h2>
+
+      <p>
+This section contains the substantive changes that have been made to this
+specification over time.
+      </p>
+
+      <p class="issue" title="Content will be filled in after standards-track has been started">
+The content for this specification will be filled in after the
+standards-track process has been started.
+      </p>
+
+    </section>
+
+  </body>
+</html>
