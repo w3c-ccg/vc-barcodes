@@ -232,6 +232,135 @@ proofs that protect optical information, such as barcodes and machine-readable
 zones, on physical media, such as driver's licenses and travel documents.
       </p>
 
+      <p>
+Generally speaking, the algorithms in this section are effectively the same
+as the ones in the [[[VC-DI-ECDSA]]] [[VC-DI-ECDSA]] except that the
+algorithm name is different because the cryptographic hashing process includes
+the machine-readable barcode information when calculating the digital signature
+such that the optical barcode is protected.
+      </p>
+
+      <section>
+        <h3>ecdsa-vb-2023</h3>
+
+        <p>
+The `ecdsa-vb-2023` cryptographic suite takes an input document, canonicalizes
+the document using the Universal RDF Dataset Canonicalization Algorithm
+[[RDF-CANON]], cryptographically hashes both the original optical barcode
+data and the canonicalized verifiable credential data, and then signs the
+output resulting in the production of a data integrity proof.
+The algorithms in this section also include the verification of such a data
+integrity proof.
+        </p>
+
+        <section>
+          <h4>Add Proof (ecdsa-vb-2023)</h4>
+
+          <p>
+To generate a proof, the algorithm in
+<a href="https://www.w3.org/TR/vc-data-integrity/#add-proof">
+Section 4.1: Add Proof</a> in the Data Integrity
+[[VC-DATA-INTEGRITY]] specification MUST be executed.
+For that algorithm, the cryptographic suite specific
+<a href="https://www.w3.org/TR/vc-data-integrity/#dfn-transformation-algorithm">
+transformation algorithm</a> is defined in the
+<a href="https://www.w3.org/TR/vc-di-ecdsa/#transformation-ecdsa-rdfc-2019">
+Transformation (ecdsa-rdfc-2019)</a> section of the [[[VC-DI-ECDSA]]], the
+<a href="https://www.w3.org/TR/vc-data-integrity/#dfn-hashing-algorithm">
+hashing algorithm</a> is defined in Section
+<a href="#hashing-ecdsa-vb-2023"></a>, and the
+<a href="https://www.w3.org/TR/vc-data-integrity/#dfn-proof-serialization-algorithm">
+proof serialization algorithm</a> is defined in the
+<a href="https://www.w3.org/TR/vc-di-ecdsa/#proof-serialization-ecdsa-rdfc-2019">
+Proof Serialization (ecdsa-rdfc-2019)</a> section of the [[[VC-DI-ECDSA]]].
+          </p>
+        </section>
+
+        <section>
+          <h4>Verify Proof (ecdsa-vb-2023)</h4>
+
+          <p>
+To verify a proof, the algorithm in
+<a href="https://www.w3.org/TR/vc-data-integrity/#verify-proof">
+Section 4.2: Verify Proof</a> in the Data Integrity [[VC-DATA-INTEGRITY]]
+specification MUST be executed. For that algorithm, the cryptographic suite
+specific
+<a href="https://www.w3.org/TR/vc-data-integrity/#dfn-transformation-algorithm">
+transformation algorithm</a> is defined in the
+<a href="https://www.w3.org/TR/vc-di-ecdsa/#transformation-ecdsa-rdfc-2019">
+Transformation (ecdsa-rdfc-2019)</a> section of the [[[VC-DI-ECDSA]]], the
+<a href="https://www.w3.org/TR/vc-data-integrity/#dfn-hashing-algorithm">
+hashing algorithm</a> is defined in
+Section <a href="#hashing-ecdsa-vb-2023"></a>, and the
+<a href="https://www.w3.org/TR/vc-data-integrity/#dfn-proof-serialization-algorithm">
+proof verification algorithm</a> is defined in the
+<a href="https://www.w3.org/TR/vc-di-ecdsa/#proof-verification-ecdsa-rdfc-2019">
+Proof Verification (ecdsa-rdfc-2019)</a> section of the [[[VC-DI-ECDSA]]].
+          </p>
+        </section>
+
+        <section>
+          <h4>Hashing (ecdsa-vb-2023)</h4>
+
+          <p>
+The hashing algorithm is what is defined in the
+<a href="https://www.w3.org/TR/vc-di-ecdsa/#hashing-ecdsa-rdfc-2019">
+Hashing (ecdsa-rdfc-2019)</a> section of the [[[VC-DI-ECDSA]]] specification
+with the addition of the hashing of the optical data, as described below. It is
+presumed that the implementation makes the machine-readable optical data (PDF417
+or MRZ data) available to this hashing algorithm.
+          </p>
+
+          <p>
+The required inputs to this algorithm are a <em>transformed data document</em>
+(<var>transformedDocument</var>), a <em>canonical proof configuration</em>
+(<var>canonicalProofConfig</var>), and the <em>optical data</em>
+(<var>opticalDataBytes</var>). A single <em>hash data</em> value represented as
+series of bytes is produced as output.
+          </p>
+
+          <p>
+The hashing algorithm is what is defined in the
+<a href="https://www.w3.org/TR/vc-di-ecdsa/#hashing-ecdsa-rdfc-2019">
+Hashing (ecdsa-rdfc-2019)</a> section of the [[[VC-DI-ECDSA]]] with step 3
+replaced with the following two steps:
+          </p>
+
+          <ol class="algorithm">
+            <li>
+Let <var>opticalDataHash</var> be the result of applying the same hash algorithm
+that was applied to <var>hashData</var> to the <var>opticalDataBytes</var>
+value.
+            </li>
+            <li>
+Let <var>hashData</var> be the result of joining <var>proofConfigHash</var> (the
+first hash), <var>transformedDocumentHash</var> (the second hash), and
+<var>opticalDataHash</var> (the third hash).
+            </li>
+          </ol>
+
+        </section>
+
+        <section>
+          <h4>Proof Configuration (ecdsa-vb-2023)</h4>
+
+          <p>
+The proof configuration algorithm is what is defined in the
+<a href="https://www.w3.org/TR/vc-di-ecdsa/#proof-configuration-ecdsa-rdfc-2019">
+Proof Configuration (ecdsa-rdfc-2019)</a> section of the [[[VC-DI-ECDSA]]] with
+step 4 replaced with the following step:
+          </p>
+
+          <ol class="algorithm">
+            <li>
+If <var>options</var>.<var>type</var> is not set to `DataIntegrityProof` and
+<var>proofConfig</var>.<var>cryptosuite</var> is not set to `ecdsa-vb-2023`, an
+`INVALID_PROOF_CONFIGURATION` error MUST be raised.
+            </li>
+          </ol>
+
+        </section>
+
       </section>
 
     </section>
