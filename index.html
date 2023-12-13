@@ -291,8 +291,21 @@ to the following output (in CBOR Diagnostic Notation):
         </p>
 
         <pre class="example nohighlight"
-             title="CBOR-LD compressed Verifiable Credential">
-
+             title="CBOR-LD compressed Verifiable Credential (137 bytes)">
+{
+  1 => [ 32768, 32769, 32770],
+  151 => [ 114, 160 ],
+  178 => 32782,
+  172 => { 150 => 162, 192 => 283749 },
+  174 => { 150 => 158 },
+  180 => {
+    150 => 102,
+    198 => 32771,
+    208 => 214,
+    210 => Uint8Array(65) [ ... ],
+    212 => 32783
+  }
+}
         </pre>
 
       </section>
