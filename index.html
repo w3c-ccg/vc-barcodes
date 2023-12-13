@@ -88,13 +88,9 @@
         alternateFormats: [ {uri: "diff-20111214.html", label: "diff to previous version"} ],
         */
         localBiblio: {
-          MULTIBASE: {
-            title: "Multibase",
-            href: "https://datatracker.ietf.org/doc/html/draft-multiformats-multibase-01",
-          },
-          MULTICODEC: {
-            title: "Multicodec",
-            href: "https://github.com/multiformats/multicodec/",
+          "CBOR-LD": {
+            title: "Compact Binary Object Representation for Linked Data v0.7",
+            href: "https://digitalbazaar.github.io/cbor-ld-spec/"
           }
         },
         lint: {"no-unused-dfns": false},
@@ -175,7 +171,49 @@ This specification is experimental.
     <section>
       <h2>Introduction</h2>
       <p>
-
+Legacy documentation, such as driver's licenses, passports, and travel
+credentials often include machine-readable data that can be used to
+quickly read the information from the document. This information is
+encoded in formats such as PDF417, machine-readable zone (MRZ), and other
+optically scannable codes that are formatted in one-dimensional or
+two-dimensional "bars"; thus the name "barcode". This information is often not
+protected from tampering and the readily available barcode generation and
+scanning libraries mean that it is fairly trivial for anyone to generate
+these barcodes.
+      </p>
+      <p>
+It is, therefore, useful for an <a>issuer</a> of these barcodes to protect
+the information contained within the barcode as well as the entity that
+generated the barcode.
+      </p>
+      <p>
+The [[[VC-DATA-MODEL-2.0]]] specification provides a global standard for
+expressing credential information, such as those in a driver's license or
+travel document. The [[[VC-DATA-INTEGRITY]]] specification provides a global
+standard for securing credential information. These two specifications, when
+combined, provide a means of protecting credentials from tampering,
+expressing authorship of the credential, and providing the current status of
+a credential in a privacy-protecting manner. These data formats, however, tend
+to be too large to express in an optical barcode.
+      </p>
+      <p>
+The [[[CBOR-LD]]] specification provides a means of compressing secured
+<a>verifiable credentials</a> to the point at which it becomes feasible to
+express the information as an optical barcode, or embedded within an optical
+barcode.
+      </p>
+      <p>
+This specification describes a mechanism to protect legacy optical barcodes,
+such as those found on driver's licenses (PDF417) and travel documents (MRZ),
+by using a <a>verifiable credential</a>> [[VC-DATA-MODEL-2.0]] to express
+information about the barcode, which is then secured using Data Integrity
+[[VC-DATA-INTEGRITY]], and then compressed using CBOR-LD [[CBOR-LD]]. The
+resulting <a>verifiable credential</a> representations are compact enough such
+that they fit in under 140 bytes and can thus be integrated with traditional
+two-dimensional barcodes that are printed on physical cards using legacy
+printing processes. This adds tamper resistance to the barcode while
+optionally enhancing the barcode to provide information related to whether or
+not the physical document has been revoked or suspended by the <a>issuer</a>.
       </p>
 
       <section id="terminology">
