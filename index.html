@@ -277,10 +277,10 @@ following <a>verifiable credential</a>.
   "proof": {
     "type": "DataIntegrity",
     "cryptosuite": "ecdsa-vb-2023",
-    "proofValue": "z4peo48uwK2EF4Fta8P...HzQMDYJ34r9gL",
-    "proofPurpose": "assertionMethod",
     <span class="comment">// the value below is defined as a URL in the 'utopia/v1' context above</span>
     "verificationMethod": "UtopiaDMV#1"
+    "proofPurpose": "assertionMethod",
+    "proofValue": "z4peo48uwK2EF4Fta8P...HzQMDYJ34r9gL",
   }
 }
         </pre>
@@ -293,17 +293,17 @@ to the following output (in CBOR Diagnostic Notation):
         <pre class="example nohighlight"
              title="CBOR-LD compressed Verifiable Credential (137 bytes)">
 {
-  1 => [ 32768, 32769, 32770],
-  151 => [ 114, 160 ],
-  178 => 32782,
-  172 => { 150 => 162, 192 => 283749 },
-  174 => { 150 => 158 },
-  180 => {
-    150 => 102,
-    198 => 32771,
-    208 => 214,
-    210 => Uint8Array(65) [ ... ],
-    212 => 32783
+  1 => [ 32768, 32769, 32770],           <span class="comment">// @context</span>
+  151 => [ 114, 160 ],                   <span class="comment">// type</span>
+  178 => 32782,                          <span class="comment">// issuer</span>
+  172 => { 150 => 162, 192 => 283749 },  <span class="comment">// credentialStatus</span>
+  174 => { 150 => 158 },                 <span class="comment">// credentialSubject</span>
+  180 => {                               <span class="comment">// proof</span>
+    150 => 102,                          <span class="comment">// type</span>
+    198 => 32771,                        <span class="comment">// cryptosuite</span>
+    212 => 32783                         <span class="comment">// verificationMethod</span>
+    208 => 214,                          <span class="comment">// proofPurpose</span>
+    210 => Uint8Array(65) [ ... ],       <span class="comment">// proofValue</span>
   }
 }
         </pre>
