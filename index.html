@@ -268,7 +268,7 @@ following <a>verifiable credential</a>.
   <span class="comment">// the value below is defined as a URL in the 'utopia/v1' context above</span>
   "issuer": "UtopiaDMV",
   "credentialStatus": {
-    "type": "OpticalBarcodeStatusList",
+    "type": "TerseBitstringStatusListEntry",
     "index": 283749
   },
   "credentialSubject": {
@@ -366,7 +366,7 @@ the information on the back of the card.
   <span class="comment">// the value below is defined as a URL in the 'utopia/v1' context above</span>
   "issuer": "UtopiaCIS",
   "credentialStatus": {
-    "type": "OpticalBarcodeStatusList",
+    "type": "TerseBitstringStatusListEntry",
     "index": 987654
   },
   "credentialSubject": {
@@ -450,6 +450,118 @@ The following sections outline the data model that is used by this specification
 to express [=verifiable credentials=] that secure optically printed information
 such as barcodes and machine-readable zones on travel documents.
       </p>
+
+      <section>
+        <h3>OpticalBarcodeCredential</h3>
+
+        <p>
+An `OpticalBarcodeCredential` is used to secure the contents of an optical
+barcode in a way that provides 1) authorship information , 2) tamper
+resistance, and 3) optionally, revocation and suspension status. In other words,
+the credential can tell you who issued the optical barcode, if the
+optical barcode has been tampered with since it was first issued, and
+whether or not the <a>issuer</a> of the optical barcode still warrants that
+the document is still valid or not. These features provide significant
+anti-fraud protections for physical documents.
+        </p>
+
+        <p>
+The `credentialSubject` of an `OpticalBarcodeCredential` is either a
+`Pdf417Barcode` or a `MachineReadableZone`. A `Pdf417Barcode` signifies that
+the <a>verifiable credential</a> secures the PDF417 barcode on the physical
+document as well as the information expressed in the
+<a>verifiable credential</a>. A `MachineReadableZone` signifies that
+the <a>verifiable credential</a> secures the machine-readable zone on the
+physical document as well as the information expressed in the
+<a>verifiable credential</a>.
+        </p>
+
+        <p>
+In order to achieve as much compression as possible, it is RECOMMENDED that the
+`issuer` and `verificationMethod` fields utilize terms from a JSON-LD Context,
+which
+        </p>
+
+        <p>
+An example of an optical barcode credential that utilizes the properties
+specified in this section is provided below:
+        </p>
+
+        <pre class="example nohighlight"
+             title="An OpticalBarcodeCredential utilizing a TerseBitstringStatusListEntry">
+{
+  "@context": [
+    "https://www.w3.org/ns/credentials/v2",
+    "https://w3id.org/vdl/v2",
+    "https://w3id.org/vdl/utopia/v1"
+  ],
+  "type": [
+    "VerifiableCredential",
+    <span class="highlight">"OpticalBarcodeCredential"</span>
+  ],
+  "issuer": "UtopiaDMV",
+  "credentialStatus": <span class="highlight">{
+    "type": "TerseBitstringStatusListEntry",
+    "index": 283749
+  }</span>,
+  "credentialSubject": {
+    "type": <span class="highlight">"Pdf417Barcode"</span>,
+  }
+}
+        </pre>
+      </section>
+
+      <section>
+        <h3>TerseBitstringStatusListEntry</h3>
+
+        <p>
+A `TerseBitstringStatusListEntry` is a subclass of a `BitstringStatusListEntry`
+as defined in the [[[VC-BITSTRING-STATUS-LIST]]] specification, where only the
+status list index is provided. The location of the status lists are discovered
+through the issuer DID Document via the `service` property.
+        </p>
+
+        <p>
+Presuming that the `UtopiaDMV` term associated with the `issuer` property in
+<a href="#example-an-opticalbarcodecredential-utilizing-a-tersebitstringstatuslistentry">
+Example 5</a> above expands to the following URL: `did:web:dmv.utopia.example`,
+dereferencing the DID Document associated with that URL will produce the
+document below:
+        </p>
+
+        <pre class="example nohighlight"
+             title="A did:web DID Document expressing status services">
+{
+  "@context": [
+    "https://www.w3.org/ns/did/v1",
+    "https://w3id.org/vdl/v2"
+  ]
+  "id": "did:web:dmv.utopia.example",
+  "service": [{
+    "id": "did:web:dmv.utopia.example#revocation-service",
+    "type": "BitstringStatusListService",
+    "statusPurpose": "revocation",
+    "serviceEndpoint": "https://dmv.utopia.example/dl/rev/{{YYYY}}/{{MM}}/list"
+  }, {
+    "id": "did:web:dmv.utopia.example#suspension-service",
+    "type": "BitstringStatusListService",
+    "statusPurpose": "suspension",
+    "serviceEndpoint": "https://dmv.utopia.example/dl/sus/{{YYYY}}/{{MM}}/list"
+  }]
+}
+        </pre>
+
+        <p>
+The `BitstringStatusListService` identifies a specific type of service that
+utilizes a URL template that uses information from the
+<a>verifiable credential</a> to determine the revocation and suspension status
+list URLs. The `{{YYYY}}` and `{{MM}}` template values are replaced with the
+issuance year and month, respectively, of the <a>verifiable credential</a>
+which are encoded in the `proof`. The resulting document MUST be a
+<a data-cite="VC-BITSTRING-STATUS-LIST#bitstringstatuslistcredential">
+BitstringStatusListCredential</a> [[VC-BITSTRING-STATUS-LIST]].
+        </p>
+      </section>
 
     </section>
 
