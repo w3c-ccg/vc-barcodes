@@ -380,6 +380,12 @@ the information on the back of the card.
 }
         </pre>
 
+        <p class="note" title="credentialStatus is optional">
+Readers might note that the credential above does not contain the optional
+`credentialStatus` property. Not every optical barcode credential issuer will
+have the requirement to have revocable optical barcode credentials.
+        </p>
+
         <p>
 The <a>verifiable credential</a> above is then compressed using [[CBOR-LD]]
 to the following output (in CBOR Diagnostic Notation):
@@ -391,7 +397,6 @@ to the following output (in CBOR Diagnostic Notation):
   1 => [ 32768, 32769, 32770],           <span class="comment">// @context</span>
   151 => [ 114, 160 ],                   <span class="comment">// type</span>
   178 => 32782,                          <span class="comment">// issuer</span>
-  172 => { 150 => 162, 192 => 987654 },  <span class="comment">// credentialStatus</span>
   174 => { 150 => 158 },                 <span class="comment">// credentialSubject</span>
   180 => {                               <span class="comment">// proof</span>
     150 => 102,                          <span class="comment">// type</span>
