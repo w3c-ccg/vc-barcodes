@@ -273,15 +273,15 @@ following <a>verifiable credential</a>.
     "index": 283749
   },
   "credentialSubject": {
-    "type": "Pdf417Barcode",
+    "type": "Pdf417Barcode"
   },
   "proof": {
     "type": "DataIntegrity",
     "cryptosuite": "ecdsa-vb-2023",
     <span class="comment">// the value below is defined as a URL in the 'utopia/v1' context above</span>
-    "verificationMethod": "UtopiaDMV#1"
+    "verificationMethod": "UtopiaDMV#1",
     "proofPurpose": "assertionMethod",
-    "proofValue": "z4peo48uwK2EF4Fta8P...HzQMDYJ34r9gL",
+    "proofValue": "z4peo48uwK2EF4Fta8P...HzQMDYJ34r9gL"
   }
 }
         </pre>
@@ -366,10 +366,6 @@ the information on the back of the card.
   ],
   <span class="comment">// the value below is defined as a URL in the 'utopia/v1' context above</span>
   "issuer": "UtopiaCIS",
-  "credentialStatus": {
-    "type": "TerseBitstringStatusListEntry",
-    "index": 987654
-  },
   "credentialSubject": {
     "type": "MachineReadableZone",
   },
@@ -379,7 +375,7 @@ the information on the back of the card.
     <span class="comment">// the value below is defined as a URL in the 'utopia/v1' context above</span>
     "verificationMethod": "UtopiaCIS#4"
     "proofPurpose": "assertionMethod",
-    "proofValue": "z4peo48uwK2EF4Fta8P...HzQMDYJ34r9gL",
+    "proofValue": "z4peo48uwK2EF4Fta8P...HzQMDYJ34r9gL"
   }
 }
         </pre>
@@ -677,11 +673,10 @@ status list credential.
         <p>
 The `ecdsa-vb-2023` cryptographic suite takes an input document, canonicalizes
 the document using the Universal RDF Dataset Canonicalization Algorithm
-[[RDF-CANON]], cryptographically hashes both the original optical barcode
-data and the canonicalized verifiable credential data, and then signs the
-output resulting in the production of a data integrity proof.
-The algorithms in this section also include the verification of such a data
-integrity proof.
+[[?RDF-CANON]], cryptographically hashes both the original optical barcode data
+and the canonicalized verifiable credential data, and then signs the output
+resulting in the production of a data integrity proof. The algorithms in this
+section also include the verification of such a data integrity proof.
         </p>
 
         <section>
@@ -814,7 +809,7 @@ In the following sections, we review these important points and direct
 the reader to additional information.
       </p>
 
-      <p class="todo">
+      <p class="issue">
 Add security considerations specific to this specification.
       </p>
 
@@ -839,7 +834,7 @@ implementing this specification should be aware of in order to avoid violating
 privacy assumptions.
       </p>
 
-      <p class="todo">
+      <p class="issue">
 Add security considerations specific to this specification.
       </p>
 
