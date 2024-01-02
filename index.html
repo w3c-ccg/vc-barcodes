@@ -94,6 +94,7 @@
           }
         },
         lint: {"no-unused-dfns": false},
+        xref: ["INFRA"],
         postProcess: [restrictRefs],
         otherLinks: [{
           key: "Related Specifications",
@@ -540,13 +541,15 @@ document below:
   "service": [{
     "id": "did:web:dmv.utopia.example#revocation-service",
     "type": "BitstringStatusListService",
+    "credentialType": "OpticalBarcodeCredential",
     "statusPurpose": "revocation",
-    "serviceEndpoint": "https://dmv.utopia.example/dl/rev/{{YYYY}}/{{MM}}/list"
+    "serviceEndpoint": "https://dmv.utopia.example/status/revocation/{{YYYY}}/{{MM}}"
   }, {
     "id": "did:web:dmv.utopia.example#suspension-service",
     "type": "BitstringStatusListService",
+    "credentialType": "OpticalBarcodeCredential",
     "statusPurpose": "suspension",
-    "serviceEndpoint": "https://dmv.utopia.example/dl/sus/{{YYYY}}/{{MM}}/list"
+    "serviceEndpoint": "https://dmv.utopia.example/status/suspension/{{YYYY}}/{{MM}}"
   }]
 }
         </pre>
@@ -559,7 +562,8 @@ list URLs. The `{{YYYY}}` and `{{MM}}` template values are replaced with the
 issuance year and month, respectively, of the <a>verifiable credential</a>
 which are encoded in the `proof`. The resulting document MUST be a
 <a data-cite="VC-BITSTRING-STATUS-LIST#bitstringstatuslistcredential">
-BitstringStatusListCredential</a> [[VC-BITSTRING-STATUS-LIST]].
+BitstringStatusListCredential</a> [[VC-BITSTRING-STATUS-LIST]]. See
+Section <a href="#convert-status-list-entries"></a> for more details.
         </p>
       </section>
 
@@ -581,6 +585,91 @@ algorithm name is different because the cryptographic hashing process includes
 the machine-readable barcode information when calculating the digital signature
 such that the optical barcode is protected.
       </p>
+
+      <section>
+        <h3>Convert Status List Entries</h3>
+
+        <p>
+The algorithm in this section is used to convert the
+`TerseBitstringStatusListEntry` to a `BitstringStatusListEntry`, which is used
+after verification has been performed on the <a>verifiable credential</a>,
+during the validation process.
+        </p>
+
+        <p>
+After <a>verifiable credential</a> verification has been performed, the
+algorithm takes an `OpticalBarcodeCredential` <a>verifiable credential</a>
+([=struct=] |vc|) as input and returns a status object ([=map=] |result|) that
+contains a [=boolean=] |status| [=map/entry=] and a [=list=] |statusListEntry|
+of one or more [=struct=] values representing `BitstringStatusListEntry`
+objects.
+        </p>
+
+        <ol class="algorithm">
+          <li>
+Set |result| to be an empty [=map=] and initialize the |result|.|status| value
+to `false`.
+          </li>
+          <li>
+Set |year| and |month| to the respective values specified in the
+|vc|.|proof|.|created| field.
+          </li>
+          <li>
+Set |didDocument| to be the result of dereferencing |issuer|. If the dereference
+does not result in a conforming DID Document, raise an
+<a data-cite="VC-DATA-INTEGRITY#INVALID_CONTROLLER_DOCUMENT">
+INVALID_CONTROLLER_DOCUMENT</a> error.
+          </li>
+          <li>
+For each |service| value in |didDocument| where the |service|.|type| is
+`BitstringStatusListService`:
+            <ol class="algorithm">
+              <li>
+Initialize |bslEntry| to an empty [=map=].
+              </li>
+              <li>
+Set |bslEntry|.|type| to `BitstringStatusListEntry`.
+              </li>
+              <li>
+Set |bslEntry|.|statusPurpose| to |service|.|statusPurpose|.
+              </li>
+              <li>
+Set |bslEntry|.|statusListIndex| to |vc|.|credentialStatus|.|index|, ensuring
+that the value is converted to a string.
+              </li>
+              <li>
+Set |bslEntry|.|statusListCredential| to |service|.|serviceEndpoint|,
+replacing any `{{YYYY}}` text with a four-character representation of |year|
+and any `{{MM}}` text with a two-character representation of |month|, using
+leading zeros as necessary.
+              </li>
+              <li>
+Add |bslEntry| to |result|.|statusListEntry|.
+              </li>
+              <li>
+Set |result|.|status| to `true`.
+              </li>
+            </ol>
+          </li>
+          <li>
+Return |result|.
+          </li>
+        </ol>
+
+        <p>
+Each value in |result|.|statusList| can be used as input to the
+<a data-cite="VC-BITSTRING-STATUS-LIST#validate-algorithm">
+validation algorithm</a> in the [[[VC-BITSTRING-STATUS-LIST]]] specification.
+        </p>
+
+        <p class="note" title="Status lists are optional">
+Implementers are advised that not all <a>issuers</a> will publish status
+list information for their <a>verifiable credentials</a>. Some <a>issuers</a>
+might require authorization before allowing a <a>verifier</a> to access a
+status list credential.
+        </p>
+
+      </section>
 
       <section>
         <h3>ecdsa-vb-2023</h3>
