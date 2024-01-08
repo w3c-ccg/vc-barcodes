@@ -817,16 +817,16 @@ Let |statusListEntryTerse| be an empty [=map=]. Set |statusListEntryTerse|.|type
         <li>
 Set |issuerUrl| to the URL the issuer wishes to use for credential verification.
         </li>
-Set |credentialUnsigned| to an `OpticalBarcodeCredential` with 
-|credentialUnsigned.issuer| set to |issuerDid| and |credentialUnsigned.credentialStatus| 
+Set |unsignedStatus| to an `OpticalBarcodeCredential` with 
+|unsignedStatus.issuer| set to |issuerUrl| and |unsignedStatus.credentialStatus| 
 set to |statusListEntryTerse|.
         <li>
-Set |signedCredential| to the result of using the algorithm in 
+Set |signedStatusVc| to the result of using the algorithm in 
 <a href="#add-proof-ecdsa-vb-2023">Section 3.2.1</a> to sign |opticalData| 
-and |credentialUnsigned|.
+and |unsignedStatus|.
         </li>
         <li>
-Encode |signedCredential| using CBOR-LD [[CBOR-LD]] and add it to the designated area of the |opticalData|.
+Encode |signedStatusVc| using CBOR-LD [[CBOR-LD]] and add it to the designated area of the |opticalData|.
         </li>
         <li>
 Generate the machine-readable credential (MRZ or PDF417).
