@@ -817,9 +817,11 @@ Let |statusListEntryTerse| be an empty [=map=]. Set |statusListEntryTerse|.|type
         <li>
 Set |issuerUrl| to the URL the issuer wishes to use for credential verification.
         </li>
+        <li>
 Set |unsignedStatus| to an `OpticalBarcodeCredential` with 
-|unsignedStatus.issuer| set to |issuerUrl| and |unsignedStatus.credentialStatus| 
+|unsignedStatus|.|issuer| set to |issuerUrl| and |unsignedStatus|.|credentialStatus| 
 set to |statusListEntryTerse|.
+        </li>
         <li>
 Set |signedStatusVc| to the result of using the algorithm in 
 <a href="#add-proof-ecdsa-vb-2023">Section 3.2.1</a> to sign |opticalData| 
@@ -835,31 +837,31 @@ Generate the machine-readable credential (MRZ or PDF417).
       </section>
 
       <section>
-      <h3>Credential Validation</h3>
-        <ol class="algorithm">
-          <li>
+        <h3>Credential Validation</h3>
+          <ol class="algorithm">
+            <li>
 Set |securedDocument| to the data in the PDF417 or MRZ.
-          </li>
-          <li>
+            </li>
+            <li>
 Set |verificationResult| to the result of applying the algorithm in 
 <a href="#verify-proof-ecdsa-vb-2023">Section 3.2.2</a> to |securedDocument|.
-          </li>
-          <li>
+            </li>
+            <li>
 Set |credential| to the `OpticalBarcodeCredential` in |securedDocument|.
-          </li>
-          <li>
+            </li>
+            <li>
 Set |statusListEntry| to the result of applying the algorithm in 
 <a href="#convert-status-list-entries">Section 3.1</a> to |credential|.
-          </li>
-          <li>
+            </li>
+            <li>
 Set |statusResult| to the result of applying the algorithm in 
-<a data-cite="VC-BITSTRING-STATUS-LIST#validate-algorithm"> to |statusListEntry|.
-          </li>
-          <li>
-Return (|validationResult|, |statusResult|).
-          </li>
-        </ol>
-        </section>
+<a data-cite="VC-BITSTRING-STATUS-LIST#validate-algorithm">Bitstring Status List v1.0: Validate Algorithm</a> to |statusListEntry|.
+            </li>
+            <li>
+  Return (|validationResult|, |statusResult|).
+            </li>
+          </ol>
+          </section>
 
     </section>
 
