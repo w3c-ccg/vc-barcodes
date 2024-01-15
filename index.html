@@ -595,6 +595,71 @@ such that the optical barcode is protected.
       </p>
 
       <section>
+      <h3>Credential Creation</h3>
+
+      <ol class="algorithm">
+        <li>
+Set |opticalData| to the data in the optical barcode to be secured.
+        </li>
+        <li>
+Set |statusListEntryVerbose| to the `BitstringStatusListCredential`
+(as defined in the [[[VC-BITSTRING-STATUS-LIST]]] specification) that the issuer
+wishes to add to the `OpticalBarcodeCredential`.
+        </li>
+        <li>
+Let |statusListEntryTerse| be an empty [=map=]. Set |statusListEntryTerse|.|type| to `TerseBitstringStatusListEntry` and |statusListEntryTerse|.|index| to the integer representation of |statusListEntryVerbose|.|statusListIndex|.
+        </li>
+        <li>
+Set |issuerUrl| to the URL the issuer wishes to use for credential verification.
+        </li>
+        <li>
+Set |unsignedStatus| to an `OpticalBarcodeCredential` with
+|unsignedStatus|.|issuer| set to |issuerUrl| and |unsignedStatus|.|credentialStatus|
+set to |statusListEntryTerse|.
+        </li>
+        <li>
+Set |signedStatusVc| to the result of using the algorithm in
+<a href="#add-proof-ecdsa-xi-2023">Section 3.2.1</a> to sign |opticalData|
+and |unsignedStatus|.
+        </li>
+        <li>
+Encode |signedStatusVc| using CBOR-LD [[CBOR-LD]] and add it to the designated area of the |opticalData|.
+        </li>
+        <li>
+Generate the machine-readable credential (MRZ or PDF417).
+        </li>
+      </ol>
+      </section>
+
+      <section>
+        <h3>Credential Validation</h3>
+
+        <ol class="algorithm">
+          <li>
+Set |securedDocument| to the data in the PDF417 or MRZ.
+          </li>
+          <li>
+Set |verificationResult| to the result of applying the algorithm in
+<a href="#verify-proof-ecdsa-xi-2023">Section 3.2.2</a> to |securedDocument|.
+          </li>
+          <li>
+Set |credential| to the `OpticalBarcodeCredential` in |securedDocument|.
+          </li>
+          <li>
+Set |statusListEntry| to the result of applying the algorithm in
+<a href="#convert-status-list-entries">Section 3.1</a> to |credential|.
+          </li>
+          <li>
+Set |statusResult| to the result of applying the algorithm in
+<a data-cite="VC-BITSTRING-STATUS-LIST#validate-algorithm">Bitstring Status List v1.0: Validate Algorithm</a> to |statusListEntry|.
+          </li>
+          <li>
+Return (|validationResult|, |statusResult|).
+          </li>
+        </ol>
+      </section>
+
+      <section>
         <h3>Convert Status List Entries</h3>
 
         <p>
@@ -799,68 +864,6 @@ If <var>options</var>.<var>type</var> is not set to `DataIntegrityProof` and
         </section>
 
       </section>
-      <section>
-      <h3>Credential Creation</h3>
-      <ol class="algorithm">
-        <li>
-Set |opticalData| to the data in the optical barcode to be secured.
-        </li>
-        <li>
-Set |statusListEntryVerbose| to the `BitstringStatusListCredential`
-(as defined in the [[[VC-BITSTRING-STATUS-LIST]]] specification) that the issuer
-wishes to add to the `OpticalBarcodeCredential`.
-        </li>
-        <li>
-Let |statusListEntryTerse| be an empty [=map=]. Set |statusListEntryTerse|.|type| to `TerseBitstringStatusListEntry` and |statusListEntryTerse|.|index| to the integer representation of |statusListEntryVerbose.statusListIndex|.
-        </li>
-        <li>
-Set |issuerUrl| to the URL the issuer wishes to use for credential verification.
-        </li>
-        <li>
-Set |unsignedStatus| to an `OpticalBarcodeCredential` with
-|unsignedStatus|.|issuer| set to |issuerUrl| and |unsignedStatus|.|credentialStatus|
-set to |statusListEntryTerse|.
-        </li>
-        <li>
-Set |signedStatusVc| to the result of using the algorithm in
-<a href="#add-proof-ecdsa-xi-2023">Section 3.2.1</a> to sign |opticalData|
-and |unsignedStatus|.
-        </li>
-        <li>
-Encode |signedStatusVc| using CBOR-LD [[CBOR-LD]] and add it to the designated area of the |opticalData|.
-        </li>
-        <li>
-Generate the machine-readable credential (MRZ or PDF417).
-        </li>
-      </ol>
-      </section>
-
-      <section>
-        <h3>Credential Validation</h3>
-          <ol class="algorithm">
-            <li>
-Set |securedDocument| to the data in the PDF417 or MRZ.
-            </li>
-            <li>
-Set |verificationResult| to the result of applying the algorithm in
-<a href="#verify-proof-ecdsa-xi-2023">Section 3.2.2</a> to |securedDocument|.
-            </li>
-            <li>
-Set |credential| to the `OpticalBarcodeCredential` in |securedDocument|.
-            </li>
-            <li>
-Set |statusListEntry| to the result of applying the algorithm in
-<a href="#convert-status-list-entries">Section 3.1</a> to |credential|.
-            </li>
-            <li>
-Set |statusResult| to the result of applying the algorithm in
-<a data-cite="VC-BITSTRING-STATUS-LIST#validate-algorithm">Bitstring Status List v1.0: Validate Algorithm</a> to |statusListEntry|.
-            </li>
-            <li>
-  Return (|validationResult|, |statusResult|).
-            </li>
-          </ol>
-          </section>
 
     </section>
 
