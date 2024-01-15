@@ -272,8 +272,8 @@ following <a>verifiable credential</a>.
     "VerifiableCredential",
     "OpticalBarcodeCredential"
   ],
-  <span class="comment">// the value below is defined as a URL in the 'utopia/v1' context above</span>
-  "issuer": "UtopiaDMV",
+  <span class="comment">// the issuer value below is defined as a URL in the 'utopia/v1' context above</span>
+  "issuer": "did:web:dmv.utopia.example",
   "credentialStatus": {
     "type": "TerseBitstringStatusListEntry",
     "index": 283749
@@ -284,8 +284,8 @@ following <a>verifiable credential</a>.
   "proof": {
     "type": "DataIntegrity",
     "cryptosuite": "ecdsa-xi-2023",
-    <span class="comment">// the value below is defined as a URL in the 'utopia/v1' context above</span>
-    "verificationMethod": "UtopiaDMV#1",
+    <span class="comment">// the public key below is defined as a URL in the 'utopia/v1' context above</span>
+    "verificationMethod": "did:web:dmv.utopia.example#key-1",
     "proofPurpose": "assertionMethod",
     "proofValue": "z4peo48uwK2EF4Fta8P...HzQMDYJ34r9gL"
   }
@@ -371,7 +371,7 @@ the information on the back of the card.
     "OpticalBarcodeCredential"
   ],
   <span class="comment">// the value below is defined as a URL in the 'utopia/v1' context above</span>
-  "issuer": "UtopiaCIS",
+  "issuer": "did:web:immigration.utopia.example",
   "credentialSubject": {
     "type": "MachineReadableZone",
   },
@@ -379,7 +379,7 @@ the information on the back of the card.
     "type": "DataIntegrity",
     "cryptosuite": "ecdsa-xi-2023",
     <span class="comment">// the value below is defined as a URL in the 'utopia/v1' context above</span>
-    "verificationMethod": "UtopiaCIS#4"
+    "verificationMethod": "did:web:immigration.utopia.example#key-4"
     "proofPurpose": "assertionMethod",
     "proofValue": "z4peo48uwK2EF4Fta8P...HzQMDYJ34r9gL"
   }
@@ -508,7 +508,7 @@ specified in this section is provided below:
     "VerifiableCredential",
     <span class="highlight">"OpticalBarcodeCredential"</span>
   ],
-  "issuer": "UtopiaDMV",
+  "issuer": "did:web:dmv.utopia.example",
   "credentialStatus": <span class="highlight">{
     "type": "TerseBitstringStatusListEntry",
     "index": 283749
