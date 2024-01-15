@@ -283,7 +283,7 @@ following <a>verifiable credential</a>.
   },
   "proof": {
     "type": "DataIntegrity",
-    "cryptosuite": "ecdsa-vb-2023",
+    "cryptosuite": "ecdsa-xi-2023",
     <span class="comment">// the value below is defined as a URL in the 'utopia/v1' context above</span>
     "verificationMethod": "UtopiaDMV#1",
     "proofPurpose": "assertionMethod",
@@ -377,7 +377,7 @@ the information on the back of the card.
   },
   "proof": {
     "type": "DataIntegrity",
-    "cryptosuite": "ecdsa-vb-2023",
+    "cryptosuite": "ecdsa-xi-2023",
     <span class="comment">// the value below is defined as a URL in the 'utopia/v1' context above</span>
     "verificationMethod": "UtopiaCIS#4"
     "proofPurpose": "assertionMethod",
@@ -680,19 +680,18 @@ status list credential.
       </section>
 
       <section>
-        <h3>ecdsa-vb-2023</h3>
+        <h3>ecdsa-xi-2023</h3>
 
         <p>
-The `ecdsa-vb-2023` cryptographic suite takes an input document, canonicalizes
-the document using the Universal RDF Dataset Canonicalization Algorithm
-[[?RDF-CANON]], cryptographically hashes both the original optical barcode data
-and the canonicalized verifiable credential data, and then signs the output
-resulting in the production of a data integrity proof. The algorithms in this
-section also include the verification of such a data integrity proof.
+The `ecdsa-xi-2023` is effectively the `ecdsa-rdfc-2019` algorithm
+[[VC-DI-ECDSA]] with an added step that takes some "extra information" (xi) as
+input, such as the original optical barcode data, and includes that data in the
+information that is protected by the digital signature. The algorithms in this
+section detail how such a signature is created and verified.
         </p>
 
         <section>
-          <h4>Add Proof (ecdsa-vb-2023)</h4>
+          <h4>Add Proof (ecdsa-xi-2023)</h4>
 
           <p>
 To generate a proof, the algorithm in
@@ -706,7 +705,7 @@ transformation algorithm</a> is defined in the
 Transformation (ecdsa-rdfc-2019)</a> section of the [[[VC-DI-ECDSA]]], the
 <a href="https://www.w3.org/TR/vc-data-integrity/#dfn-hashing-algorithm">
 hashing algorithm</a> is defined in Section
-<a href="#hashing-ecdsa-vb-2023"></a>, and the
+<a href="#hashing-ecdsa-xi-2023"></a>, and the
 <a href="https://www.w3.org/TR/vc-data-integrity/#dfn-proof-serialization-algorithm">
 proof serialization algorithm</a> is defined in the
 <a href="https://www.w3.org/TR/vc-di-ecdsa/#proof-serialization-ecdsa-rdfc-2019">
@@ -715,7 +714,7 @@ Proof Serialization (ecdsa-rdfc-2019)</a> section of the [[[VC-DI-ECDSA]]].
         </section>
 
         <section>
-          <h4>Verify Proof (ecdsa-vb-2023)</h4>
+          <h4>Verify Proof (ecdsa-xi-2023)</h4>
 
           <p>
 To verify a proof, the algorithm in
@@ -729,7 +728,7 @@ transformation algorithm</a> is defined in the
 Transformation (ecdsa-rdfc-2019)</a> section of the [[[VC-DI-ECDSA]]], the
 <a href="https://www.w3.org/TR/vc-data-integrity/#dfn-hashing-algorithm">
 hashing algorithm</a> is defined in
-Section <a href="#hashing-ecdsa-vb-2023"></a>, and the
+Section <a href="#hashing-ecdsa-xi-2023"></a>, and the
 <a href="https://www.w3.org/TR/vc-data-integrity/#dfn-proof-serialization-algorithm">
 proof verification algorithm</a> is defined in the
 <a href="https://www.w3.org/TR/vc-di-ecdsa/#proof-verification-ecdsa-rdfc-2019">
@@ -738,7 +737,7 @@ Proof Verification (ecdsa-rdfc-2019)</a> section of the [[[VC-DI-ECDSA]]].
         </section>
 
         <section>
-          <h4>Hashing (ecdsa-vb-2023)</h4>
+          <h4>Hashing (ecdsa-xi-2023)</h4>
 
           <p>
 The hashing algorithm is what is defined in the
@@ -780,7 +779,7 @@ first hash), <var>transformedDocumentHash</var> (the second hash), and
         </section>
 
         <section>
-          <h4>Proof Configuration (ecdsa-vb-2023)</h4>
+          <h4>Proof Configuration (ecdsa-xi-2023)</h4>
 
           <p>
 The proof configuration algorithm is what is defined in the
@@ -792,7 +791,7 @@ step 4 replaced with the following step:
           <ol class="algorithm">
             <li>
 If <var>options</var>.<var>type</var> is not set to `DataIntegrityProof` and
-<var>proofConfig</var>.<var>cryptosuite</var> is not set to `ecdsa-vb-2023`, an
+<var>proofConfig</var>.<var>cryptosuite</var> is not set to `ecdsa-xi-2023`, an
 `INVALID_PROOF_CONFIGURATION` error MUST be raised.
             </li>
           </ol>
@@ -807,8 +806,8 @@ If <var>options</var>.<var>type</var> is not set to `DataIntegrityProof` and
 Set |opticalData| to the data in the optical barcode to be secured.
         </li>
         <li>
-Set |statusListEntryVerbose| to the `BitstringStatusListCredential` 
-(as defined in the [[[VC-BITSTRING-STATUS-LIST]]] specification) that the issuer 
+Set |statusListEntryVerbose| to the `BitstringStatusListCredential`
+(as defined in the [[[VC-BITSTRING-STATUS-LIST]]] specification) that the issuer
 wishes to add to the `OpticalBarcodeCredential`.
         </li>
         <li>
@@ -818,13 +817,13 @@ Let |statusListEntryTerse| be an empty [=map=]. Set |statusListEntryTerse|.|type
 Set |issuerUrl| to the URL the issuer wishes to use for credential verification.
         </li>
         <li>
-Set |unsignedStatus| to an `OpticalBarcodeCredential` with 
-|unsignedStatus|.|issuer| set to |issuerUrl| and |unsignedStatus|.|credentialStatus| 
+Set |unsignedStatus| to an `OpticalBarcodeCredential` with
+|unsignedStatus|.|issuer| set to |issuerUrl| and |unsignedStatus|.|credentialStatus|
 set to |statusListEntryTerse|.
         </li>
         <li>
-Set |signedStatusVc| to the result of using the algorithm in 
-<a href="#add-proof-ecdsa-vb-2023">Section 3.2.1</a> to sign |opticalData| 
+Set |signedStatusVc| to the result of using the algorithm in
+<a href="#add-proof-ecdsa-xi-2023">Section 3.2.1</a> to sign |opticalData|
 and |unsignedStatus|.
         </li>
         <li>
@@ -843,18 +842,18 @@ Generate the machine-readable credential (MRZ or PDF417).
 Set |securedDocument| to the data in the PDF417 or MRZ.
             </li>
             <li>
-Set |verificationResult| to the result of applying the algorithm in 
-<a href="#verify-proof-ecdsa-vb-2023">Section 3.2.2</a> to |securedDocument|.
+Set |verificationResult| to the result of applying the algorithm in
+<a href="#verify-proof-ecdsa-xi-2023">Section 3.2.2</a> to |securedDocument|.
             </li>
             <li>
 Set |credential| to the `OpticalBarcodeCredential` in |securedDocument|.
             </li>
             <li>
-Set |statusListEntry| to the result of applying the algorithm in 
+Set |statusListEntry| to the result of applying the algorithm in
 <a href="#convert-status-list-entries">Section 3.1</a> to |credential|.
             </li>
             <li>
-Set |statusResult| to the result of applying the algorithm in 
+Set |statusResult| to the result of applying the algorithm in
 <a data-cite="VC-BITSTRING-STATUS-LIST#validate-algorithm">Bitstring Status List v1.0: Validate Algorithm</a> to |statusListEntry|.
             </li>
             <li>
@@ -866,9 +865,9 @@ Set |statusResult| to the result of applying the algorithm in
     </section>
 
 
-      
 
-   
+
+
 
     <section class="informative">
       <h2>Security Considerations</h2>
