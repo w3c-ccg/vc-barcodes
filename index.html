@@ -595,40 +595,40 @@ such that the optical barcode is protected.
       </p>
 
       <section>
-      <h3>Credential Creation</h3>
+        <h3>Credential Creation</h3>
 
-      <ol class="algorithm">
-        <li>
+        <ol class="algorithm">
+          <li>
 Set |opticalData| to the data in the optical barcode to be secured.
-        </li>
-        <li>
+          </li>
+          <li>
 Set |statusListEntryVerbose| to the `BitstringStatusListCredential`
 (as defined in the [[[VC-BITSTRING-STATUS-LIST]]] specification) that the issuer
 wishes to add to the `OpticalBarcodeCredential`.
-        </li>
-        <li>
+          </li>
+          <li>
 Let |statusListEntryTerse| be an empty [=map=]. Set |statusListEntryTerse|.|type| to `TerseBitstringStatusListEntry` and |statusListEntryTerse|.|index| to the integer representation of |statusListEntryVerbose|.|statusListIndex|.
-        </li>
-        <li>
+          </li>
+          <li>
 Set |issuerUrl| to the URL the issuer wishes to use for credential verification.
-        </li>
-        <li>
+          </li>
+          <li>
 Set |unsignedStatus| to an `OpticalBarcodeCredential` with
 |unsignedStatus|.|issuer| set to |issuerUrl| and |unsignedStatus|.|credentialStatus|
 set to |statusListEntryTerse|.
-        </li>
-        <li>
+          </li>
+          <li>
 Set |signedStatusVc| to the result of using the algorithm in
 <a href="#add-proof-ecdsa-xi-2023">Section 3.2.1</a> to sign |opticalData|
 and |unsignedStatus|.
-        </li>
-        <li>
+          </li>
+          <li>
 Encode |signedStatusVc| using CBOR-LD [[CBOR-LD]] and add it to the designated area of the |opticalData|.
-        </li>
-        <li>
+          </li>
+          <li>
 Generate the machine-readable credential (MRZ or PDF417).
-        </li>
-      </ol>
+          </li>
+        </ol>
       </section>
 
       <section>
