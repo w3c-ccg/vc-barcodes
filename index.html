@@ -13,13 +13,13 @@
 
     <script type="text/javascript" class="remove">
       var respecConfig = {
-        subtitle: "Securing legacy barcodes using Verifiable Credentials",
+        subtitle: "Securing legacy bar codes using Verifiable Credentials",
         // specification status (e.g. WD, LCWD, NOTE, etc.). If in doubt use ED.
         group: "credentials",
         specStatus: "CG-DRAFT",
 
         // the specification's short name, as in http://www.w3.org/TR/short-name/
-        shortName: "verifiable-barcodes",
+        shortName: "verifiable-bar codes",
 
         // if you wish the publication date to be other than today, set this
         //publishDate:  "",
@@ -30,7 +30,7 @@
         // previousMaturity:  "WD",
 
         // if there a publicly available Editor's Draft, this is the link
-        edDraftURI: "https://digitalbazaar.github.io/verifiable-barcodes/",
+        edDraftURI: "https://digitalbazaar.github.io/verifiable-bar codes/",
         //latestVersion: "",
 
         // if this is a LCWD, uncomment and set the end of its review period
@@ -64,11 +64,9 @@
           company: "Digital Bazaar", companyURL: "https://digitalbazaar.com/",
           w3cid: 48025
         }, {
-          name: "Wesley Smith", url: "https://www.linkedin.com/in/wesley-smith-phd-24973a12b/"
+          name: "Wesley Smith", url: "https://www.linkedin.com/in/wesley-smith-phd-24973a12b/",
+          company: "Digital Bazaar", companyURL: "https://digitalbazaar.com/"
         }],
-
-        // extend the bibliography entries
-        //localBiblio: ccg.localBiblio,
 
         // name of the WG
         //wg:           "W3C Credentials Community Group",
@@ -79,7 +77,7 @@
         // name (with the @w3c.org) of the public mailing to which comments are due
         //wgPublicList: "public-credentials",
 
-        github: "https://github.com/digitalbazaar/verifiable-barcodes/",
+        github: "https://github.com/digitalbazaar/verifiable-bar codes/",
 
         otherLinks: [],
 
@@ -96,7 +94,25 @@
         localBiblio: {
           "CBOR-LD": {
             title: "Compact Binary Object Representation for Linked Data v0.7",
-            href: "https://digitalbazaar.github.io/cbor-ld-spec/"
+            href: "https://json-ld.github.io/cbor-ld-spec/"
+          },
+          "ICAO9303-3": {
+            title: "Machine Readable Travel Documents Part 3: Specifications Common to all MRTDs, Eighth Edition, 2021",
+            date: "2021",
+            href: "https://www.icao.int/publications/Documents/9303_p3_cons_en.pdf",
+            authors: [
+              "ICAO"
+            ],
+            publisher: "International Civil Aviation Organization"
+          },
+          "ISO15438-2015": {
+            title: "ISO/IEC 15438:2015: PDF417 Bar Code Symbology Specification",
+            date: "2015",
+            href: "https://www.iso.org/standard/65502.html",
+            authors: [
+              "ISO/IEC JTC 1/SC 31"
+            ],
+            publisher: "International Standards Organization"
           }
         },
         lint: {"no-unused-dfns": false},
@@ -158,11 +174,11 @@ ol.algorithm li:before {
   <body>
     <section id="abstract">
       <p>
-This specification describes a mechanism to protect legacy optical barcodes,
+This specification describes a mechanism to protect legacy optical bar codes,
 such as those found on driver's licenses (PDF417) and travel documents (MRZ),
 using Verifiable Credentials [[VC-DATA-MODEL-2.0]]. The Verifiable Credential
 representations are compact enough such that they fit in under 140 bytes and
-can thus be integrated with traditional two-dimensional barcodes that are
+can thus be integrated with traditional two-dimensional bar codes that are
 printed on physical cards using legacy printing processes.
       </p>
     </section>
@@ -179,19 +195,19 @@ This specification is experimental.
       <h2>Introduction</h2>
       <p>
 Legacy documentation, such as driver's licenses, passports, and travel
-credentials often include machine-readable data that can be used to
-quickly read the information from the document. This information is
-encoded in formats such as PDF417, machine-readable zone (MRZ), and other
-optically scannable codes that are formatted in one-dimensional or
-two-dimensional "bars"; thus the name "barcode". This information is often not
-protected from tampering and the readily available barcode generation and
-scanning libraries mean that it is fairly trivial for anyone to generate
-these barcodes.
+credentials often include machine-readable data that can be used to quickly read
+the information from the document. This information is encoded in formats such
+as PDF417 [[ISO15438-2015]], machine-readable zone (MRZ) [[ICAO9303-3]], and
+other optically scannable codes that are formatted in one-dimensional or
+two-dimensional "bars"; thus the phrase "bar code". This information is often
+not protected from tampering and the readily available bar code generation and
+scanning libraries mean that it is fairly trivial for anyone to generate these
+bar codes.
       </p>
       <p>
-It is, therefore, useful for an <a>issuer</a> of these barcodes to protect
-the information contained within the barcode as well as the entity that
-generated the barcode.
+It is, therefore, useful for an <a>issuer</a> of these bar codes to protect
+the information contained within the bar code as well as the entity that
+generated the bar code.
       </p>
       <p>
 The [[[VC-DATA-MODEL-2.0]]] specification provides a global standard for
@@ -201,25 +217,25 @@ standard for securing credential information. These two specifications, when
 combined, provide a means of protecting credentials from tampering,
 expressing authorship of the credential, and providing the current status of
 a credential in a privacy-protecting manner. These data formats, however, tend
-to be too large to express in an optical barcode.
+to be too large to express in an optical bar code.
       </p>
       <p>
 The [[[CBOR-LD]]] specification provides a means of compressing secured
 <a>verifiable credentials</a> to the point at which it becomes feasible to
-express the information as an optical barcode, or embedded within an optical
-barcode.
+express the information as an optical bar code, or embedded within an optical
+bar code.
       </p>
       <p>
-This specification describes a mechanism to protect legacy optical barcodes,
+This specification describes a mechanism to protect legacy optical bar codes,
 such as those found on driver's licenses (PDF417) and travel documents (MRZ),
 by using a <a>verifiable credential</a> [[VC-DATA-MODEL-2.0]] to express
-information about the barcode, which is then secured using Data Integrity
+information about the bar code, which is then secured using Data Integrity
 [[VC-DATA-INTEGRITY]], and then compressed using CBOR-LD [[CBOR-LD]]. The
 resulting <a>verifiable credential</a> representations are compact enough such
 that they fit in under 140 bytes and can thus be integrated with traditional
-two-dimensional barcodes that are printed on physical cards using legacy
-printing processes. This adds tamper resistance to the barcode while
-optionally enhancing the barcode to provide information related to whether or
+two-dimensional bar codes that are printed on physical cards using legacy
+printing processes. This adds tamper resistance to the bar code while
+optionally enhancing the bar code to provide information related to whether or
 not the physical document has been revoked or suspended by the <a>issuer</a>.
       </p>
 
@@ -228,8 +244,8 @@ not the physical document has been revoked or suspended by the <a>issuer</a>.
 
         <p>
 This section provides an example on how the technology in this specification
-can be utilized to secure the optical barcode on a driver's license that
-uses a PDF417 barcode. We start off with an example driver's license:
+can be utilized to secure the optical bar code on a driver's license that
+uses a PDF417 bar code. We start off with an example driver's license:
         </p>
 
         <figure id="dl-front">
@@ -242,13 +258,13 @@ The front of a driver's license issued by the state of Utopia.
         </figure>
 
         <p>
-The back of the driver's license contains a PDF417 barcode:
+The back of the driver's license contains a PDF417 bar code:
         </p>
 
         <figure id="dl-back">
           <img style="margin: auto; display: block; border-radius:15px; width: 50%;"
                src="diagrams/dl-back.png"
-               alt="Picture of the back of a driver's license issued by the state of Utopia, containing usage rules as well as a PDF417 barcode that encodes much of the information displayed on the front of the card.">
+               alt="Picture of the back of a driver's license issued by the state of Utopia, containing usage rules as well as a PDF417 bar code that encodes much of the information displayed on the front of the card.">
           <figcaption style="text-align: center;">
 A back of a driver's license issued by the state of Utopia.
           </figcaption>
@@ -256,12 +272,12 @@ A back of a driver's license issued by the state of Utopia.
 
         <p>
 The PDF417 data contains information that is secured using the algorithms
-described in this specification. Namely, the PDF417 barcode contains the
+described in this specification. Namely, the PDF417 bar code contains the
 following <a>verifiable credential</a>.
         </p>
 
         <pre class="example nohighlight"
-             title="Verifiable Credential embedded in the PDF417 barcode">
+             title="Verifiable Credential embedded in the PDF417 bar code">
 {
   "@context": [
     "https://www.w3.org/ns/credentials/v2",
@@ -388,8 +404,8 @@ the information on the back of the card.
 
         <p class="note" title="credentialStatus is optional">
 Readers might note that the credential above does not contain the optional
-`credentialStatus` property. Not every optical barcode credential issuer will
-have the requirement to have revocable optical barcode credentials.
+`credentialStatus` property. Not every optical bar code credential issuer will
+have the requirement to have revocable optical bar code credentials.
         </p>
 
         <p>
@@ -456,7 +472,7 @@ removed if implementers want to treat the examples as valid JSON or JSON-LD.
       <p>
 The following sections outline the data model that is used by this specification
 to express [=verifiable credentials=] that secure optically printed information
-such as barcodes and machine-readable zones on travel documents.
+such as bar codes and machine-readable zones on travel documents.
       </p>
 
       <section>
@@ -464,11 +480,11 @@ such as barcodes and machine-readable zones on travel documents.
 
         <p>
 An `OpticalBarcodeCredential` is used to secure the contents of an optical
-barcode in a way that provides 1) authorship information , 2) tamper
+bar code in a way that provides 1) authorship information , 2) tamper
 resistance, and 3) optionally, revocation and suspension status. In other words,
-the credential can tell you who issued the optical barcode, if the
-optical barcode has been tampered with since it was first issued, and
-whether or not the <a>issuer</a> of the optical barcode still warrants that
+the credential can tell you who issued the optical bar code, if the
+optical bar code has been tampered with since it was first issued, and
+whether or not the <a>issuer</a> of the optical bar code still warrants that
 the document is still valid or not. These features provide significant
 anti-fraud protections for physical documents.
         </p>
@@ -476,7 +492,7 @@ anti-fraud protections for physical documents.
         <p>
 The `credentialSubject` of an `OpticalBarcodeCredential` is either a
 `Pdf417Barcode` or a `MachineReadableZone`. A `Pdf417Barcode` signifies that
-the <a>verifiable credential</a> secures the PDF417 barcode on the physical
+the <a>verifiable credential</a> secures the PDF417 bar code on the physical
 document as well as the information expressed in the
 <a>verifiable credential</a>. A `MachineReadableZone` signifies that
 the <a>verifiable credential</a> secures the machine-readable zone on the
@@ -492,7 +508,7 @@ compression mechanism.
         </p>
 
         <p>
-An example of an optical barcode credential that utilizes the properties
+An example of an optical bar code credential that utilizes the properties
 specified in this section is provided below:
         </p>
 
@@ -581,7 +597,7 @@ Section <a href="#convert-status-list-entries"></a> for more details.
 
       <p>
 The following section describes algorithms for adding and verifying digital
-proofs that protect optical information, such as barcodes and machine-readable
+proofs that protect optical information, such as bar codes and machine-readable
 zones, on physical media, such as driver's licenses and travel documents.
       </p>
 
@@ -589,8 +605,8 @@ zones, on physical media, such as driver's licenses and travel documents.
 Generally speaking, the algorithms in this section are effectively the same
 as the ones in the [[[VC-DI-ECDSA]]] [[VC-DI-ECDSA]] except that the
 algorithm name is different because the cryptographic hashing process includes
-the machine-readable barcode information when calculating the digital signature
-such that the optical barcode is protected.
+the machine-readable bar code information when calculating the digital signature
+such that the optical bar code is protected.
       </p>
 
       <section>
@@ -602,7 +618,7 @@ provided to a CBOR-LD processor when encoding and decoding
 <a>verifiable credentials</a> of type `OpticalBarcodeCredential`. A registry for
 all context URLs for various issuers is <a href="cbor-ld-compression-table.csv">
 provided as a comma-separated value file</a> and can be updated and modified via
-<a href="https://github.com/digitalbazaar/verifiable-barcodes/pulls/">
+<a href="https://github.com/digitalbazaar/verifiable-bar codes/pulls/">
 change requests</a> to the file on an append-only and first-come-first-served
 basis. Implementations SHOULD retrieve and utilize the latest file on a monthly
 basis to ensure that compression and decompression supports the latest values.
@@ -615,7 +631,7 @@ basis to ensure that compression and decompression supports the latest values.
 
         <ol class="algorithm">
           <li>
-Set |opticalData| to the data in the optical barcode to be secured.
+Set |opticalData| to the data in the optical bar code to be secured.
           </li>
           <li>
 Set |statusListEntryVerbose| to the `BitstringStatusListCredential`
@@ -766,7 +782,7 @@ status list credential.
         <p>
 The `ecdsa-xi-2023` is effectively the `ecdsa-rdfc-2019` algorithm
 [[VC-DI-ECDSA]] with an added step that takes some "extra information" (xi) as
-input, such as the original optical barcode data, and includes that data in the
+input, such as the original optical bar code data, and includes that data in the
 information that is protected by the digital signature. The algorithms in this
 section detail how such a signature is created and verified.
         </p>
