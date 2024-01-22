@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Verifiable Barcodes v0.7</title>
+    <title>Verifiable Bar Codes v0.7</title>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
     <!--
       === NOTA BENE ===
@@ -286,7 +286,7 @@ following <a>verifiable credential</a>.
   ],
   "type": [
     "VerifiableCredential",
-    "OpticalBarcodeCredential"
+    "OpticalBarCodeCredential"
   ],
   <span class="comment">// the issuer value below is defined as a URL in the 'utopia/v1' context above</span>
   "issuer": "did:web:dmv.utopia.example",
@@ -295,7 +295,7 @@ following <a>verifiable credential</a>.
     "index": 283749
   },
   "credentialSubject": {
-    "type": "Pdf417Barcode"
+    "type": "Pdf417BarCode"
   },
   "proof": {
     "type": "DataIntegrity",
@@ -384,7 +384,7 @@ the information on the back of the card.
   ],
   "type": [
     "VerifiableCredential",
-    "OpticalBarcodeCredential"
+    "OpticalBarCodeCredential"
   ],
   <span class="comment">// the value below is defined as a URL in the 'utopia/v1' context above</span>
   "issuer": "did:web:immigration.utopia.example",
@@ -476,10 +476,10 @@ such as bar codes and machine-readable zones on travel documents.
       </p>
 
       <section>
-        <h3>OpticalBarcodeCredential</h3>
+        <h3>OpticalBarCodeCredential</h3>
 
         <p>
-An `OpticalBarcodeCredential` is used to secure the contents of an optical
+An `OpticalBarCodeCredential` is used to secure the contents of an optical
 bar code in a way that provides 1) authorship information , 2) tamper
 resistance, and 3) optionally, revocation and suspension status. In other words,
 the credential can tell you who issued the optical bar code, if the
@@ -490,8 +490,8 @@ anti-fraud protections for physical documents.
         </p>
 
         <p>
-The `credentialSubject` of an `OpticalBarcodeCredential` is either a
-`Pdf417Barcode` or a `MachineReadableZone`. A `Pdf417Barcode` signifies that
+The `credentialSubject` of an `OpticalBarCodeCredential` is either a
+`Pdf417BarCode` or a `MachineReadableZone`. A `Pdf417BarCode` signifies that
 the <a>verifiable credential</a> secures the PDF417 bar code on the physical
 document as well as the information expressed in the
 <a>verifiable credential</a>. A `MachineReadableZone` signifies that
@@ -513,7 +513,7 @@ specified in this section is provided below:
         </p>
 
         <pre class="example nohighlight"
-             title="An OpticalBarcodeCredential utilizing a TerseBitstringStatusListEntry">
+             title="An OpticalBarCodeCredential utilizing a TerseBitstringStatusListEntry">
 {
   "@context": [
     "https://www.w3.org/ns/credentials/v2",
@@ -522,7 +522,7 @@ specified in this section is provided below:
   ],
   "type": [
     "VerifiableCredential",
-    <span class="highlight">"OpticalBarcodeCredential"</span>
+    <span class="highlight">"OpticalBarCodeCredential"</span>
   ],
   "issuer": "did:web:dmv.utopia.example",
   "credentialStatus": <span class="highlight">{
@@ -530,7 +530,7 @@ specified in this section is provided below:
     "index": 283749
   }</span>,
   "credentialSubject": {
-    "type": <span class="highlight">"Pdf417Barcode"</span>,
+    "type": <span class="highlight">"Pdf417BarCode"</span>,
   }
 }
         </pre>
@@ -564,13 +564,13 @@ will result in the DID Document below:
   "service": [{
     "id": "did:web:dmv.utopia.example#revocation-service",
     "type": "BitstringStatusListService",
-    "credentialType": "OpticalBarcodeCredential",
+    "credentialType": "OpticalBarCodeCredential",
     "statusPurpose": "revocation",
     "serviceEndpoint": "https://dmv.utopia.example/status/revocation/{{YYYY}}/{{MM}}"
   }, {
     "id": "did:web:dmv.utopia.example#suspension-service",
     "type": "BitstringStatusListService",
-    "credentialType": "OpticalBarcodeCredential",
+    "credentialType": "OpticalBarCodeCredential",
     "statusPurpose": "suspension",
     "serviceEndpoint": "https://dmv.utopia.example/status/suspension/{{YYYY}}/{{MM}}"
   }]
@@ -615,7 +615,7 @@ such that the optical bar code is protected.
         <p>
 This specification requires that an application-specific compression table is
 provided to a CBOR-LD processor when encoding and decoding
-<a>verifiable credentials</a> of type `OpticalBarcodeCredential`. A registry for
+<a>verifiable credentials</a> of type `OpticalBarCodeCredential`. A registry for
 all context URLs for various issuers is <a href="cbor-ld-compression-table.csv">
 provided as a comma-separated value file</a> and can be updated and modified via
 <a href="https://github.com/digitalbazaar/verifiable-bar codes/pulls/">
@@ -636,7 +636,7 @@ Set |opticalData| to the data in the optical bar code to be secured.
           <li>
 Set |statusListEntryVerbose| to the `BitstringStatusListCredential`
 (as defined in the [[[VC-BITSTRING-STATUS-LIST]]] specification) that the issuer
-wishes to add to the `OpticalBarcodeCredential`.
+wishes to add to the `OpticalBarCodeCredential`.
           </li>
           <li>
 Let |statusListEntryTerse| be an empty [=map=]. Set |statusListEntryTerse|.|type| to `TerseBitstringStatusListEntry` and |statusListEntryTerse|.|index| to the integer representation of |statusListEntryVerbose|.|statusListIndex|.
@@ -645,7 +645,7 @@ Let |statusListEntryTerse| be an empty [=map=]. Set |statusListEntryTerse|.|type
 Set |issuerUrl| to the URL the issuer wishes to use for credential verification.
           </li>
           <li>
-Set |unsignedStatus| to an `OpticalBarcodeCredential` with
+Set |unsignedStatus| to an `OpticalBarCodeCredential` with
 |unsignedStatus|.|issuer| set to |issuerUrl| and |unsignedStatus|.|credentialStatus|
 set to |statusListEntryTerse|.
           </li>
@@ -675,7 +675,7 @@ Set |verificationResult| to the result of applying the algorithm in
 <a href="#verify-proof-ecdsa-xi-2023">Section 3.2.2</a> to |securedDocument|.
           </li>
           <li>
-Set |credential| to the `OpticalBarcodeCredential` in |securedDocument|.
+Set |credential| to the `OpticalBarCodeCredential` in |securedDocument|.
           </li>
           <li>
 Set |statusListEntry| to the result of applying the algorithm in
@@ -703,7 +703,7 @@ during the validation process.
 
         <p>
 After <a>verifiable credential</a> verification has been performed, the
-algorithm takes an `OpticalBarcodeCredential` <a>verifiable credential</a>
+algorithm takes an `OpticalBarCodeCredential` <a>verifiable credential</a>
 ([=struct=] |vc|) as input and returns a status object ([=map=] |result|) that
 contains a [=boolean=] |status| [=map/entry=] and a [=list=] |statusListEntry|
 of one or more [=struct=] values representing `BitstringStatusListEntry`
