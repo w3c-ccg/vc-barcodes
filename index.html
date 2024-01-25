@@ -1003,10 +1003,57 @@ In the following sections, we review these important points and direct
 the reader to additional information.
       </p>
 
-      <p class="issue">
-Add security considerations specific to this specification.
-      </p>
-
+      <section>
+        <h3>Optical Data Duplication</h3>
+        <p>
+          One attack vector against `OpticalBarcodeCredentials` involves duplicating
+          a signed optical barcode for use on a fraudulent document. While a duplicated 
+          barcode will pass signature validation like the original, this attack is mitigated
+          by the document verifier checking the following three things: the signed data matches
+          the data visible on the document, the signed data matches the physical attributes of
+          the user, and the visible data matches the physical attributes of the user. When these
+          three are all equivalent, the only way the `OpticalBarcodeCredential` could be a 
+          duplicate is if the fraudulent document creator had access to a real 
+          `OpticalBarcodeCredential` where the signed physical attributes fully  overlapped 
+          with those of the user of the fraudulent document. The low likelihood of an undetected 
+          stolen `OpticalBarcodeCredential` existing that completely matches the appearance 
+          of an arbitrary person makes this attack very unlikely to succeed.
+        </p>
+      </section>
+      <section>
+        <h3>Partially Signed Optical Data</h3>
+        <p>
+        It is possible that in some cases the digital signature cannot be created 
+        over the entirety of the existing optical data. For example, consider a case 
+        where a serial number is injected by a physical credential manufacturer in a way
+        where it is not known to the issuer at signature time. In this case, the verifier
+        must assume that any data not digitally signed could have been changed in 
+        the optical barcode without impacting the `OpticalBarcodeCredential's`
+        ability to successfully validate.
+       </p>
+       <p>
+        When checking that data from the optical barcode matches the data visible on the 
+        document as well as the characteristics of the document holder, emphasis should 
+        be given to only the fields that are digitally signed. Validating the signed fields 
+        against the document/document holder should trump all other fields, no matter how 
+        commonly the other fields are used for fraud detection on unsigned documents. For
+        example, if eye color and hair color are signed but the holder's portrait is not,
+        eye color and hair color should be emphasized for fraud detection over portrait.
+       </p>
+       <p>
+        Verification systems should only display card data that has been secured via 
+        digital signature during the verification process. Displaying unsigned data, which
+        could have been tampered with, could interfere with fraud detection.
+       </p>
+      </section>
+      <section>
+        <h3>Safe Verification</h3>
+        <p>
+        The verifier should always use trusted programs and interfaces to check the validity
+        of the `OpticalBarcodeCredential`. Use of untrusted software to verify a document 
+        could result in a fraudulent credential being accepted, or a genuine credential being stolen.
+        </p>
+      </section>
     </section>
 
     <section>
