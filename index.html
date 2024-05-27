@@ -292,10 +292,12 @@ following <a>verifiable credential</a>.
   "issuer": "did:web:dmv.utopia.example",
   "credentialStatus": {
     "type": "TerseBitstringStatusListEntry",
-    "index": 283749
+    "terseStatusListBaseUrl": "dmv.utopia.gov/statuses/12345/status-lists"
+    "terseStatusListIndex": 123567890
   },
   "credentialSubject": {
-    "type": "Pdf417Barcode"
+    "type": <span class="highlight">"UsDriversLicenseWithMandatoryFieldsPdf417Barcode"</span>,
+    "signatureBitfield": "uP_BA"
   },
   "proof": {
     "type": "DataIntegrity",
@@ -389,7 +391,7 @@ the information on the back of the card.
   <span class="comment">// the value below is defined as a URL in the 'utopia/v1' context above</span>
   "issuer": "did:web:immigration.utopia.example",
   "credentialSubject": {
-    "type": "MachineReadableZone",
+    "type": "CompleteMrzBarcode",
   },
   "proof": {
     "type": "DataIntegrity",
@@ -491,10 +493,11 @@ anti-fraud protections for physical documents.
 
         <p>
 The `credentialSubject` of an `OpticalBarcodeCredential` is either a
-`Pdf417Barcode` or a `MachineReadableZone`. A `Pdf417Barcode` signifies that
+`UsDriversLicenseWithMandatoryFieldsPdf417Barcode` or a `CompleteMrzBarcode`. A 
+`UsDriversLicenseWithMandatoryFieldsPdf417Barcode` signifies that
 the <a>verifiable credential</a> secures the PDF417 barcode on the physical
 document as well as the information expressed in the
-<a>verifiable credential</a>. A `MachineReadableZone` signifies that
+<a>verifiable credential</a>. A `CompleteMrzBarcode` signifies that
 the <a>verifiable credential</a> secures the machine-readable zone on the
 physical document as well as the information expressed in the
 <a>verifiable credential</a>.
@@ -527,10 +530,12 @@ specified in this section is provided below:
   "issuer": "did:web:dmv.utopia.example",
   "credentialStatus": <span class="highlight">{
     "type": "TerseBitstringStatusListEntry",
-    "index": 283749
+    "terseStatusListBaseUrl": "dmv.utopia.gov/statuses/12345/status-lists"
+    "terseStatusListIndex": 123567890
   }</span>,
   "credentialSubject": {
-    "type": <span class="highlight">"Pdf417Barcode"</span>,
+    "type": <span class="highlight">"UsDriversLicenseWithMandatoryFieldsPdf417Barcode"</span>,
+    "signatureBitfield": "uP_BA"
   }
 }
         </pre>
