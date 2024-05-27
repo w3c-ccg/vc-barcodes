@@ -113,6 +113,12 @@
               "ISO/IEC JTC 1/SC 31"
             ],
             publisher: "International Standards Organization"
+          },
+          "aamva-dl-id-card-design-standard": {
+            title: "AAMVA DL/ID Card Design Standard (2020)",
+            date: "2020",
+            href: "https://www.aamva.org/assets/best-practices,-guides,-standards,-manuals,-whitepapers/aamva-dl-id-card-design-standard-(2020)",
+            publisher: "American Association of Motor Vehicle Administrators"
           }
         },
         lint: {"no-unused-dfns": false},
@@ -492,7 +498,7 @@ anti-fraud protections for physical documents.
         </p>
 
         <p>
-The `credentialSubject` of an `OpticalBarcodeCredential` is either a
+The `credentialSubject` of an `OpticalBarcodeCredential` is either of type
 `UsDriversLicenseWithMandatoryFieldsPdf417Barcode` or a `CompleteMrzBarcode`. A 
 `UsDriversLicenseWithMandatoryFieldsPdf417Barcode` signifies that
 the <a>verifiable credential</a> secures the PDF417 barcode on the physical
@@ -501,6 +507,21 @@ document as well as the information expressed in the
 the <a>verifiable credential</a> secures the machine-readable zone on the
 physical document as well as the information expressed in the
 <a>verifiable credential</a>.
+        </p>
+
+        <p>
+If an `OpticalBarcodeCredential` is of type `UsDriversLicenseWithMandatoryFieldsPdf417Barcode`,
+there is a REQUIRED additional field `signatureBitfield` that contains information about which fields
+in the PDF417 are digitally signed. `signatureBitfield` MUST be a three byte/24 bit value that is 
+multibase-base64url encoded for a total of 5 characters in the JSON-LD credential. There are 22
+mandatory fields in an AAMVA compliant driver's license PDF417 [[aamva-dl-id-card-design-standard]],
+and the first 22 bits of the `signatureBitfield` value correspond to these fields. Each AAMVA mandatory
+field begins with a three character element ID (e.g. `DBA` for document expiration date). To construct 
+a mapping between bits in the `signatureBitfield` value and these fields, sort these element IDs lexically.
+Then, if a bit in position `i` of `signatureBitfield` is `1`, then the AAMVA mandatory field in
+position `i` of the sorted element IDs is digitally signed. The last two bits in `signatureBitfield`
+MUST be `0`. For more information, see 
+<a href="#create-opticaldatahash">Section 3.5.4</a>.
         </p>
 
         <p>
@@ -534,8 +555,8 @@ specified in this section is provided below:
     "terseStatusListIndex": 123567890
   }</span>,
   "credentialSubject": {
-    "type": <span class="highlight">"UsDriversLicenseWithMandatoryFieldsPdf417Barcode"</span>,
-    "signatureBitfield": "uP_BA"
+    <span class="highlight">"type": "UsDriversLicenseWithMandatoryFieldsPdf417Barcode"</span>,
+    <span class="highlight">"signatureBitfield": "uP_BA"</span>
   }
 }
         </pre>
@@ -878,6 +899,10 @@ first hash), <var>transformedDocumentHash</var> (the second hash), and
             </li>
           </ol>
 
+        </section>
+
+        <section>
+          <h4> Create opticalDataHash</h4>
         </section>
 
         <section>
