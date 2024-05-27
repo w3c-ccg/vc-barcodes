@@ -903,8 +903,72 @@ first hash), <var>transformedDocumentHash</var> (the second hash), and
 
         <section>
           <h4> Create opticalDataHash</h4>
-        </section>
+        
+          <section>
+            <h5>`UsDriversLicenseWithMandatoryFieldsPdf417Barcode` Credentials</h5>
+            <ol class="algorithm">
+              <li>
+Set |dataToCanonicalize| to an empty array.
+              </li>
+              <li>
+Set |bitfieldDecoded| to be first 22 bits of the length 24 bitstring resulting from decoding `credentialSubject.signatureBitfield`
+from multibase-base64url to binary.
+              </li>
+              <li>
+Set |fieldsAlphabetized| to be an array containing the 22 AAMVA mandatory PDF417 Element IDs 
+[[aamva-dl-id-card-design-standard]] sorted in lexical order (i.e. ['DAC', 'DAD' ... 'DDG']).
+              </li>
+              <li>
+For each bit with value `1` in |bitfieldDecoded|:
+                <ol class="algorithm">
+                  <li>
+Set the string |fieldName| to |fieldsAlphabetized|[|i|], where |i| is the index of the bit in |bitfieldDecoded|.
+                  </li>
+                  <li>
+Set the string |fieldData| to the data that will be in the PDF417 associated with that field name.
+                  </li>
+                  <li>
+Concatenate |fieldData| to the end of |fieldName|, and append the result to |dataToCanonicalize|.
+                  </li>
+                </ol>
+              </li>
+              <li>
+Set |canonicalizedData| to the result of lexically sorting |dataToCanonicalize| and then applying a join operation
+to create a single string from the array.
+              </li>
+              <li>
+Hash |canonicalizedData| and return the result.
+              </li>
+            </ol>
+          </section>
 
+          <section>
+            <h5>`CompleteMrzBarcode` Credentials</h5>
+            <ol class="algorithm">
+              <li>
+Set |dataToCanonicalize| to an empty array.
+              </li>
+              <li>
+For each line in the Machine Readable Zone on the credential:
+                <ol class="algorithm">
+                  <li>
+Set |mrzLine| to a string containing the data in that line.
+                  </li>
+                  <li>
+Append a newline character to the end of |mrzLine| and append |mrzLine| to |dataToCanonicalize|.
+                  </li>
+                </ol>
+              </li>
+              <li>
+Set |canonicalizedData| to the result of lexically sorting |dataToCanonicalize| and then applying a join operation
+to create a single string from the array.
+              </li>
+              <li>
+Hash |canonicalizedData| and return the result.
+              </li>
+            </ol>
+          </section>
+        </section>
         <section>
           <h4>Proof Configuration (ecdsa-xi-2023)</h4>
 
