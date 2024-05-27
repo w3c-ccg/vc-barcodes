@@ -296,7 +296,7 @@ following <a>verifiable credential</a>.
     "terseStatusListIndex": 123567890
   },
   "credentialSubject": {
-    "type": <span class="highlight">"UsDriversLicenseWithMandatoryFieldsPdf417Barcode"</span>,
+    "type": "UsDriversLicenseWithMandatoryFieldsPdf417Barcode",
     "signatureBitfield": "uP_BA"
   },
   "proof": {
@@ -316,19 +316,19 @@ to the following output (in CBOR Diagnostic Notation):
         </p>
 
         <pre class="example nohighlight"
-             title="CBOR-LD compressed Verifiable Credential (137 bytes)">
-{
-  1 => [ 32768, 32769, 32770],           <span class="comment">// @context</span>
-  151 => [ 114, 160 ],                   <span class="comment">// type</span>
-  178 => 32782,                          <span class="comment">// issuer</span>
-  172 => { 150 => 162, 192 => 283749 },  <span class="comment">// credentialStatus</span>
-  174 => { 150 => 158 },                 <span class="comment">// credentialSubject</span>
-  180 => {                               <span class="comment">// proof</span>
-    150 => 102,                          <span class="comment">// type</span>
-    198 => 32771,                        <span class="comment">// cryptosuite</span>
-    212 => 32783                         <span class="comment">// verificationMethod</span>
-    208 => 214,                          <span class="comment">// proofPurpose</span>
-    210 => Uint8Array(65) [ ... ],       <span class="comment">// proofValue</span>
+             title="CBOR-LD compressed Verifiable Credential (145 bytes)">
+1281{
+  1 => [ 32768, 32769, 32770],                           <span class="comment">// @context</span>
+  155 => [ 116, 164 ],                                   <span class="comment">// type</span>
+  192 => 174,                                            <span class="comment">// issuer</span>
+  186 => { 154 => 166, 206 => 178, 208 => 1234567890 },  <span class="comment">// credentialStatus</span>
+  188 => { 154 => 172, 180 => h'753FF040 },              <span class="comment">// credentialSubject</span>
+  194 => {                                               <span class="comment">// proof</span>
+    154 => 108,                                          <span class="comment">// type</span>
+    214 => 4,                                            <span class="comment">// cryptosuite</span>
+    224 => 230                                           <span class="comment">// verificationMethod</span>
+    228 => 176,                                          <span class="comment">// proofPurpose</span>
+    210 => Uint8Array(65) [ ... ],                       <span class="comment">// proofValue</span>
   }
 }
         </pre>
@@ -416,17 +416,17 @@ to the following output (in CBOR Diagnostic Notation):
         </p>
 
         <pre class="example nohighlight"
-             title="CBOR-LD compressed Verifiable Credential (137 bytes)">
+             title="CBOR-LD compressed Verifiable Credential (120 bytes)">
 {
   1 => [ 32768, 32769, 32770],           <span class="comment">// @context</span>
-  151 => [ 114, 160 ],                   <span class="comment">// type</span>
-  178 => 32782,                          <span class="comment">// issuer</span>
-  174 => { 150 => 158 },                 <span class="comment">// credentialSubject</span>
-  180 => {                               <span class="comment">// proof</span>
-    150 => 102,                          <span class="comment">// type</span>
-    198 => 32771,                        <span class="comment">// cryptosuite</span>
-    212 => 32783                         <span class="comment">// verificationMethod</span>
-    208 => 214,                          <span class="comment">// proofPurpose</span>
+  155 => [ 116, 176 ],                   <span class="comment">// type</span>
+  208 => 194,                          <span class="comment">// issuer</span>
+  204 => { 154 => 192 },                 <span class="comment">// credentialSubject</span>
+  210 => {                               <span class="comment">// proof</span>
+    154 => 108,                          <span class="comment">// type</span>
+    226 => 4,                        <span class="comment">// cryptosuite</span>
+    236 => 242                         <span class="comment">// verificationMethod</span>
+    240 => 196,                          <span class="comment">// proofPurpose</span>
     210 => Uint8Array(65) [ ... ],       <span class="comment">// proofValue</span>
   }
 }
