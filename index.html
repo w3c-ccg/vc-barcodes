@@ -590,16 +590,24 @@ specification.
 An object of type `TerseBitstringStatusListEntry` MUST have two additional properties:
           <ul>
             <li>
-`terseStatusListBaseUrl`, which identifies the location of the status lists associated with this credential,
+`terseStatusListBaseUrl`, which identifies the location of the status lists associated with this credential.
             </li>
             <li>
-`terseStatusListIndex`, which specifies an individual status at the above URL.
+`terseStatusListIndex`, which specifies an individual status at the above URL. `terseStatusListIndex` MUST be
+representable as a 32 bit unsigned integer.
             </li>
           </ul>
         </p>
 To process a `TerseBitstringStatusListEntry`, apply the algorithm in 
 <a href="#convert-status-list-entries">Section 3.4</a> to convert it to a `BitstringStatusListEntry`,
 then process it as in [[[VC-BITSTRING-STATUS-LIST]]].
+        <p>
+Implementers MUST set a value |listLength| for the length of an individual status list. This then yields
+a number of status lists |listCount| = 2^32 / |listLength| for a 32-bit `terseStatusListIndex`.
+|listLength| is needed to convert from a `TerseBitstringStatusListEntry` to a `BitstringStatusListEntry`
+Noting that some values of |listLength| will harm the privacy-preserving properties of these status lists, it is
+RECOMMENDED that implementations use |listLength| = 2^17 and |listCount| = 2^15.
+        </p>
     
       </section>
 
@@ -717,65 +725,22 @@ during the validation process.
         <p>
 After <a>verifiable credential</a> verification has been performed, the
 algorithm takes an `OpticalBarcodeCredential` <a>verifiable credential</a>
-([=struct=] |vc|) as input and returns a status object ([=map=] |result|) that
-contains a [=boolean=] |status| [=map/entry=] and a [=list=] |statusListEntry|
-of one or more [=struct=] values representing `BitstringStatusListEntry`
-objects.
+([=struct=] |vc|) and a string |statusPurpose| (e.g. 'revocation', 'suspension'...)
+as input and returns a 'BitstringStatusListEntry' object.
         </p>
 
         <ol class="algorithm">
           <li>
-Set |result| to be an empty [=map=] and initialize the |result|.|status| value
-to `false`.
+Set |result| to be an empty [=map=].
           </li>
-          <li>
-Set |year| and |month| to the respective values specified in the
-|vc|.|proof|.|created| field.
-          </li>
-          <li>
-Set |didDocument| to be the result of dereferencing |issuer|. If the dereference
-does not result in a conforming DID Document, raise an
-<a data-cite="VC-DATA-INTEGRITY#INVALID_CONTROLLER_DOCUMENT">
-INVALID_CONTROLLER_DOCUMENT</a> error.
-          </li>
-          <li>
-For each |service| value in |didDocument| where the |service|.|type| is
-`BitstringStatusListService`:
-            <ol class="algorithm">
-              <li>
-Initialize |bslEntry| to an empty [=map=].
-              </li>
-              <li>
-Set |bslEntry|.|type| to `BitstringStatusListEntry`.
-              </li>
-              <li>
-Set |bslEntry|.|statusPurpose| to |service|.|statusPurpose|.
-              </li>
-              <li>
-Set |bslEntry|.|statusListIndex| to |vc|.|credentialStatus|.|index|, ensuring
-that the value is converted to a string.
-              </li>
-              <li>
-Set |bslEntry|.|statusListCredential| to |service|.|serviceEndpoint|,
-replacing any `{{YYYY}}` text with a four-character representation of |year|
-and any `{{MM}}` text with a two-character representation of |month|, using
-leading zeros as necessary.
-              </li>
-              <li>
-Add |bslEntry| to |result|.|statusListEntry|.
-              </li>
-              <li>
-Set |result|.|status| to `true`.
-              </li>
-            </ol>
-          </li>
+Set 
           <li>
 Return |result|.
           </li>
         </ol>
 
         <p>
-Each value in |result|.|statusList| can be used as input to the
+|result| can be used as input to the
 <a data-cite="VC-BITSTRING-STATUS-LIST#validate-algorithm">
 validation algorithm</a> in the [[[VC-BITSTRING-STATUS-LIST]]] specification.
         </p>
