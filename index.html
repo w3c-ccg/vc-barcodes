@@ -604,7 +604,7 @@ then process it as in [[[VC-BITSTRING-STATUS-LIST]]].
         <p>
 Implementers MUST set a value |listLength| for the length of an individual status list. This then yields
 a number of status lists |listCount| = 2^32 / |listLength| for a 32-bit `terseStatusListIndex`.
-|listLength| is needed to convert from a `TerseBitstringStatusListEntry` to a `BitstringStatusListEntry`
+|listLength| is needed to convert from a `TerseBitstringStatusListEntry` to a `BitstringStatusListEntry`.
 Noting that some values of |listLength| will harm the privacy-preserving properties of these status lists, it is
 RECOMMENDED that implementations use |listLength| = 2^17 and |listCount| = 2^15.
         </p>
@@ -725,15 +725,33 @@ during the validation process.
         <p>
 After <a>verifiable credential</a> verification has been performed, the
 algorithm takes an `OpticalBarcodeCredential` <a>verifiable credential</a>
-([=struct=] |vc|) and a string |statusPurpose| (e.g. 'revocation', 'suspension'...)
-as input and returns a 'BitstringStatusListEntry' object.
+([=struct=] |vc|), an integer |listLength| containing the number of entries 
+in the `BitstringStatusListCredential` associated with |vc|, and a string 
+|statusPurpose| (e.g. 'revocation', 'suspension'...) as input and returns 
+a 'BitstringStatusListEntry' object.
         </p>
 
         <ol class="algorithm">
           <li>
 Set |result| to be an empty [=map=].
           </li>
-Set 
+          <li>
+Set |listIndex| to ⌊|vc|.|credentialStatus|.|terseStatusListIndex|/|listLength|⌋.
+          </li>
+          <li>
+Set |statusListIndex| to |vc|.|credentialStatus|.|terseStatusListIndex| % |listLength|.
+          </li>
+          <li>
+Set |result|.|statusListCredential| to 
+'${|vc|.|credentialStatus|.|terseStatusListBaseUrl|}/${|statusPurpose|}/${|listIndex|}'.
+          </li>
+          <li>
+Set |result|.|type| to 'BitstringStatusListEntry'.
+          </li>
+          <li>
+Set |result|.|statusListIndex| to |statusListIndex|.
+          </li>
+Set |result|.|statusPurpose| to |statusPurpose|.
           <li>
 Return |result|.
           </li>
