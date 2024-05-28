@@ -298,7 +298,7 @@ described in this specification. Namely, the PDF417 barcode contains a
   "issuer": "did:web:dmv.utopia.example",
   "credentialStatus": {
     "type": "TerseBitstringStatusListEntry",
-    "terseStatusListBaseUrl": "dmv.utopia.gov/statuses/12345/status-lists"
+    "terseStatusListBaseUrl": "https://dmv.utopia.gov/statuses/12345/status-lists"
     "terseStatusListIndex": 123567890
   },
   "credentialSubject": {
@@ -451,13 +451,14 @@ to the following output (in CBOR Diagnostic Notation):
         <h3>Terms defined by cited specifications</h3>
         <dl data-sort="ascending">
           <dt><dfn data-cite="XPATH-FUNCTIONS#codepoint-collation" data-lt="code point order|code point ordered|unicode codepoint collation">Unicode code point order</dfn></dt>
-          <dd>This refers to determining the order of two Unicode strings (`A` and `B`),
-            using <a>Unicode Codepoint Collation</a>,
-            as defined in [[XPATH-FUNCTIONS]],
-            which defines a
-            <a href="https://en.wikipedia.org/wiki/Total_order">total ordering</a>
-            of <a>strings</a> comparing code points.
-            Note that for UTF-8 encoded strings, comparing the byte sequences gives the same result as <a>code point order</a>.
+          <dd>
+This refers to determining the order of two Unicode strings (`A` and `B`),
+using <a>Unicode Codepoint Collation</a>,
+as defined in [[XPATH-FUNCTIONS]],
+which defines a
+<a href="https://en.wikipedia.org/wiki/Total_order">total ordering</a>
+of <a>strings</a> comparing code points.
+Note that for UTF-8 encoded strings, comparing the byte sequences gives the same result as <a>code point order</a>.
           </dd>
         </dl>
       </section>
@@ -533,9 +534,9 @@ mandatory fields in an AAMVA compliant driver's license PDF417 [[aamva-dl-id-car
 and the first 22 bits of the `signatureBitfield` value correspond to these fields. Each AAMVA mandatory
 field begins with a three character element ID (e.g. `DBA` for document expiration date). To construct 
 a mapping between bits in the `signatureBitfield` value and these fields, sort these element IDs 
-according to Unicode code point order. Then, if a bit in position `i` of `signatureBitfield` is `1`, 
-the AAMVA mandatory field in position `i` of the sorted element IDs is digitally signed. The last two 
-bits in `signatureBitfield`MUST be `0`. For more information, see <a href="#create-opticaldatahash">Section 3.5.4</a>.
+according to Unicode code point order. Then, if a bit in position `i` of `signatureBitfield` is `1`, the 
+AAMVA mandatory field in position `i` of the sorted element IDs is protected by the digital signature. The last two 
+bits in `signatureBitfield` MUST be `0`. For more information, see Section [[[#create-opticaldatahash]]].
         </p>
 
         <p>
@@ -590,6 +591,7 @@ An object of type `TerseBitstringStatusListEntry` MUST have two additional prope
           <ul>
             <li>
 `terseStatusListBaseUrl`, which identifies the location of the status lists associated with this credential.
+`terseStatusListBaseUrl` MUST be a URL [[URL]].
             </li>
             <li>
 `terseStatusListIndex`, which specifies an individual status at the above URL. `terseStatusListIndex` MUST be
@@ -597,30 +599,30 @@ representable as a 32 bit unsigned integer.
             </li>
           </ul>
         </p>
-To process a `TerseBitstringStatusListEntry`, apply the algorithm in 
-<a href="#convert-status-list-entries">Section 3.4</a> to convert it to a `BitstringStatusListEntry`,
+To process a `TerseBitstringStatusListEntry`, apply the algorithm in Section
+[[[#convert-status-list-entries]]] to convert it to a `BitstringStatusListEntry`,
 then process it as in [[[VC-BITSTRING-STATUS-LIST]]].
         <p>
-Implementers MUST set a value |listLength| for the length of an individual status list. This then yields
+Implementers need to set a value |listLength| for the length of an individual status list. This then yields
 a number of status lists |listCount| = 2^32 / |listLength| for a 32-bit `terseStatusListIndex`.
 |listLength| is needed to convert from a `TerseBitstringStatusListEntry` to a `BitstringStatusListEntry`.
-Noting that some values of |listLength| will harm the privacy-preserving properties of these status lists, it is
-RECOMMENDED that implementations use |listLength| = 2^17 and |listCount| = 2^15.
+Noting that some values of |listLength| will harm the privacy-preserving properties of these status lists,
+implementations MUST use |listLength| = 2^17 and |listCount| = 2^15.
         </p>
     
       </section>
 
       <section>
         <h3>Encoding to and from barcodes</h3>
-While the credentials in this specification use CBOR-LD to efficiently encode Verifiable Credentials
+While the credentials in this specification use CBOR-LD to efficiently encode [=verifiable credentials=]
 in a binary format, binary data is often inefficient or incompatible to turn into standard barcode
-image formats directly. To that end, we provide recommendations here for
+image formats directly. To that end, we provide requirements here for implementations.
         <p>
-It is RECOMMENDED that implementers re-encode CBOR-LD encoded `UsDriversLicenseWithMandatoryFieldsPdf417Barcode`
+It is REQUIRED that implementers character-encode CBOR-LD encoded `UsDriversLicenseWithMandatoryFieldsPdf417Barcode`
 credentials as base64url before encoding them in a PDF417.
         </p>
         <p>
-It is RECOMMENDED that implementers re-encode CBOR-LD encoded `CompleteMrzBarcode` credentials
+It is REQUIRED that implementers re-encode CBOR-LD encoded `CompleteMrzBarcode` credentials
 as base32 with the string 'VC1-' prepended before encoding them in a QR code.
         </p>
       </section>
@@ -706,15 +708,15 @@ Generate the machine-readable credential (MRZ or PDF417).
 Set |securedDocument| to the data in the PDF417 or MRZ.
           </li>
           <li>
-Set |verificationResult| to the result of applying the algorithm in
-<a href="#verify-proof-ecdsa-xi-2023">Section 3.2.2</a> to |securedDocument|.
+Set |verificationResult| to the result of applying the algorithm in Section 
+[[[#verify-proof-ecdsa-xi-2023]]]to |securedDocument|.
           </li>
           <li>
 Set |credential| to the `OpticalBarcodeCredential` in |securedDocument|.
           </li>
           <li>
-Set |statusListEntry| to the result of applying the algorithm in
-<a href="#convert-status-list-entries">Section 3.4</a> to |credential|.
+Set |statusListEntry| to the result of applying the algorithm in Section 
+[[[#convert-status-list-entries]]] to |credential|.
           </li>
           <li>
 Set |statusResult| to the result of applying the algorithm in
@@ -750,14 +752,15 @@ a 'BitstringStatusListEntry' object.
 Set |result| to be an empty [=map=].
           </li>
           <li>
-Set |listIndex| to ⌊|vc|.|credentialStatus|.|terseStatusListIndex|/|listLength|⌋.
+Set |listIndex| to |vc|.|credentialStatus|.|terseStatusListIndex|/|listLength| rounded down
+to the next lowest integer (i.e. apply the `floor()` operation).
           </li>
           <li>
 Set |statusListIndex| to |vc|.|credentialStatus|.|terseStatusListIndex| % |listLength|.
           </li>
           <li>
-Set |result|.|statusListCredential| to 
-'${|vc|.|credentialStatus|.|terseStatusListBaseUrl|}/${|statusPurpose|}/${|listIndex|}'.
+Set |result|.|statusListCredential| to the concatenation of the following values:
+|vc|.|credentialStatus|.|terseStatusListBaseUrl|, '/', |statusPurpose|, '/', |listIndex|.
           </li>
           <li>
 Set |result|.|type| to 'BitstringStatusListEntry'.
