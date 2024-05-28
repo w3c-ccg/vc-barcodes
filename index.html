@@ -183,7 +183,7 @@ ol.algorithm li:before {
 This specification describes a mechanism to protect legacy optical barcodes,
 such as those found on driver's licenses (PDF417) and travel documents (MRZ),
 using Verifiable Credentials [[VC-DATA-MODEL-2.0]]. The Verifiable Credential
-representations are compact enough such that they fit in under 140 bytes and
+representations are compact enough such that they fit in under 150 bytes and
 can thus be integrated with traditional two-dimensional barcodes that are
 printed on physical cards using legacy printing processes.
       </p>
@@ -278,8 +278,8 @@ A back of a driver's license issued by the state of Utopia.
 
         <p>
 The PDF417 data contains information that is secured using the algorithms
-described in this specification. Namely, the PDF417 barcode contains the
-following <a>verifiable credential</a>.
+described in this specification. Namely, the PDF417 barcode contains a
+<a>verifiable credential</a> of the following form.
         </p>
 
         <pre class="example nohighlight"
@@ -378,7 +378,7 @@ A back of an employment authorization document issued by the state of Utopia.
         <p>
 The MRZ data contains information that is secured using the algorithms
 described in this specification. Namely, the QR Code on the front of the
-card contains the following <a>verifiable credential</a>, which secures
+card contains a <a>verifiable credential</a> of the following form, which secures
 the information on the back of the card.
         </p>
 
