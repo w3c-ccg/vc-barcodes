@@ -581,54 +581,26 @@ specified in this section is provided below:
         <h3>TerseBitstringStatusListEntry</h3>
 
         <p>
-A `TerseBitstringStatusListEntry` is a subclass of a `BitstringStatusListEntry`
-as defined in the [[[VC-BITSTRING-STATUS-LIST]]] specification, where only the
-status list index is provided. The location of the status lists are discovered
-through the issuer DID Document via the `service` property.
+A `TerseBitstringStatusListEntry` is a compact representation
+of a `BitstringStatusListEntry` as defined in the [[[VC-BITSTRING-STATUS-LIST]]] 
+specification.
         </p>
 
         <p>
-Using the `issuer` property value in
-<a href="#example-an-opticalbarcodecredential-utilizing-a-tersebitstringstatuslistentry">
-Example 5</a> above (`did:web:dmv.utopia.example`), dereferencing the DID URL
-will result in the DID Document below:
+An object of type `TerseBitstringStatusListEntry` MUST have two additional properties:
+          <ul>
+            <li>
+`terseStatusListBaseUrl`, which identifies the location of the status lists associated with this credential,
+            </li>
+            <li>
+`terseStatusListIndex`, which specifies an individual status at the above URL.
+            </li>
+          </ul>
         </p>
-
-        <pre class="example nohighlight"
-             title="A did:web DID Document expressing status services">
-{
-  "@context": [
-    "https://www.w3.org/ns/did/v1",
-    "https://w3id.org/vdl/v2"
-  ]
-  "id": "did:web:dmv.utopia.example",
-  "service": [{
-    "id": "did:web:dmv.utopia.example#revocation-service",
-    "type": "BitstringStatusListService",
-    "credentialType": "OpticalBarcodeCredential",
-    "statusPurpose": "revocation",
-    "serviceEndpoint": "https://dmv.utopia.example/status/revocation/{{YYYY}}/{{MM}}"
-  }, {
-    "id": "did:web:dmv.utopia.example#suspension-service",
-    "type": "BitstringStatusListService",
-    "credentialType": "OpticalBarcodeCredential",
-    "statusPurpose": "suspension",
-    "serviceEndpoint": "https://dmv.utopia.example/status/suspension/{{YYYY}}/{{MM}}"
-  }]
-}
-        </pre>
-
-        <p>
-The `BitstringStatusListService` identifies a specific type of service that
-utilizes a URL template that uses information from the
-<a>verifiable credential</a> to determine the revocation and suspension status
-list URLs. The `{{YYYY}}` and `{{MM}}` template values are replaced with the
-issuance year and month, respectively, of the <a>verifiable credential</a>
-which are encoded in the `proof`. The resulting document MUST be a
-<a data-cite="VC-BITSTRING-STATUS-LIST#bitstringstatuslistcredential">
-BitstringStatusListCredential</a> [[VC-BITSTRING-STATUS-LIST]]. See
-Section <a href="#convert-status-list-entries"></a> for more details.
-        </p>
+To process a `TerseBitstringStatusListEntry`, apply the algorithm in 
+<a href="#convert-status-list-entries">Section 3.4</a> to convert it to a `BitstringStatusListEntry`,
+then process it as in [[[VC-BITSTRING-STATUS-LIST]]].
+    
       </section>
 
     </section>
@@ -720,7 +692,7 @@ Set |credential| to the `OpticalBarcodeCredential` in |securedDocument|.
           </li>
           <li>
 Set |statusListEntry| to the result of applying the algorithm in
-<a href="#convert-status-list-entries">Section 3.1</a> to |credential|.
+<a href="#convert-status-list-entries">Section 3.4</a> to |credential|.
           </li>
           <li>
 Set |statusResult| to the result of applying the algorithm in
