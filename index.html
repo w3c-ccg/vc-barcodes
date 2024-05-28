@@ -447,6 +447,21 @@ to the following output (in CBOR Diagnostic Notation):
 
       </section>
 
+      <section id="terms-reference">
+        <h3>Terms defined by cited specifications</h3>
+        <dl data-sort="ascending">
+          <dt><dfn data-cite="XPATH-FUNCTIONS#codepoint-collation" data-lt="code point order|code point ordered|unicode codepoint collation">Unicode code point order</dfn></dt>
+          <dd>This refers to determining the order of two Unicode strings (`A` and `B`),
+            using <a>Unicode Codepoint Collation</a>,
+            as defined in [[XPATH-FUNCTIONS]],
+            which defines a
+            <a href="https://en.wikipedia.org/wiki/Total_order">total ordering</a>
+            of <a>strings</a> comparing code points.
+            Note that for UTF-8 encoded strings, comparing the byte sequences gives the same result as <a>code point order</a>.
+          </dd>
+        </dl>
+      </section>
+
       <section id="conformance">
         <p>
 A <dfn>conforming document</dfn> is any concrete expression of the data model
@@ -916,7 +931,7 @@ from multibase-base64url to binary.
               </li>
               <li>
 Set |fieldsAlphabetized| to be an array containing the 22 AAMVA mandatory PDF417 Element IDs 
-[[aamva-dl-id-card-design-standard]] sorted in lexical order (i.e. ['DAC', 'DAD' ... 'DDG']).
+[[aamva-dl-id-card-design-standard]] sorted in Unicode code point order (i.e. ['DAC', 'DAD' ... 'DDG']).
               </li>
               <li>
 For each bit with value `1` in |bitfieldDecoded|:
@@ -933,7 +948,7 @@ Concatenate |fieldData| to the end of |fieldName|, and append the result to |dat
                 </ol>
               </li>
               <li>
-Set |canonicalizedData| to the result of lexically sorting |dataToCanonicalize| and then applying a join operation
+Set |canonicalizedData| to the result of sorting |dataToCanonicalize| in Unicode code point order and then applying a join operation
 to create a single string from the array.
               </li>
               <li>
@@ -960,8 +975,8 @@ Append a newline character to the end of |mrzLine| and append |mrzLine| to |data
                 </ol>
               </li>
               <li>
-Set |canonicalizedData| to the result of lexically sorting |dataToCanonicalize| and then applying a join operation
-to create a single string from the array.
+Set |canonicalizedData| to the result of ordering the elements of |dataToCanonicalize| to match the order they appear
+on the credential and then applying a join operation to create a single string from the array.
               </li>
               <li>
 Hash |canonicalizedData| and return the result.
