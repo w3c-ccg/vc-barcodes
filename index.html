@@ -532,11 +532,10 @@ multibase-base64url encoded for a total of 5 characters in the JSON-LD credentia
 mandatory fields in an AAMVA compliant driver's license PDF417 [[aamva-dl-id-card-design-standard]],
 and the first 22 bits of the `signatureBitfield` value correspond to these fields. Each AAMVA mandatory
 field begins with a three character element ID (e.g. `DBA` for document expiration date). To construct 
-a mapping between bits in the `signatureBitfield` value and these fields, sort these element IDs lexically.
-Then, if a bit in position `i` of `signatureBitfield` is `1`, then the AAMVA mandatory field in
-position `i` of the sorted element IDs is digitally signed. The last two bits in `signatureBitfield`
-MUST be `0`. For more information, see 
-<a href="#create-opticaldatahash">Section 3.5.4</a>.
+a mapping between bits in the `signatureBitfield` value and these fields, sort these element IDs 
+according to Unicode code point order. Then, if a bit in position `i` of `signatureBitfield` is `1`, 
+the AAMVA mandatory field in position `i` of the sorted element IDs is digitally signed. The last two 
+bits in `signatureBitfield`MUST be `0`. For more information, see <a href="#create-opticaldatahash">Section 3.5.4</a>.
         </p>
 
         <p>
@@ -609,6 +608,21 @@ Noting that some values of |listLength| will harm the privacy-preserving propert
 RECOMMENDED that implementations use |listLength| = 2^17 and |listCount| = 2^15.
         </p>
     
+      </section>
+
+      <section>
+        <h3>Encoding to and from barcodes</h3>
+While the credentials in this specification use CBOR-LD to efficiently encode Verifiable Credentials
+in a binary format, binary data is often inefficient or incompatible to turn into standard barcode
+image formats directly. To that end, we provide recommendations here for
+        <p>
+It is RECOMMENDED that implementers re-encode CBOR-LD encoded `UsDriversLicenseWithMandatoryFieldsPdf417Barcode`
+credentials as base64url before encoding them in a PDF417.
+        </p>
+        <p>
+It is RECOMMENDED that implementers re-encode CBOR-LD encoded `CompleteMrzBarcode` credentials
+as base32 with the string 'VC1-' prepended before encoding them in a QR code.
+        </p>
       </section>
 
     </section>
