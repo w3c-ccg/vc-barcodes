@@ -1025,21 +1025,21 @@ of an arbitrary person makes this attack unlikely to succeed.
         <p>
 It is possible that in some cases the digital signature cannot be created 
 over the entirety of the existing optical data. For example, consider a case 
-where a serial number is injected by a physical credential manufacturer in a way
-where it is not known to the issuer at signature time. In this case, the verifier
+where a serial number is injected by a physical credential manufacturer such
+that it is not known to the issuer at signature time. In this case, the verifier
 will assume that any data not digitally signed could have been changed in 
 the optical barcode without impacting the `OpticalBarcodeCredential's`
 ability to successfully validate.
        </p>
        <p>
 When checking that data from the optical barcode matches the data visible on the 
-document as well as the characteristics of the document holder, Implementers
+document as well as the characteristics of the document holder, implementers
 are advised to only use the fields that are digitally signed. [=Verifiers=] are
 advised to only use fields protected by the digital signature, no matter how 
 commonly the other fields are used for fraud detection on unsigned documents. For
-example, if eye color and hair color are signed but the [=holder=]'s portrait is not,
-[=verifiers=] are advised to emphasize the eye color and hair color when
-attempting to detect fraud over the portrait.
+example, if eye color and hair color are protected by the signature, but the
+[=holder=]'s portrait is not, [=verifiers=] are advised to emphasize the eye
+color and hair color when attempting to detect fraud over the portrait.
        </p>
        <p>
 Implementers of software used by [=verifiers=] are advised to only display card data 
