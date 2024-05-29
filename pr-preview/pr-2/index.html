@@ -113,6 +113,12 @@
               "ISO/IEC JTC 1/SC 31"
             ],
             publisher: "International Standards Organization"
+          },
+          "aamva-dl-id-card-design-standard": {
+            title: "AAMVA DL/ID Card Design Standard (2020)",
+            date: "2020",
+            href: "https://www.aamva.org/assets/best-practices,-guides,-standards,-manuals,-whitepapers/aamva-dl-id-card-design-standard-(2020)",
+            publisher: "American Association of Motor Vehicle Administrators"
           }
         },
         lint: {"no-unused-dfns": false},
@@ -177,7 +183,7 @@ ol.algorithm li:before {
 This specification describes a mechanism to protect legacy optical barcodes,
 such as those found on driver's licenses (PDF417) and travel documents (MRZ),
 using Verifiable Credentials [[VC-DATA-MODEL-2.0]]. The Verifiable Credential
-representations are compact enough such that they fit in under 140 bytes and
+representations are compact enough such that they fit in under 150 bytes and
 can thus be integrated with traditional two-dimensional barcodes that are
 printed on physical cards using legacy printing processes.
       </p>
@@ -272,8 +278,8 @@ A back of a driver's license issued by the state of Utopia.
 
         <p>
 The PDF417 data contains information that is secured using the algorithms
-described in this specification. Namely, the PDF417 barcode contains the
-following <a>verifiable credential</a>.
+described in this specification. Namely, the PDF417 barcode contains a
+<a>verifiable credential</a> of the following form.
         </p>
 
         <pre class="example nohighlight"
@@ -292,10 +298,12 @@ following <a>verifiable credential</a>.
   "issuer": "did:web:dmv.utopia.example",
   "credentialStatus": {
     "type": "TerseBitstringStatusListEntry",
-    "index": 283749
+    "terseStatusListBaseUrl": "https://dmv.utopia.gov/statuses/12345/status-lists"
+    "terseStatusListIndex": 123567890
   },
   "credentialSubject": {
-    "type": "Pdf417Barcode"
+    "type": "UsDriversLicenseWithMandatoryFieldsPdf417Barcode",
+    "signatureBitfield": "uP_BA"
   },
   "proof": {
     "type": "DataIntegrity",
@@ -314,19 +322,19 @@ to the following output (in CBOR Diagnostic Notation):
         </p>
 
         <pre class="example nohighlight"
-             title="CBOR-LD compressed Verifiable Credential (137 bytes)">
-{
-  1 => [ 32768, 32769, 32770],           <span class="comment">// @context</span>
-  151 => [ 114, 160 ],                   <span class="comment">// type</span>
-  178 => 32782,                          <span class="comment">// issuer</span>
-  172 => { 150 => 162, 192 => 283749 },  <span class="comment">// credentialStatus</span>
-  174 => { 150 => 158 },                 <span class="comment">// credentialSubject</span>
-  180 => {                               <span class="comment">// proof</span>
-    150 => 102,                          <span class="comment">// type</span>
-    198 => 32771,                        <span class="comment">// cryptosuite</span>
-    212 => 32783                         <span class="comment">// verificationMethod</span>
-    208 => 214,                          <span class="comment">// proofPurpose</span>
-    210 => Uint8Array(65) [ ... ],       <span class="comment">// proofValue</span>
+             title="CBOR-LD compressed Verifiable Credential (145 bytes)">
+1281{
+  1 => [ 32768, 32769, 32770],                           <span class="comment">// @context</span>
+  155 => [ 116, 164 ],                                   <span class="comment">// type</span>
+  192 => 174,                                            <span class="comment">// issuer</span>
+  186 => { 154 => 166, 206 => 178, 208 => 1234567890 },  <span class="comment">// credentialStatus</span>
+  188 => { 154 => 172, 180 => h'753FF040 },              <span class="comment">// credentialSubject</span>
+  194 => {                                               <span class="comment">// proof</span>
+    154 => 108,                                          <span class="comment">// type</span>
+    214 => 4,                                            <span class="comment">// cryptosuite</span>
+    224 => 230                                           <span class="comment">// verificationMethod</span>
+    228 => 176,                                          <span class="comment">// proofPurpose</span>
+    210 => Uint8Array(65) [ ... ],                       <span class="comment">// proofValue</span>
   }
 }
         </pre>
@@ -370,7 +378,7 @@ A back of an employment authorization document issued by the state of Utopia.
         <p>
 The MRZ data contains information that is secured using the algorithms
 described in this specification. Namely, the QR Code on the front of the
-card contains the following <a>verifiable credential</a>, which secures
+card contains a <a>verifiable credential</a> of the following form, which secures
 the information on the back of the card.
         </p>
 
@@ -389,7 +397,7 @@ the information on the back of the card.
   <span class="comment">// the value below is defined as a URL in the 'utopia/v1' context above</span>
   "issuer": "did:web:immigration.utopia.example",
   "credentialSubject": {
-    "type": "MachineReadableZone",
+    "type": "CompleteMrzBarcode",
   },
   "proof": {
     "type": "DataIntegrity",
@@ -414,17 +422,17 @@ to the following output (in CBOR Diagnostic Notation):
         </p>
 
         <pre class="example nohighlight"
-             title="CBOR-LD compressed Verifiable Credential (137 bytes)">
+             title="CBOR-LD compressed Verifiable Credential (120 bytes)">
 {
   1 => [ 32768, 32769, 32770],           <span class="comment">// @context</span>
-  151 => [ 114, 160 ],                   <span class="comment">// type</span>
-  178 => 32782,                          <span class="comment">// issuer</span>
-  174 => { 150 => 158 },                 <span class="comment">// credentialSubject</span>
-  180 => {                               <span class="comment">// proof</span>
-    150 => 102,                          <span class="comment">// type</span>
-    198 => 32771,                        <span class="comment">// cryptosuite</span>
-    212 => 32783                         <span class="comment">// verificationMethod</span>
-    208 => 214,                          <span class="comment">// proofPurpose</span>
+  155 => [ 116, 176 ],                   <span class="comment">// type</span>
+  208 => 194,                          <span class="comment">// issuer</span>
+  204 => { 154 => 192 },                 <span class="comment">// credentialSubject</span>
+  210 => {                               <span class="comment">// proof</span>
+    154 => 108,                          <span class="comment">// type</span>
+    226 => 4,                        <span class="comment">// cryptosuite</span>
+    236 => 242                         <span class="comment">// verificationMethod</span>
+    240 => 196,                          <span class="comment">// proofPurpose</span>
     210 => Uint8Array(65) [ ... ],       <span class="comment">// proofValue</span>
   }
 }
@@ -437,6 +445,22 @@ to the following output (in CBOR Diagnostic Notation):
 
         <div data-include="https://w3c.github.io/vc-data-model/terms.html"></div>
 
+      </section>
+
+      <section id="terms-reference">
+        <h3>Terms defined by cited specifications</h3>
+        <dl data-sort="ascending">
+          <dt><dfn data-cite="XPATH-FUNCTIONS#codepoint-collation" data-lt="code point order|code point ordered|unicode codepoint collation">Unicode code point order</dfn></dt>
+          <dd>
+This refers to determining the order of two Unicode strings (`A` and `B`),
+using <a>Unicode Codepoint Collation</a>,
+as defined in [[XPATH-FUNCTIONS]],
+which defines a
+<a href="https://en.wikipedia.org/wiki/Total_order">total ordering</a>
+of <a>strings</a> comparing code points.
+Note that for UTF-8 encoded strings, comparing the byte sequences gives the same result as <a>code point order</a>.
+          </dd>
+        </dl>
       </section>
 
       <section id="conformance">
@@ -490,14 +514,29 @@ anti-fraud protections for physical documents.
         </p>
 
         <p>
-The `credentialSubject` of an `OpticalBarcodeCredential` is either a
-`Pdf417Barcode` or a `MachineReadableZone`. A `Pdf417Barcode` signifies that
+The `credentialSubject` of an `OpticalBarcodeCredential` is either of type
+`UsDriversLicenseWithMandatoryFieldsPdf417Barcode` or a `CompleteMrzBarcode`. A 
+`UsDriversLicenseWithMandatoryFieldsPdf417Barcode` signifies that
 the <a>verifiable credential</a> secures the PDF417 barcode on the physical
 document as well as the information expressed in the
-<a>verifiable credential</a>. A `MachineReadableZone` signifies that
+<a>verifiable credential</a>. A `CompleteMrzBarcode` signifies that
 the <a>verifiable credential</a> secures the machine-readable zone on the
 physical document as well as the information expressed in the
 <a>verifiable credential</a>.
+        </p>
+
+        <p>
+If an `OpticalBarcodeCredential` is of type `UsDriversLicenseWithMandatoryFieldsPdf417Barcode`,
+there is a REQUIRED additional field `signatureBitfield` that contains information about which fields
+in the PDF417 are digitally signed. `signatureBitfield` MUST be a three byte/24 bit value that is 
+multibase-base64url encoded for a total of 5 characters in the JSON-LD credential. There are 22
+mandatory fields in an AAMVA compliant driver's license PDF417 [[aamva-dl-id-card-design-standard]],
+and the first 22 bits of the `signatureBitfield` value correspond to these fields. Each AAMVA mandatory
+field begins with a three character element ID (e.g. `DBA` for document expiration date). To construct 
+a mapping between bits in the `signatureBitfield` value and these fields, sort these element IDs 
+according to Unicode code point order. Then, if a bit in position `i` of `signatureBitfield` is `1`, the 
+AAMVA mandatory field in position `i` of the sorted element IDs is protected by the digital signature. The last two 
+bits in `signatureBitfield` MUST be `0`. For more information, see Section [[[#create-opticaldatahash]]].
         </p>
 
         <p>
@@ -527,10 +566,12 @@ specified in this section is provided below:
   "issuer": "did:web:dmv.utopia.example",
   "credentialStatus": <span class="highlight">{
     "type": "TerseBitstringStatusListEntry",
-    "index": 283749
+    "terseStatusListBaseUrl": "dmv.utopia.gov/statuses/12345/status-lists"
+    "terseStatusListIndex": 123567890
   }</span>,
   "credentialSubject": {
-    "type": <span class="highlight">"Pdf417Barcode"</span>,
+    <span class="highlight">"type": "UsDriversLicenseWithMandatoryFieldsPdf417Barcode"</span>,
+    <span class="highlight">"signatureBitfield": "uP_BA"</span>
   }
 }
         </pre>
@@ -540,53 +581,49 @@ specified in this section is provided below:
         <h3>TerseBitstringStatusListEntry</h3>
 
         <p>
-A `TerseBitstringStatusListEntry` is a subclass of a `BitstringStatusListEntry`
-as defined in the [[[VC-BITSTRING-STATUS-LIST]]] specification, where only the
-status list index is provided. The location of the status lists are discovered
-through the issuer DID Document via the `service` property.
+A `TerseBitstringStatusListEntry` is a compact representation
+of a `BitstringStatusListEntry` as defined in the [[[VC-BITSTRING-STATUS-LIST]]] 
+specification.
         </p>
 
         <p>
-Using the `issuer` property value in
-<a href="#example-an-opticalbarcodecredential-utilizing-a-tersebitstringstatuslistentry">
-Example 5</a> above (`did:web:dmv.utopia.example`), dereferencing the DID URL
-will result in the DID Document below:
+An object of type `TerseBitstringStatusListEntry` MUST have two additional properties:
+          <ul>
+            <li>
+`terseStatusListBaseUrl`, which identifies the location of the status lists associated with this credential.
+`terseStatusListBaseUrl` MUST be a URL [[URL]].
+            </li>
+            <li>
+`terseStatusListIndex`, which specifies an individual status at the above URL. `terseStatusListIndex` MUST be
+representable as a 32 bit unsigned integer.
+            </li>
+          </ul>
         </p>
-
-        <pre class="example nohighlight"
-             title="A did:web DID Document expressing status services">
-{
-  "@context": [
-    "https://www.w3.org/ns/did/v1",
-    "https://w3id.org/vdl/v2"
-  ]
-  "id": "did:web:dmv.utopia.example",
-  "service": [{
-    "id": "did:web:dmv.utopia.example#revocation-service",
-    "type": "BitstringStatusListService",
-    "credentialType": "OpticalBarcodeCredential",
-    "statusPurpose": "revocation",
-    "serviceEndpoint": "https://dmv.utopia.example/status/revocation/{{YYYY}}/{{MM}}"
-  }, {
-    "id": "did:web:dmv.utopia.example#suspension-service",
-    "type": "BitstringStatusListService",
-    "credentialType": "OpticalBarcodeCredential",
-    "statusPurpose": "suspension",
-    "serviceEndpoint": "https://dmv.utopia.example/status/suspension/{{YYYY}}/{{MM}}"
-  }]
-}
-        </pre>
-
+To process a `TerseBitstringStatusListEntry`, apply the algorithm in Section
+[[[#convert-status-list-entries]]] to convert it to a `BitstringStatusListEntry`,
+then process it as in [[[VC-BITSTRING-STATUS-LIST]]].
         <p>
-The `BitstringStatusListService` identifies a specific type of service that
-utilizes a URL template that uses information from the
-<a>verifiable credential</a> to determine the revocation and suspension status
-list URLs. The `{{YYYY}}` and `{{MM}}` template values are replaced with the
-issuance year and month, respectively, of the <a>verifiable credential</a>
-which are encoded in the `proof`. The resulting document MUST be a
-<a data-cite="VC-BITSTRING-STATUS-LIST#bitstringstatuslistcredential">
-BitstringStatusListCredential</a> [[VC-BITSTRING-STATUS-LIST]]. See
-Section <a href="#convert-status-list-entries"></a> for more details.
+Implementers need to set a value |listLength| for the length of an individual status list. This then yields
+a number of status lists |listCount| = 2^32 / |listLength| for a 32-bit `terseStatusListIndex`.
+|listLength| is needed to convert from a `TerseBitstringStatusListEntry` to a `BitstringStatusListEntry`.
+Noting that some values of |listLength| will harm the privacy-preserving properties of these status lists,
+implementations MUST use |listLength| = 2^17 and |listCount| = 2^15.
+        </p>
+    
+      </section>
+
+      <section>
+        <h3>Encoding to and from barcodes</h3>
+While the credentials in this specification use CBOR-LD to efficiently encode [=verifiable credentials=]
+in a binary format, binary data is often inefficient or incompatible to turn into standard barcode
+image formats directly. To that end, we provide requirements here for implementations.
+        <p>
+It is REQUIRED that implementers character-encode CBOR-LD encoded `UsDriversLicenseWithMandatoryFieldsPdf417Barcode`
+credentials as base64url before encoding them in a PDF417.
+        </p>
+        <p>
+It is REQUIRED that implementers re-encode CBOR-LD encoded `CompleteMrzBarcode` credentials
+as base32 with the string 'VC1-' prepended before encoding them in a QR code.
         </p>
       </section>
 
@@ -671,15 +708,15 @@ Generate the machine-readable credential (MRZ or PDF417).
 Set |securedDocument| to the data in the PDF417 or MRZ.
           </li>
           <li>
-Set |verificationResult| to the result of applying the algorithm in
-<a href="#verify-proof-ecdsa-xi-2023">Section 3.2.2</a> to |securedDocument|.
+Set |verificationResult| to the result of applying the algorithm in Section 
+[[[#verify-proof-ecdsa-xi-2023]]]to |securedDocument|.
           </li>
           <li>
 Set |credential| to the `OpticalBarcodeCredential` in |securedDocument|.
           </li>
           <li>
-Set |statusListEntry| to the result of applying the algorithm in
-<a href="#convert-status-list-entries">Section 3.1</a> to |credential|.
+Set |statusListEntry| to the result of applying the algorithm in Section 
+[[[#convert-status-list-entries]]] to |credential|.
           </li>
           <li>
 Set |statusResult| to the result of applying the algorithm in
@@ -704,65 +741,41 @@ during the validation process.
         <p>
 After <a>verifiable credential</a> verification has been performed, the
 algorithm takes an `OpticalBarcodeCredential` <a>verifiable credential</a>
-([=struct=] |vc|) as input and returns a status object ([=map=] |result|) that
-contains a [=boolean=] |status| [=map/entry=] and a [=list=] |statusListEntry|
-of one or more [=struct=] values representing `BitstringStatusListEntry`
-objects.
+([=struct=] |vc|), an integer |listLength| containing the number of entries 
+in the `BitstringStatusListCredential` associated with |vc|, and a string 
+|statusPurpose| (e.g. 'revocation', 'suspension'...) as input and returns 
+a 'BitstringStatusListEntry' object.
         </p>
 
         <ol class="algorithm">
           <li>
-Set |result| to be an empty [=map=] and initialize the |result|.|status| value
-to `false`.
+Set |result| to be an empty [=map=].
           </li>
           <li>
-Set |year| and |month| to the respective values specified in the
-|vc|.|proof|.|created| field.
+Set |listIndex| to |vc|.|credentialStatus|.|terseStatusListIndex|/|listLength| rounded down
+to the next lowest integer (i.e. apply the `floor()` operation).
           </li>
           <li>
-Set |didDocument| to be the result of dereferencing |issuer|. If the dereference
-does not result in a conforming DID Document, raise an
-<a data-cite="VC-DATA-INTEGRITY#INVALID_CONTROLLER_DOCUMENT">
-INVALID_CONTROLLER_DOCUMENT</a> error.
+Set |statusListIndex| to |vc|.|credentialStatus|.|terseStatusListIndex| % |listLength|.
           </li>
           <li>
-For each |service| value in |didDocument| where the |service|.|type| is
-`BitstringStatusListService`:
-            <ol class="algorithm">
-              <li>
-Initialize |bslEntry| to an empty [=map=].
-              </li>
-              <li>
-Set |bslEntry|.|type| to `BitstringStatusListEntry`.
-              </li>
-              <li>
-Set |bslEntry|.|statusPurpose| to |service|.|statusPurpose|.
-              </li>
-              <li>
-Set |bslEntry|.|statusListIndex| to |vc|.|credentialStatus|.|index|, ensuring
-that the value is converted to a string.
-              </li>
-              <li>
-Set |bslEntry|.|statusListCredential| to |service|.|serviceEndpoint|,
-replacing any `{{YYYY}}` text with a four-character representation of |year|
-and any `{{MM}}` text with a two-character representation of |month|, using
-leading zeros as necessary.
-              </li>
-              <li>
-Add |bslEntry| to |result|.|statusListEntry|.
-              </li>
-              <li>
-Set |result|.|status| to `true`.
-              </li>
-            </ol>
+Set |result|.|statusListCredential| to the concatenation of the following values:
+|vc|.|credentialStatus|.|terseStatusListBaseUrl|, '/', |statusPurpose|, '/', |listIndex|.
           </li>
+          <li>
+Set |result|.|type| to 'BitstringStatusListEntry'.
+          </li>
+          <li>
+Set |result|.|statusListIndex| to |statusListIndex|.
+          </li>
+Set |result|.|statusPurpose| to |statusPurpose|.
           <li>
 Return |result|.
           </li>
         </ol>
 
         <p>
-Each value in |result|.|statusList| can be used as input to the
+|result| can be used as input to the
 <a data-cite="VC-BITSTRING-STATUS-LIST#validate-algorithm">
 validation algorithm</a> in the [[[VC-BITSTRING-STATUS-LIST]]] specification.
         </p>
@@ -876,6 +889,74 @@ first hash), <var>transformedDocumentHash</var> (the second hash), and
         </section>
 
         <section>
+          <h4> Create opticalDataHash</h4>
+        
+          <section>
+            <h5>`UsDriversLicenseWithMandatoryFieldsPdf417Barcode` Credentials</h5>
+            <ol class="algorithm">
+              <li>
+Set |dataToCanonicalize| to an empty array.
+              </li>
+              <li>
+Set |bitfieldDecoded| to be first 22 bits of the length 24 bitstring resulting from decoding `credentialSubject.signatureBitfield`
+from multibase-base64url to binary.
+              </li>
+              <li>
+Set |fieldsAlphabetized| to be an array containing the 22 AAMVA mandatory PDF417 Element IDs 
+[[aamva-dl-id-card-design-standard]] sorted in Unicode code point order (i.e. ['DAC', 'DAD' ... 'DDG']).
+              </li>
+              <li>
+For each bit with value `1` in |bitfieldDecoded|:
+                <ol class="algorithm">
+                  <li>
+Set the string |fieldName| to |fieldsAlphabetized|[|i|], where |i| is the index of the bit in |bitfieldDecoded|.
+                  </li>
+                  <li>
+Set the string |fieldData| to the data that will be in the PDF417 associated with that field name.
+                  </li>
+                  <li>
+Concatenate |fieldData| to the end of |fieldName|, and append the result to |dataToCanonicalize|.
+                  </li>
+                </ol>
+              </li>
+              <li>
+Set |canonicalizedData| to the result of sorting |dataToCanonicalize| in Unicode code point order and then applying a join operation
+to create a single string from the array.
+              </li>
+              <li>
+Hash |canonicalizedData| and return the result.
+              </li>
+            </ol>
+          </section>
+
+          <section>
+            <h5>`CompleteMrzBarcode` Credentials</h5>
+            <ol class="algorithm">
+              <li>
+Set |dataToCanonicalize| to an empty array.
+              </li>
+              <li>
+For each line in the Machine Readable Zone on the credential:
+                <ol class="algorithm">
+                  <li>
+Set |mrzLine| to a string containing the data in that line.
+                  </li>
+                  <li>
+Append a newline character to the end of |mrzLine| and append |mrzLine| to |dataToCanonicalize|.
+                  </li>
+                </ol>
+              </li>
+              <li>
+Set |canonicalizedData| to the result of ordering the elements of |dataToCanonicalize| to match the order they appear
+on the credential and then applying a join operation to create a single string from the array.
+              </li>
+              <li>
+Hash |canonicalizedData| and return the result.
+              </li>
+            </ol>
+          </section>
+        </section>
+        <section>
           <h4>Proof Configuration (ecdsa-xi-2023)</h4>
 
           <p>
@@ -925,52 +1006,53 @@ the reader to additional information.
       <section>
         <h3>Optical Data Duplication</h3>
         <p>
-          One attack vector against `OpticalBarcodeCredentials` involves duplicating
-          a signed optical barcode for use on a fraudulent document. While a duplicated 
-          barcode will pass signature validation like the original, this attack is mitigated
-          by the document verifier checking the following three things: the signed data matches
-          the data visible on the document, the signed data matches the physical attributes of
-          the user, and the visible data matches the physical attributes of the user. When these
-          three are all equivalent, the only way the `OpticalBarcodeCredential` could be a 
-          duplicate is if the fraudulent document creator had access to a real 
-          `OpticalBarcodeCredential` where the signed physical attributes fully overlapped 
-          with those of the user of the fraudulent document. The low likelihood of an undetected 
-          stolen `OpticalBarcodeCredential` existing that completely matches the appearance 
-          of an arbitrary person makes this attack very unlikely to succeed.
+One attack vector against `OpticalBarcodeCredentials` involves duplicating
+an optical barcode containing a digital signature for use on a fraudulent document. 
+While a duplicated barcode will pass signature validation like the original, this attack 
+is mitigated by the document verifier checking the following three things: the signed data 
+matches the data visible on the document, the signed data matches the physical attributes of
+the user, and the visible data matches the physical attributes of the user. When these
+three are all equivalent, the only way the `OpticalBarcodeCredential` could be a 
+duplicate is if the fraudulent document creator had access to a real 
+`OpticalBarcodeCredential` where the signed physical attributes fully overlapped 
+with those of the user of the fraudulent document. The low likelihood of an undetected 
+stolen `OpticalBarcodeCredential` existing that completely matches the appearance 
+of an arbitrary person makes this attack unlikely to succeed.
         </p>
       </section>
       <section>
         <h3>Partially Signed Optical Data</h3>
         <p>
-        It is possible that in some cases the digital signature cannot be created 
-        over the entirety of the existing optical data. For example, consider a case 
-        where a serial number is injected by a physical credential manufacturer in a way
-        where it is not known to the issuer at signature time. In this case, the verifier
-        must assume that any data not digitally signed could have been changed in 
-        the optical barcode without impacting the `OpticalBarcodeCredential's`
-        ability to successfully validate.
+It is possible that in some cases the digital signature cannot be created 
+over the entirety of the existing optical data. For example, consider a case 
+where a serial number is injected by a physical credential manufacturer in a way
+where it is not known to the issuer at signature time. In this case, the verifier
+will assume that any data not digitally signed could have been changed in 
+the optical barcode without impacting the `OpticalBarcodeCredential's`
+ability to successfully validate.
        </p>
        <p>
-        When checking that data from the optical barcode matches the data visible on the 
-        document as well as the characteristics of the document holder, emphasis should 
-        be given to only the fields that are digitally signed. Validating the signed fields 
-        against the document/document holder should trump all other fields, no matter how 
-        commonly the other fields are used for fraud detection on unsigned documents. For
-        example, if eye color and hair color are signed but the holder's portrait is not,
-        eye color and hair color should be emphasized for fraud detection over the portrait.
+When checking that data from the optical barcode matches the data visible on the 
+document as well as the characteristics of the document holder, Implementers
+are advised to only use the fields that are digitally signed. [=Verifiers=] are
+advised to only use fields protected by the digital signature, no matter how 
+commonly the other fields are used for fraud detection on unsigned documents. For
+example, if eye color and hair color are signed but the [=holder=]'s portrait is not,
+[=verifiers=] are advised to emphasize the eye color and hair color when
+attempting to detect fraud over the portrait.
        </p>
        <p>
-        Verification systems should only display card data that has been secured via 
-        digital signature during the verification process. Displaying unsigned data, which
-        could have been tampered with, could interfere with fraud detection.
+Implementers of software used by [=verifiers=] are advised to only display card data 
+that has been secured via digital signature during the verification process. Displaying 
+unsigned data, which could have been tampered with, could interfere with fraud detection.
        </p>
       </section>
       <section>
         <h3>Safe Verification</h3>
         <p>
-        The verifier should always use trusted programs and interfaces to check the validity
-        of the `OpticalBarcodeCredential`. Use of untrusted software to verify a document 
-        could result in a fraudulent credential being accepted, or a genuine credential being stolen.
+[=Verifiers=] are advised to always use trusted programs and interfaces to check the validity
+of the `OpticalBarcodeCredential`. Use of untrusted software to verify a document 
+could result in a fraudulent credential being accepted, or a genuine credential being stolen.
         </p>
       </section>
     </section>
