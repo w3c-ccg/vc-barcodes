@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Verifiable Barcodes v0.7</title>
+    <title>Verifiable Credential Barcodes v0.7</title>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
     <!--
       === NOTA BENE ===
@@ -13,13 +13,13 @@
 
     <script type="text/javascript" class="remove">
       var respecConfig = {
-        subtitle: "Securing legacy barcodes using Verifiable Credentials",
+        subtitle: "Embedding Verifiable Credentials in legacy barcodes",
         // specification status (e.g. WD, LCWD, NOTE, etc.). If in doubt use ED.
         group: "credentials",
         specStatus: "CG-DRAFT",
 
         // the specification's short name, as in http://www.w3.org/TR/short-name/
-        shortName: "verifiable-barcodes",
+        shortName: "vc-barcodes",
 
         // if you wish the publication date to be other than today, set this
         //publishDate:  "",
@@ -30,7 +30,7 @@
         // previousMaturity:  "WD",
 
         // if there a publicly available Editor's Draft, this is the link
-        edDraftURI: "https://digitalbazaar.github.io/verifiable-barcodes/",
+        edDraftURI: "https://digitalbazaar.github.io/vc-barcodes/",
         //latestVersion: "",
 
         // if this is a LCWD, uncomment and set the end of its review period
@@ -77,7 +77,7 @@
         // name (with the @w3c.org) of the public mailing to which comments are due
         //wgPublicList: "public-credentials",
 
-        github: "https://github.com/digitalbazaar/verifiable-barcodes/",
+        github: "https://github.com/digitalbazaar/vc-barcodes/",
 
         otherLinks: [],
 
@@ -515,7 +515,7 @@ anti-fraud protections for physical documents.
 
         <p>
 The `credentialSubject` of an `OpticalBarcodeCredential` is either of type
-`UsDriversLicenseWithMandatoryFieldsPdf417Barcode` or a `CompleteMrzBarcode`. A 
+`UsDriversLicenseWithMandatoryFieldsPdf417Barcode` or a `CompleteMrzBarcode`. A
 `UsDriversLicenseWithMandatoryFieldsPdf417Barcode` signifies that
 the <a>verifiable credential</a> secures the PDF417 barcode on the physical
 document as well as the information expressed in the
@@ -528,14 +528,14 @@ physical document as well as the information expressed in the
         <p>
 If an `OpticalBarcodeCredential` is of type `UsDriversLicenseWithMandatoryFieldsPdf417Barcode`,
 there is a REQUIRED additional field `signatureBitfield` that contains information about which fields
-in the PDF417 are digitally signed. `signatureBitfield` MUST be a three byte/24 bit value that is 
+in the PDF417 are digitally signed. `signatureBitfield` MUST be a three byte/24 bit value that is
 multibase-base64url encoded for a total of 5 characters in the JSON-LD credential. There are 22
 mandatory fields in an AAMVA compliant driver's license PDF417 [[aamva-dl-id-card-design-standard]],
 and the first 22 bits of the `signatureBitfield` value correspond to these fields. Each AAMVA mandatory
-field begins with a three character element ID (e.g. `DBA` for document expiration date). To construct 
-a mapping between bits in the `signatureBitfield` value and these fields, sort these element IDs 
-according to Unicode code point order. Then, if a bit in position `i` of `signatureBitfield` is `1`, the 
-AAMVA mandatory field in position `i` of the sorted element IDs is protected by the digital signature. The last two 
+field begins with a three character element ID (e.g. `DBA` for document expiration date). To construct
+a mapping between bits in the `signatureBitfield` value and these fields, sort these element IDs
+according to Unicode code point order. Then, if a bit in position `i` of `signatureBitfield` is `1`, the
+AAMVA mandatory field in position `i` of the sorted element IDs is protected by the digital signature. The last two
 bits in `signatureBitfield` MUST be `0`. For more information, see Section [[[#create-opticaldatahash]]].
         </p>
 
@@ -582,7 +582,7 @@ specified in this section is provided below:
 
         <p>
 A `TerseBitstringStatusListEntry` is a compact representation
-of a `BitstringStatusListEntry` as defined in the [[[VC-BITSTRING-STATUS-LIST]]] 
+of a `BitstringStatusListEntry` as defined in the [[[VC-BITSTRING-STATUS-LIST]]]
 specification.
         </p>
 
@@ -609,7 +609,7 @@ a number of status lists |listCount| = 2^32 / |listLength| for a 32-bit `terseSt
 Noting that some values of |listLength| will harm the privacy-preserving properties of these status lists,
 implementations MUST use |listLength| = 2^17 and |listCount| = 2^15.
         </p>
-    
+
       </section>
 
       <section>
@@ -708,14 +708,14 @@ Generate the machine-readable credential (MRZ or PDF417).
 Set |securedDocument| to the data in the PDF417 or MRZ.
           </li>
           <li>
-Set |verificationResult| to the result of applying the algorithm in Section 
+Set |verificationResult| to the result of applying the algorithm in Section
 [[[#verify-proof-ecdsa-xi-2023]]]to |securedDocument|.
           </li>
           <li>
 Set |credential| to the `OpticalBarcodeCredential` in |securedDocument|.
           </li>
           <li>
-Set |statusListEntry| to the result of applying the algorithm in Section 
+Set |statusListEntry| to the result of applying the algorithm in Section
 [[[#convert-status-list-entries]]] to |credential|.
           </li>
           <li>
@@ -741,9 +741,9 @@ during the validation process.
         <p>
 After <a>verifiable credential</a> verification has been performed, the
 algorithm takes an `OpticalBarcodeCredential` <a>verifiable credential</a>
-([=struct=] |vc|), an integer |listLength| containing the number of entries 
-in the `BitstringStatusListCredential` associated with |vc|, and a string 
-|statusPurpose| (e.g. 'revocation', 'suspension'...) as input and returns 
+([=struct=] |vc|), an integer |listLength| containing the number of entries
+in the `BitstringStatusListCredential` associated with |vc|, and a string
+|statusPurpose| (e.g. 'revocation', 'suspension'...) as input and returns
 a 'BitstringStatusListEntry' object.
         </p>
 
@@ -890,7 +890,7 @@ first hash), <var>transformedDocumentHash</var> (the second hash), and
 
         <section>
           <h4> Create opticalDataHash</h4>
-        
+
           <section>
             <h5>`UsDriversLicenseWithMandatoryFieldsPdf417Barcode` Credentials</h5>
             <ol class="algorithm">
@@ -902,7 +902,7 @@ Set |bitfieldDecoded| to be first 22 bits of the length 24 bitstring resulting f
 from multibase-base64url to binary.
               </li>
               <li>
-Set |fieldsAlphabetized| to be an array containing the 22 AAMVA mandatory PDF417 Element IDs 
+Set |fieldsAlphabetized| to be an array containing the 22 AAMVA mandatory PDF417 Element IDs
 [[aamva-dl-id-card-design-standard]] sorted in Unicode code point order (i.e. ['DAC', 'DAD' ... 'DDG']).
               </li>
               <li>
@@ -1007,43 +1007,43 @@ the reader to additional information.
         <h3>Optical Data Duplication</h3>
         <p>
 One attack vector against `OpticalBarcodeCredentials` involves duplicating
-an optical barcode containing a digital signature for use on a fraudulent document. 
-While a duplicated barcode will pass signature validation like the original, this attack 
-is mitigated by the document verifier checking the following three things: the signed data 
+an optical barcode containing a digital signature for use on a fraudulent document.
+While a duplicated barcode will pass signature validation like the original, this attack
+is mitigated by the document verifier checking the following three things: the signed data
 matches the data visible on the document, the signed data matches the physical attributes of
 the user, and the visible data matches the physical attributes of the user. When these
-three are all equivalent, the only way the `OpticalBarcodeCredential` could be a 
-duplicate is if the fraudulent document creator had access to a real 
-`OpticalBarcodeCredential` where the signed physical attributes fully overlapped 
-with those of the user of the fraudulent document. The low likelihood of an undetected 
-stolen `OpticalBarcodeCredential` existing that completely matches the appearance 
+three are all equivalent, the only way the `OpticalBarcodeCredential` could be a
+duplicate is if the fraudulent document creator had access to a real
+`OpticalBarcodeCredential` where the signed physical attributes fully overlapped
+with those of the user of the fraudulent document. The low likelihood of an undetected
+stolen `OpticalBarcodeCredential` existing that completely matches the appearance
 of an arbitrary person makes this attack unlikely to succeed.
         </p>
       </section>
       <section>
         <h3>Partially Signed Optical Data</h3>
         <p>
-It is possible that in some cases the digital signature cannot be created 
-over the entirety of the existing optical data. For example, consider a case 
+It is possible that in some cases the digital signature cannot be created
+over the entirety of the existing optical data. For example, consider a case
 where a serial number is injected by a physical credential manufacturer such
 that it is not known to the issuer at signature time. In this case, the verifier
-will assume that any data not digitally signed could have been changed in 
+will assume that any data not digitally signed could have been changed in
 the optical barcode without impacting the `OpticalBarcodeCredential's`
 ability to successfully validate.
        </p>
        <p>
-When checking that data from the optical barcode matches the data visible on the 
+When checking that data from the optical barcode matches the data visible on the
 document as well as the characteristics of the document holder, implementers
 are advised to only use the fields that are digitally signed. [=Verifiers=] are
-advised to only use fields protected by the digital signature, no matter how 
+advised to only use fields protected by the digital signature, no matter how
 commonly the other fields are used for fraud detection on unsigned documents. For
 example, if eye color and hair color are protected by the signature, but the
 [=holder=]'s portrait is not, [=verifiers=] are advised to emphasize the eye
 color and hair color when attempting to detect fraud over the portrait.
        </p>
        <p>
-Implementers of software used by [=verifiers=] are advised to only display card data 
-that has been secured via digital signature during the verification process. Displaying 
+Implementers of software used by [=verifiers=] are advised to only display card data
+that has been secured via digital signature during the verification process. Displaying
 unsigned data, which could have been tampered with, could interfere with fraud detection.
        </p>
       </section>
@@ -1051,7 +1051,7 @@ unsigned data, which could have been tampered with, could interfere with fraud d
         <h3>Safe Verification</h3>
         <p>
 [=Verifiers=] are advised to always use trusted programs and interfaces to check the validity
-of the `OpticalBarcodeCredential`. Use of untrusted software to verify a document 
+of the `OpticalBarcodeCredential`. Use of untrusted software to verify a document
 could result in a fraudulent credential being accepted, or a genuine credential being stolen.
         </p>
       </section>
