@@ -1,4 +1,4 @@
-## Verifiable Barcodes
+## Verifiable Credential Barcodes
 
 This specification describes a data model and
 [Data Integrity Cryptosuite](https://www.w3.org/TR/vc-data-integrity/)
