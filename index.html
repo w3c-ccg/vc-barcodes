@@ -487,6 +487,37 @@ information that is irrelevant to the example. Such parts need to be
 removed if implementers want to treat the examples as valid JSON or JSON-LD.
         </p>
       </section>
+      <section>
+        <h3>Design Goals</h3>
+        <p>
+The following are the design goals of the technology in this specification:
+          <ul>
+            <li>
+<b>Authenticity</b>: a Verifiable Credential Barcode that succesfully verifies is
+guaranteed to have originated from the claimed issuing authority.
+            </li>
+            <li>
+<b>Integrity</b>: data on a document with a Verifiable Credential Barcode that 
+succesfully verifies is guaranteed to not have been modified as long as that data
+is secured by the barcode.
+            </li>
+            <li>
+<b>Real-time Status</b>: verification of a Verifiable Credential Barcode proves that
+the document has not been revoked or suspended, and this is done without a
+privacy-invasive "phone home" to a source-of-truth database.
+            </li>
+            <li>
+<b>Simplicity</b>: Verifiable Credential Barcodes reuse existing optical barcodes on
+documents (e.g. PDF417s on the back of AAMVA compliant Driver's Licenses) or add a
+new barcode in an easily consumable form (e.g. a QR code).
+            </li>
+            <li>
+<b>Conformance</b>: the Verifiable Credential Barcodes technology stack is aligned with
+global standards and standards-track technologies. 
+            </li>
+          </ul>
+        </p>
+      </section>
 
     </section>
 
