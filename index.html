@@ -302,8 +302,8 @@ described in this specification. Namely, the PDF417 barcode contains a
     "terseStatusListIndex": 123567890
   },
   "credentialSubject": {
-    "type": "UsDriversLicenseWithMandatoryFieldsPdf417Barcode",
-    "signatureBitfield": "uP_BA"
+    "type": "AamvaDriversLicenseScannableInformation",
+    "protectedComponentIndex": "uP_BA"
   },
   "proof": {
     "type": "DataIntegrity",
@@ -397,7 +397,7 @@ the information on the back of the card.
   <span class="comment">// the value below is defined as a URL in the 'utopia/v1' context above</span>
   "issuer": "did:web:immigration.utopia.example",
   "credentialSubject": {
-    "type": "CompleteMrzBarcode",
+    "type": "MachineReadableZone",
   },
   "proof": {
     "type": "DataIntegrity",
@@ -546,28 +546,28 @@ anti-fraud protections for physical documents.
 
         <p>
 The `credentialSubject` of an `OpticalBarcodeCredential` is either of type
-`UsDriversLicenseWithMandatoryFieldsPdf417Barcode` or a `CompleteMrzBarcode`. A
-`UsDriversLicenseWithMandatoryFieldsPdf417Barcode` signifies that
+`AamvaDriversLicenseScannableInformation` or a `MachineReadableZone`. A
+`AamvaDriversLicenseScannableInformation` signifies that
 the <a>verifiable credential</a> secures the PDF417 barcode on the physical
 document as well as the information expressed in the
-<a>verifiable credential</a>. A `CompleteMrzBarcode` signifies that
+<a>verifiable credential</a>. A `MachineReadableZone` signifies that
 the <a>verifiable credential</a> secures the machine-readable zone on the
 physical document as well as the information expressed in the
 <a>verifiable credential</a>.
         </p>
 
         <p>
-If an `OpticalBarcodeCredential` is of type `UsDriversLicenseWithMandatoryFieldsPdf417Barcode`,
-there is a REQUIRED additional field `signatureBitfield` that contains information about which fields
-in the PDF417 are digitally signed. `signatureBitfield` MUST be a three byte/24 bit value that is
+If an `OpticalBarcodeCredential` is of type `AamvaDriversLicenseScannableInformation`,
+there is a REQUIRED additional field `protectedComponentIndex` that contains information about which fields
+in the PDF417 are digitally signed. `protectedComponentIndex` MUST be a three byte/24 bit value that is
 multibase-base64url encoded for a total of 5 characters in the JSON-LD credential. There are 22
 mandatory fields in an AAMVA compliant driver's license PDF417 [[aamva-dl-id-card-design-standard]],
-and the first 22 bits of the `signatureBitfield` value correspond to these fields. Each AAMVA mandatory
+and the first 22 bits of the `protectedComponentIndex` value correspond to these fields. Each AAMVA mandatory
 field begins with a three character element ID (e.g. `DBA` for document expiration date). To construct
-a mapping between bits in the `signatureBitfield` value and these fields, sort these element IDs
-according to Unicode code point order. Then, if a bit in position `i` of `signatureBitfield` is `1`, the
+a mapping between bits in the `protectedComponentIndex` value and these fields, sort these element IDs
+according to Unicode code point order. Then, if a bit in position `i` of `protectedComponentIndex` is `1`, the
 AAMVA mandatory field in position `i` of the sorted element IDs is protected by the digital signature. The last two
-bits in `signatureBitfield` MUST be `0`. For more information, see Section [[[#create-opticaldatahash]]].
+bits in `protectedComponentIndex` MUST be `0`. For more information, see Section [[[#create-opticaldatahash]]].
         </p>
 
         <p>
@@ -601,8 +601,8 @@ specified in this section is provided below:
     "terseStatusListIndex": 123567890
   }</span>,
   "credentialSubject": {
-    <span class="highlight">"type": "UsDriversLicenseWithMandatoryFieldsPdf417Barcode"</span>,
-    <span class="highlight">"signatureBitfield": "uP_BA"</span>
+    <span class="highlight">"type": "AamvaDriversLicenseScannableInformation"</span>,
+    <span class="highlight">"protectedComponentIndex": "uP_BA"</span>
   }
 }
         </pre>
@@ -649,11 +649,11 @@ While the credentials in this specification use CBOR-LD to efficiently encode [=
 in a binary format, binary data is often inefficient or incompatible to turn into standard barcode
 image formats directly. To that end, we provide requirements here for implementations.
         <p>
-It is REQUIRED that implementers character-encode CBOR-LD encoded `UsDriversLicenseWithMandatoryFieldsPdf417Barcode`
+It is REQUIRED that implementers character-encode CBOR-LD encoded `AamvaDriversLicenseScannableInformation`
 credentials as base64url before encoding them in a PDF417.
         </p>
         <p>
-It is REQUIRED that implementers re-encode CBOR-LD encoded `CompleteMrzBarcode` credentials
+It is REQUIRED that implementers re-encode CBOR-LD encoded `MachineReadableZone` credentials
 as base32 with the string 'VC1-' prepended before encoding them in a QR code.
         </p>
       </section>
@@ -923,14 +923,14 @@ first hash), <var>transformedDocumentHash</var> (the second hash), and
           <h4> Create opticalDataHash</h4>
 
           <section>
-            <h5>`UsDriversLicenseWithMandatoryFieldsPdf417Barcode` Credentials</h5>
+            <h5>`AamvaDriversLicenseScannableInformation` Credentials</h5>
             <ol class="algorithm">
               <li>
 Set |dataToCanonicalize| to an empty array.
               </li>
               <li>
-Set |bitfieldDecoded| to be first 22 bits of the length 24 bitstring resulting from decoding `credentialSubject.signatureBitfield`
-from multibase-base64url to binary.
+Set |bitfieldDecoded| to be first 22 bits of the length 24 bitstring resulting from decoding
+`credentialSubject.protectedComponentIndex` from multibase-base64url to binary.
               </li>
               <li>
 Set |fieldsAlphabetized| to be an array containing the 22 AAMVA mandatory PDF417 Element IDs
@@ -962,7 +962,7 @@ Hash |canonicalizedData| and return the result.
           </section>
 
           <section>
-            <h5>`CompleteMrzBarcode` Credentials</h5>
+            <h5>`MachineReadableZone` Credentials</h5>
             <ol class="algorithm">
               <li>
 Set |dataToCanonicalize| to an empty array.
