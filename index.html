@@ -654,7 +654,7 @@ credentials as base64url before encoding them in a PDF417.
         </p>
         <p>
 It is REQUIRED that implementers re-encode CBOR-LD encoded `MachineReadableZone` credentials
-as base32 with the string 'VC1-' prepended before encoding them in a QR code.
+as base45 with the string 'VC1-' prepended before encoding them in a QR code.
         </p>
       </section>
 
@@ -751,7 +751,8 @@ Set |statusListEntry| to the result of applying the algorithm in Section
           </li>
           <li>
 Set |statusResult| to the result of applying the algorithm in
-<a data-cite="VC-BITSTRING-STATUS-LIST#validate-algorithm">Bitstring Status List v1.0: Validate Algorithm</a> to |statusListEntry|.
+<a data-cite="VC-BITSTRING-STATUS-LIST#validate-algorithm">
+  Bitstring Status List v1.0: Validate Algorithm</a> to |statusListEntry|.
           </li>
           <li>
 Return (|validationResult|, |statusResult|).
@@ -1114,6 +1115,228 @@ Add security considerations specific to this specification.
 
     </section>
 
+    <section class="informative">
+      <h2> Test Vectors</h2>
+      <p>
+This section contains examples of Verifiable Credential Barcodes as well
+as step-by-step processes for how they are generated and how they are verified.
+      </p>
+      <p>
+Throughout this section we will analyze two running examples, one a VCB securing
+the MRZ of a Utopia Employment Authorization Document, and one a VCB securing
+the PDF417 of a Utopia Driver's License.
+      </p>
+      <section>
+        <h3>Creating VCBs</h3>
+        <p>
+We start with the data that will be signed by the VCB (i.e an MRZ and
+mandatory AAMVA fields from a PDF417):
+        </p>
+        <pre class="example nohighlight"
+             title="A Machine Readable Zone that might appear on a Utopia EAD">
+I A U T O 0 0 0 0 0 0 7 0 1 0 S R C 0 0 0 0 0 0 0 7 0 1 < <
+8 8 0 4 1 9 2 M 2 6 0 1 0 5 8 N O T < < < < < < < < < < < 5
+S M I T H &#60 &#60 J O H N < < < < < < < < < < < < < < < < < < <       
+        </pre>
+        <pre class="example nohighlight"
+        title="Fields from a PDF417 that might appear on a Utopia Driver's License">
+DACJOHN
+DADNONE
+DAG123 MAIN ST
+DAIANYVILLE
+DAJUTO
+DAKF87P20000
+DAQF987654321
+DAU069 IN
+DAYBRO
+DBA04192030
+DBB04191988
+DBC1
+DBD01012024
+DCAC
+DCBNONE
+DCDNONE
+DCFUTODOCDISCRIM
+DCGUTO
+DCSSMITH
+DDEN
+DDFN
+DDGN
+        </pre>
+        <section>
+          <h4>
+Creating `opticalDataHash`
+          </h4>
+        
+          <p>
+Assume for simplicity that the only data in the PDF417 that you want to sign is first
+name (DAC), last name (DCS), and license number. The bitstring value for use in
+`protectedComponentIndex` is then |100000100000000000100000|. Applying
+<a href="#create-opticaldatahash">Algorithm 3.5.4.1</a>, we get 
+          </p>
+          <pre class="example nohighlight"
+title="A Machine Readable Zone that might appear on a Utopia EAD">
+|canonicalizedData| = 'DACJOHN\nDAQ987654321\nDCSSMITH\n'
+hashed: TODO
+          </pre>
+          <p>
+For the EAD, we apply <a href="#create-opticaldatahash">Algorithm 3.5.4.2</a>:
+          </p>
+          <pre class="example nohighlight"
+          title="A Machine Readable Zone that might appear on a Utopia EAD">
+|canonicalizedData| = 'IAUTO0000007010SRC0000000701<<\n8804192M2601058NOT<<<<<<<<<<
+&lt5\nSMITH<&#60JOHN<<<<<<<<<<<<<<<<<<<\n'
+hashed: TODO
+          </pre>
+        </section>
+        <p>
+We now can use these hash values with
+<a href="#hashing-ecdsa-xi-2023">Algorithm 3.5.3</a> to sign the VC.
+Executing  <a href="#credential-creation">Algorithm 3.2</a> with a
+`BitstringStatusListCredential`, we get the following JSON-LD VCs:
+        </p>
+        <section>
+          <h4>
+Example VCs
+          </h4>
+          <pre class="example nohighlight"
+title="A JSON-LD VC for a Utopia Driver's License VCB">
+TODO
+          </pre>
+          <pre class="example nohighlight"
+          title="A JSON-LD VC for a Utopia EAD VCB">
+TODO
+          </pre>
+        </section>
+        <section>
+          <h4>CBOR-LD Compression and Encoding</h4>
+          <p>
+We can now apply CBOR-LD compression to these VCs, yielding the following:
+          </p>
+          <pre class="example nohighlight"
+          title="A CBOR-LD compressed Utopia Driver's License VC">
+TODO
+          </pre>
+          <pre class="example nohighlight"
+          title="A CBOR-LD compressed Utopia EAD VC">
+TODO
+          </pre>
+          <p>
+Encoding the Driver's License CBORLD as base64url and inserting the result into the
+PDF417 bytes in the 'ZZA' field in the 'ZZ' subfile:
+          </p>
+          <pre class="example nohighlight"
+          title="An encoded Utopia Driver's License VCB">
+TODO
+          </pre>
+          <p>
+Encoding the EAD CBORLD as base45 and prepending 'VC1-':
+          </p>
+          <pre class="example nohighlight"
+          title="An encoded Utopia Driver's License EAD">
+TODO
+          </pre>
+          <p>
+The above can now be turned into barcodes: TODO
+          </p>
+        </section>
+      </section>
+      <section>
+        <h3>Verifying VCBs</h3>
+        <p>
+We now apply the reverse process to verify.
+        </p>
+        <section>
+          <h4>Decoding and Decompressing</h4>
+          <p>
+We first read the data from the barcodes:
+          </p>
+          <pre class="example nohighlight"
+          title="An encoded Utopia Driver's License VCB">
+TODO
+          </pre>
+          <p>
+Encoding the EAD CBORLD as base45 and prepending 'VC1-':
+          </p>
+          <pre class="example nohighlight"
+          title="An encoded Utopia Driver's License EAD">
+TODO
+          </pre>
+          <p>
+We extract the data after 'VC1-' and the data in field 'ZZA'
+in subfile 'ZZ', undoing the base encoding:
+          </p>
+          <pre class="example nohighlight"
+          title="A CBOR-LD compressed Utopia Driver's License VC">
+TODO
+          </pre>
+          <pre class="example nohighlight"
+          title="A CBOR-LD compressed Utopia EAD VC">
+TODO
+          </pre>
+          <p>
+We now decompress with CBOR-LD to get the JSON-LD VCs to be
+verified:
+          </p>
+          <pre class="example nohighlight"
+title="A JSON-LD VC for a Utopia Driver's License VCB">
+TODO
+          </pre>
+          <pre class="example nohighlight"
+          title="A JSON-LD VC for a Utopia EAD VCB">
+TODO
+          </pre>
+        </section>
+        <section>
+          <h4>Verifying</h4>
+          <p>
+Again we apply <a href="#create-opticaldatahash">Algorithm 3.5.4.1</a>
+and <a href="#create-opticaldatahash">Algorithm 3.5.4.2</a> to create
+the |opticalDataHash| that `ecdsa-xi-2023` requires, using the
+scanned PDF417 as input for the driver's license, and using the MRZ
+on the EAD as input for the EAD:
+          </p>
+          <pre class="example nohighlight"
+title="A canonicalization of a Utopia Driver's License PDF417">
+|canonicalizedData| = 'DACJOHN\nDAQ987654321\nDCSSMITH\n'
+`opticalDataHash`: TODO
+          </pre>
+          <pre class="example nohighlight"
+          title="A canonicalization of a Utopia EAD MRZ">
+|canonicalizedData| = 'IAUTO0000007010SRC0000000701<<\n8804192M2601058NOT<<<<<<<<<<
+&lt5\nSMITH<&#60JOHN<<<<<<<<<<<<<<<<<<<\n'
+`opticalDataHash`: TODO
+          </pre>
+          <p>
+We then apply <a href="#hashing-ecdsa-xi-2023">Algorithm 3.5.3</a> and
+<a href="#verify-proof-ecdsa-xi-2023">Algorithm 3.5.2</a> to verify
+the credential.
+          </p>
+        </section>
+        <section>
+          <h4>Status Checking</h4>
+          <p>
+The last step is to check the status information on the Driver's License
+credential. We apply <a href="#convert-status-list-entries">Algorithm 3.4</a>
+to convert the `TerseBitstringStatusListEntry` into a `BitstringStatusListEntry`.
+Here we check two status types, 'revocation' and 'suspension', passing those
+strings as values of |statusPurpose|.
+          </p>
+          <pre class="example nohighlight"
+          title="A BitstringStatusListEntry for status purpose: revocation">
+TODO
+          </pre>
+          <pre class="example nohighlight"
+          title="A BitstringStatusListEntry for status purpose: suspension">
+TODO
+          </pre>
+          <p>
+These can then be validated as in the <a data-cite="VC-BITSTRING-STATUS-LIST#validate-algorithm">
+  Bitstring Status List v1.0: Validate Algorithm</a>.
+          </p>
+        </section>
+      </section>
+    </section>
     <section class="informative">
       <h2>Revision History</h2>
 
