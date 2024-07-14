@@ -567,7 +567,7 @@ field begins with a three character element ID (e.g. `DBA` for document expirati
 a mapping between bits in the `protectedComponentIndex` value and these fields, sort these element IDs
 according to Unicode code point order. Then, if a bit in position `i` of `protectedComponentIndex` is `1`, the
 AAMVA mandatory field in position `i` of the sorted element IDs is protected by the digital signature. The last two
-bits in `protectedComponentIndex` MUST be `0`. For more information, see Section [[[#create-opticaldatahash]]].
+bits in `protectedComponentIndex` MUST be `0`. For more information, see Section [[[#create-opticaldatabytes]]].
         </p>
 
         <p>
@@ -921,7 +921,7 @@ first hash), <var>transformedDocumentHash</var> (the second hash), and
         </section>
 
         <section>
-          <h4> Create opticalDataHash</h4>
+          <h4> Create opticalDataBytes</h4>
 
           <section>
             <h5>`AamvaDriversLicenseScannableInformation` Credentials</h5>
@@ -1165,7 +1165,7 @@ DDGN
         </pre>
         <section>
           <h4>
-Creating `opticalDataHash`
+Creating `opticalDataBytes`
           </h4>
         
           <p>
@@ -1173,25 +1173,25 @@ Assume for simplicity that the only data in the PDF417 that you want to sign is 
 name (DAC), last name (DCS), and license number (DAQ). The bitstring value for use in
 `protectedComponentIndex` is then |100000100000000000100000|, and the value of
 `protectedComponentIndex` is "uggAg". Applying
-<a href="#create-opticaldatahash">Algorithm 3.5.4.1</a>, we get 
+<a href="#create-opticaldatabytes">Algorithm 3.5.4.1</a>, we get 
           </p>
           <pre class="example nohighlight"
 title="Data from the canonicalization of a Utopia Driver's License">
 |canonicalizedData| = 'DACJOHN\nDAQ987654321\nDCSSMITH\n'
-hashed:
+|opticalDataBytes|:
   [188,  38, 200, 146, 227, 213,  90, 250,
   50,  18, 126, 254,  47, 177,  91,  23,
   64, 129, 104, 223, 136,  81, 116,  67,
   136, 125, 137, 165, 117,  63, 152, 207]
           </pre>
           <p>
-For the EAD, we apply <a href="#create-opticaldatahash">Algorithm 3.5.4.2</a>:
+For the EAD, we apply <a href="#create-opticaldatabytes">Algorithm 3.5.4.2</a>:
           </p>
           <pre class="example nohighlight"
           title="A Machine Readable Zone that might appear on a Utopia EAD">
 |canonicalizedData| = 'IAUTO0000007010SRC0000000701<<\n8804192M2601058NOT<<<<<<<<<<
 &lt5\nSMITH<&#60JOHN<<<<<<<<<<<<<<<<<<<\n'
-hashed:
+|opticalDataBytes|:
 [8, 198, 126, 183,  25, 160, 166, 112,
 254, 184, 189,  47, 225, 211, 125, 210,
 132, 137, 45,  86, 169,  28,  57, 165,
@@ -1414,22 +1414,30 @@ title="A JSON-LD VC for a Utopia Driver's License VCB">
         <section>
           <h4>Verifying</h4>
           <p>
-Again we apply <a href="#create-opticaldatahash">Algorithm 3.5.4.1</a>
-and <a href="#create-opticaldatahash">Algorithm 3.5.4.2</a> to create
-the |opticalDataHash| that `ecdsa-xi-2023` requires, using the
+Again we apply <a href="#create-opticaldatabytes">Algorithm 3.5.4.1</a>
+and <a href="#create-opticaldatabytes">Algorithm 3.5.4.2</a> to create
+the |opticalDataBytes| that `ecdsa-xi-2023` requires, using the
 scanned PDF417 as input for the driver's license, and using the MRZ
 on the EAD as input for the EAD:
           </p>
           <pre class="example nohighlight"
 title="A canonicalization of a Utopia Driver's License PDF417">
 |canonicalizedData| = 'DACJOHN\nDAQ987654321\nDCSSMITH\n'
-`opticalDataHash`: TODO
+|opticalDataBytes|:
+  [188,  38, 200, 146, 227, 213,  90, 250,
+  50,  18, 126, 254,  47, 177,  91,  23,
+  64, 129, 104, 223, 136,  81, 116,  67,
+  136, 125, 137, 165, 117,  63, 152, 207]
           </pre>
           <pre class="example nohighlight"
           title="A canonicalization of a Utopia EAD MRZ">
 |canonicalizedData| = 'IAUTO0000007010SRC0000000701<<\n8804192M2601058NOT<<<<<<<<<<
 &lt5\nSMITH<&#60JOHN<<<<<<<<<<<<<<<<<<<\n'
-`opticalDataHash`: TODO
+|opticalDataBytes|:
+[8, 198, 126, 183,  25, 160, 166, 112,
+254, 184, 189,  47, 225, 211, 125, 210,
+132, 137, 45,  86, 169,  28,  57, 165,
+46, 253, 9, 137, 145,  42, 192, 113]
           </pre>
           <p>
 We then apply <a href="#hashing-ecdsa-xi-2023">Algorithm 3.5.3</a> and
