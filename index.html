@@ -1365,11 +1365,27 @@ TODO
           <p>
 We now decompress with CBOR-LD to get the original JSON-LD VCs to be
 verified. Again, the parameters are associated with CBOR-LD
-registry entry 0x0664.
+registry entry 100.
           </p>
         <pre class="example nohighlight"
         title="CBOR-LD decoding parameters">
-
+typeTable:
+{
+  "context":
+    {
+      "https://www.w3.org/ns/credentials/v2": 32768,
+      "https://w3id.org/vc-barcodes/v1": 32769,
+      "https://w3id.org/utopia/v2": 32770
+    },
+  
+  "https://w3id.org/security#cryptosuiteString":
+    {
+      "ecdsa-rdfc-2019": 1,
+      "ecdsa-sd-2023": 2,
+      "eddsa-rdfc-2022": 3,
+      "ecdsa-xi-2023": 4
+    }
+}
         </pre>
           <pre class="example nohighlight"
 title="A JSON-LD VC for a Utopia Driver's License VCB">
