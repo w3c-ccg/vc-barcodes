@@ -1276,12 +1276,29 @@ with CBOR-LD implementations that are not up to date.
           <p>
 For this specficiation, we have reserved the CBOR-LD registry entry
 with value 100 (i.e. these payloads will begin with tag 0x0664). The parameters
-to encode using CBOR-LD, which can be found in the registry (TODO link),
-are then as follows:
+to encode using CBOR-LD, which can be found in the registry in the CBOR-LD
+specification, are then as follows:
           </p>
           <pre class="example nohighlight"
           title="CBOR-LD encoding parameters">
-TODO
+registryEntry: 100
+typeTable:
+{
+  "context":
+    {
+      "https://www.w3.org/ns/credentials/v2": 32768,
+      "https://w3id.org/vc-barcodes/v1": 32769,
+      "https://w3id.org/utopia/v2": 32770
+    },
+  
+  "https://w3id.org/security#cryptosuiteString":
+    {
+      "ecdsa-rdfc-2019": 1,
+      "ecdsa-sd-2023": 2,
+      "eddsa-rdfc-2022": 3,
+      "ecdsa-xi-2023": 4
+    }
+}
           </pre>
 This results in the following encoded credentials:
           <pre class="example nohighlight"
