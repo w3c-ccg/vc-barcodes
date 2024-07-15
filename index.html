@@ -1177,8 +1177,8 @@ name (DAC), last name (DCS), and license number (DAQ). The bitstring value for u
           </p>
           <pre class="example nohighlight"
 title="Data from the canonicalization of a Utopia Driver's License">
-|canonicalizedData| = 'DACJOHN\nDAQ987654321\nDCSSMITH\n'
-|opticalDataBytes|:
+canonicalizedData = 'DACJOHN\nDAQ987654321\nDCSSMITH\n'
+opticalDataBytes:
   [188,  38, 200, 146, 227, 213,  90, 250,
   50,  18, 126, 254,  47, 177,  91,  23,
   64, 129, 104, 223, 136,  81, 116,  67,
@@ -1188,10 +1188,10 @@ title="Data from the canonicalization of a Utopia Driver's License">
 For the EAD, we apply <a href="#create-opticaldatabytes">Algorithm 3.5.4.2</a>:
           </p>
           <pre class="example nohighlight"
-          title="A Machine Readable Zone that might appear on a Utopia EAD">
-|canonicalizedData| = 'IAUTO0000007010SRC0000000701<<\n8804192M2601058NOT<<<<<<<<<<
+          title="Data from the canonicalization of a Utopia EAD MRZ">
+canonicalizedData = 'IAUTO0000007010SRC0000000701<<\n8804192M2601058NOT<<<<<<<<<<
 &lt5\nSMITH<&#60JOHN<<<<<<<<<<<<<<<<<<<\n'
-|opticalDataBytes|:
+opticalDataBytes:
 [8, 198, 126, 183,  25, 160, 166, 112,
 254, 184, 189,  47, 225, 211, 125, 210,
 132, 137, 45,  86, 169,  28,  57, 165,
@@ -1281,7 +1281,7 @@ specification, are then as follows:
           </p>
           <pre class="example nohighlight"
           title="CBOR-LD encoding parameters">
-registryEntry: 100
+registryEntryId: 100
 typeTable:
 {
   "context":
@@ -1517,8 +1517,8 @@ on the EAD as input for the EAD:
           </p>
           <pre class="example nohighlight"
 title="A canonicalization of a Utopia Driver's License PDF417">
-|canonicalizedData| = 'DACJOHN\nDAQ987654321\nDCSSMITH\n'
-|opticalDataBytes|:
+canonicalizedData = 'DACJOHN\nDAQ987654321\nDCSSMITH\n'
+opticalDataBytes:
   [188,  38, 200, 146, 227, 213,  90, 250,
   50,  18, 126, 254,  47, 177,  91,  23,
   64, 129, 104, 223, 136,  81, 116,  67,
@@ -1526,9 +1526,9 @@ title="A canonicalization of a Utopia Driver's License PDF417">
           </pre>
           <pre class="example nohighlight"
           title="A canonicalization of a Utopia EAD MRZ">
-|canonicalizedData| = 'IAUTO0000007010SRC0000000701<<\n8804192M2601058NOT<<<<<<<<<<
+canonicalizedData = 'IAUTO0000007010SRC0000000701<<\n8804192M2601058NOT<<<<<<<<<<
 &lt5\nSMITH<&#60JOHN<<<<<<<<<<<<<<<<<<<\n'
-|opticalDataBytes|:
+opticalDataBytes:
 [8, 198, 126, 183,  25, 160, 166, 112,
 254, 184, 189,  47, 225, 211, 125, 210,
 132, 137, 45,  86, 169,  28,  57, 165,
@@ -1583,11 +1583,9 @@ should be used:
           <pre class="example nohighlight"
           title="A BitstringStatusListEntry for status purpose: suspension">
 appContextMap:
-[
-['https://www.w3.org/ns/credentials/v2', 32768],
+[['https://www.w3.org/ns/credentials/v2', 32768],
 ['https://w3id.org/vc-barcodes/v1', 32769],
-['https://w3id.org/utopia/v2', 32770]
-]
+['https://w3id.org/utopia/v2', 32770]]
           </pre>
         <section>
           <h4>Driver's License</h4>
@@ -1607,7 +1605,7 @@ A VCB from a Utopia driver's license encoded with legacy CBOR-LD.
                  src="diagrams/ead-qr-legacy.png"
                  alt="A VCB from a Utopia EAD encoded with legacy CBOR-LD.">
             <figcaption style="text-align: center;">
-A VCB from a Utopia EAD with legacy CBOR-LD.
+A VCB from a Utopia EAD encoded with legacy CBOR-LD.
             </figcaption>
           </figure>
           <p>
