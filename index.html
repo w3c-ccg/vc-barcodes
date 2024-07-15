@@ -1223,22 +1223,22 @@ Example VC
 }
             </pre>
           </section>
-        <section>
-          <h4>CBOR-LD Compression and Encoding</h4>
-          <p>
+          <section>
+            <h4>CBOR-LD Compression and Encoding</h4>
+            <p>
 We can now apply CBOR-LD compression to this VC. Here we use the newest
 version of CBOR-LD, however at the end of the section we provide VCBs
 encoded using older versions of CBOR-LD for interoperability testing 
 with CBOR-LD implementations that are not up to date.
-          </p>
-          <p>
+            </p>
+            <p>
 For this specficiation, we have reserved the CBOR-LD registry entry
 with value 100 (i.e. these payloads will begin with tag 0x0664). The parameters
 to encode using CBOR-LD, which can be found in the registry in the CBOR-LD
 specification, are then as follows:
-          </p>
-          <pre class="example nohighlight"
-          title="CBOR-LD encoding parameters">
+            </p>
+            <pre class="example nohighlight"
+            title="CBOR-LD encoding parameters">
 registryEntryId: 100
 typeTable:
 {
@@ -1257,10 +1257,10 @@ typeTable:
       "ecdsa-xi-2023": 4
     }
 }
-          </pre>
+            </pre>
 This results in the following encoded credential:
-          <pre class="example nohighlight"
-          title="A CBOR-LD compressed Utopia Driver's License VC">
+            <pre class="example nohighlight"
+            title="A CBOR-LD compressed Utopia Driver's License VC">
 d90664a60183198000198001198002189d82187618a418b8a3189c18a618ce18b218d01ae592208118baa2189c18a018a8447582002018be18aa18c0a5189c186c18d60418e018e618e258417ab7c2e56b49e2cce62184ce26818e15a8b173164401b5d3bb93ffd6d2b5eb8f6ac0971502ae3dd49d17ec66528164034c912685b8111bc04cdc9ec13dbadd91cc18e418ac
 
 diagnostic:
@@ -1280,31 +1280,31 @@ diagnostic:
     }
   }
 )
-          </pre>
-          <p>
+            </pre>
+            <p>
 Encoding the Driver's License CBORLD as base64url and inserting the result into the
 PDF417 bytes in the 'ZZA' field in the 'ZZ' subfile:
-          </p>
-          <pre class="example nohighlight"
-          title="Bytes from a PDF417 including an encoded Utopia Driver's License VCB">
+            </p>
+            <pre class="example nohighlight"
+            title="Bytes from a PDF417 including an encoded Utopia Driver's License VCB">
 bytes(@\n\x1e\rANSI000000090002DL00410267ZZ03080162DLDAQF987654321\nDCSSMITH\nDDEN\nDACJOHN\nDDFN\nDADNONE\nDDGN\nDCAC\nDCBNONE\nDCDNONE\nDBD01012024\nDBB04191988\nDBA04192030\nDBC1\nDAU069 IN\nDAYBRO\nDAG123 MAIN ST\nDAIANYVILLE\nDAJUTO\nDAKF87P20000  \nDCFUTODOCDISCRIM\nDCGUTO\nDAW158\nDCK1234567890\nDDAN\rZZZZA2QZkpgGDGYAAGYABGYACGJ2CGHYYpBi4oxicGKYYzhiyGNAa5ZIggRi6ohicGKAYqER1ggAgGL4YqhjApRicGGwY1gQY4BjmGOJYQXq3wuVrSeLM5iGEziaBjhWosXMWRAG107uT_9bSteuPasCXFQKuPdSdF-xmUoFkA0yRJoW4ERvATNyewT263ZHMGOQYrA==\r)
-          </pre>
-          <p>
+            </pre>
+            <p>
 The above can now be turned into a barcode:
-          </p>
-          <figure id="dl-barcode">
-            <img style="margin: auto; display: block; border-radius:15px; width: 80%;"
-                  src="diagrams/dl-barcode.png"
-                  alt="A VCB from a Utopia driver's license.">
-            <figcaption style="text-align: center;">
+            </p>
+            <figure id="dl-barcode">
+              <img style="margin: auto; display: block; border-radius:15px; width: 80%;"
+                    src="diagrams/dl-barcode.png"
+                    alt="A VCB from a Utopia driver's license.">
+              <figcaption style="text-align: center;">
 A VCB from a Utopia driver's license.
-            </figcaption>
-          </figure>
+              </figcaption>
+            </figure>
           </section>
         </section>
         <section>
           <h4>Utopia Employment Authorization Document</h4>
-        
+          
           <p>
 We start with the data that will be signed by the VCB (i.e an MRZ):
           </p>
@@ -1331,13 +1331,13 @@ opticalDataBytes:
 132, 137, 45,  86, 169,  28,  57, 165,
 46, 253, 9, 137, 145,  42, 192, 113]
             </pre>
-          </section>
-          <p>
+            <p>
 We now can use this hash value with
 <a href="#hashing-ecdsa-xi-2023">Algorithm 3.5.3</a> to sign the VC.
 Executing  <a href="#credential-creation">Algorithm 3.2</a> without
 adding status, we get the following JSON-LD VC:
-          </p>
+            </p>
+          </section>
           <section>
             <h5>
 Example VC
@@ -1368,23 +1368,22 @@ Example VC
 }
             </pre>
           </section>
-        </section>
-        <section>
-          <h4>CBOR-LD Compression and Encoding</h4>
-          <p>
+          <section>
+            <h4>CBOR-LD Compression and Encoding</h4>
+            <p>
 We can now apply CBOR-LD compression to this VC. Here we use the newest
 version of CBOR-LD, however at the end of the section we provide VCBs
 encoded using older versions of CBOR-LD for interoperability testing 
 with CBOR-LD implementations that are not up to date.
-          </p>
-          <p>
+            </p>
+            <p>
 For this specficiation, we have reserved the CBOR-LD registry entry
 with value 100 (i.e. these payloads will begin with tag 0x0664). The parameters
 to encode using CBOR-LD, which can be found in the registry in the CBOR-LD
 specification, are then as follows:
-          </p>
-          <pre class="example nohighlight"
-          title="CBOR-LD encoding parameters">
+            </p>
+            <pre class="example nohighlight"
+            title="CBOR-LD encoding parameters">
 registryEntryId: 100
 typeTable:
 {
@@ -1403,10 +1402,10 @@ typeTable:
       "ecdsa-xi-2023": 4
     }
 }
-          </pre>
+            </pre>
 This results in the following encoded credential:
-          <pre class="example nohighlight"
-          title="A CBOR-LD compressed Utopia EAD VC">
+            <pre class="example nohighlight"
+            title="A CBOR-LD compressed Utopia EAD VC">
 d90664a50183198000198001198002189d82187618a418baa1189c18a218be18ae18c0a5189c186c18d20418dc18e218de58417a9ec7f688f60caa8c757592250b3f6d6e18419941f186e1ed4245770e687502d51d01cd2c2295e4338178a51a35c2f044a85598e15db9aef00261bc5c95a744e718e018b0
 
 diagnostic:
@@ -1425,39 +1424,40 @@ diagnostic:
     }
   }
 )
-          </pre>
-          <p>
+            </pre>
+            <p>
 Encoding the EAD CBORLD as base45-multibase and prepending 'VC1-':
-          </p>
-          <pre class="example nohighlight"
-          title="An encoded Utopia EAD VCB">
+            </p>
+            <pre class="example nohighlight"
+            title="An encoded Utopia EAD VCB">
 VC1-RSJRPWCR803A3P0098G3A3-B02-J743853U53KGK0XJ6MKJ1OI0M.FO053.33963DN04$RAQS+4SMC8C3KM7VX4VAPL9%EILI:I1O$D:23%GJ0OUCPS0H8D2FB9D5G00U39.PXG49%SOGGB*K$Z6%GUSCLWEJ8%B95MOD0P NG-I:V8N63K53
-          </pre>
-          <p>
+            </pre>
+            <p>
 The above can now be turned into a QR code:
-          </p>
-        </section>
-        <section>
-          <h5>Employment Authorization Document</h5>
-          <figure id="ead-qr-legacy">
-            <img style="margin: auto; display: block; border-radius:15px; width: 50%;"
-                 src="diagrams/ead-qr.png"
-                 alt="A VCB from a Utopia EAD.">
-            <figcaption style="text-align: center;">
+            </p>
+          </section>
+          <section>
+            <h5>Employment Authorization Document</h5>
+            <figure id="ead-qr">
+              <img style="margin: auto; display: block; border-radius:15px; width: 50%;"
+                  src="diagrams/ead-qr.png"
+                  alt="A VCB from a Utopia EAD.">
+              <figcaption style="text-align: center;">
 A VCB from a Utopia EAD.
-            </figcaption>
-          </figure>
-          <p>
+              </figcaption>
+            </figure>
+            <p>
 For use with the following MRZ:
-          </p>
-          <figure id="ead-back">
-            <img style="margin: auto; display: block; border-radius:15px; width: 50%;"
-                 src="diagrams/ead-back.png"
-                 alt="An MRZ on a Utopia Employment Authorization Document.">
-            <figcaption style="text-align: center;">
+            </p>
+            <figure id="ead-back">
+              <img style="margin: auto; display: block; border-radius:15px; width: 50%;"
+                  src="diagrams/ead-back.png"
+                  alt="An MRZ on a Utopia Employment Authorization Document.">
+              <figcaption style="text-align: center;">
 An MRZ on a Utopia Employment Authorization Document.
-            </figcaption>
-          </figure>
+              </figcaption>
+            </figure>
+          </section>
         </section>
       </section>
       <section>
@@ -1707,7 +1707,7 @@ appContextMap:
 ['https://w3id.org/utopia/v2', 32770]]
           </pre>
         <section>
-          <h4>Driver's License</h4>
+          <h4>Utopia Driver's License</h4>
           <figure id="dl-barcode-legacy">
             <img style="margin: auto; display: block; border-radius:15px; width: 80%;"
                  src="diagrams/dl-barcode-legacy.png"
@@ -1718,7 +1718,7 @@ A VCB from a Utopia driver's license encoded with legacy CBOR-LD.
           </figure>
         </section>
         <section>
-          <h5>Employment Authorization Document</h5>
+          <h5>Utopia Employment Authorization Document</h5>
           <figure id="ead-qr-legacy">
             <img style="margin: auto; display: block; border-radius:15px; width: 50%;"
                  src="diagrams/ead-qr-legacy.png"
