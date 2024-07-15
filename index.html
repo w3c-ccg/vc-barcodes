@@ -1128,18 +1128,14 @@ the PDF417 of a Utopia Driver's License.
       </p>
       <section>
         <h3>Creating VCBs</h3>
-        <p>
-We start with the data that will be signed by the VCB (i.e an MRZ and
-mandatory AAMVA fields from a PDF417):
-        </p>
-        <pre class="example nohighlight"
-             title="A Machine Readable Zone that might appear on a Utopia EAD">
-IAUTO0000007010SRC0000000701<<
-8804192M2601058NOT<<<<<<<<<<&lt5
-SMITH&#60&#60JOHN<<<<<<<<<<<<<<<<<<<       
-        </pre>
-        <pre class="example nohighlight"
-        title="Fields from a PDF417 that might appear on a Utopia Driver's License">
+        <section>
+          <h4>Utopia Driver's License</h4>
+          <p>
+We start with the data that will be signed by the VCB (i.e. mandatory AAMVA fields
+from a PDF417):
+          </p>
+          <pre class="example nohighlight"
+          title="Fields from a PDF417 that might appear on a Utopia Driver's License">
 DACJOHN
 DADNONE
 DAG123 MAIN ST
@@ -1162,20 +1158,20 @@ DCSSMITH
 DDEN
 DDFN
 DDGN
-        </pre>
-        <section>
-          <h4>
+          </pre>
+          <section>
+            <h5>
 Creating `opticalDataBytes`
-          </h4>
-        
-          <p>
+            </h5>
+          
+            <p>
 Assume for simplicity that the only data in the PDF417 that you want to sign is first
 name (DAC), last name (DCS), and license number (DAQ). The bitstring value for use in
 `protectedComponentIndex` is then |100000100000000000100000|, and the value of
 `protectedComponentIndex` is "uggAg". Applying
 <a href="#create-opticaldatabytes">Algorithm 3.5.4.1</a>, we get 
-          </p>
-          <pre class="example nohighlight"
+            </p>
+            <pre class="example nohighlight"
 title="Data from the canonicalization of a Utopia Driver's License">
 canonicalizedData = 'DACJOHN\nDAQ987654321\nDCSSMITH\n'
 opticalDataBytes:
@@ -1183,33 +1179,20 @@ opticalDataBytes:
   50,  18, 126, 254,  47, 177,  91,  23,
   64, 129, 104, 223, 136,  81, 116,  67,
   136, 125, 137, 165, 117,  63, 152, 207]
-          </pre>
+            </pre>
+          </section>
           <p>
-For the EAD, we apply <a href="#create-opticaldatabytes">Algorithm 3.5.4.2</a>:
-          </p>
-          <pre class="example nohighlight"
-          title="Data from the canonicalization of a Utopia EAD MRZ">
-canonicalizedData = 'IAUTO0000007010SRC0000000701<<\n8804192M2601058NOT<<<<<<<<<<
-&lt5\nSMITH<&#60JOHN<<<<<<<<<<<<<<<<<<<\n'
-opticalDataBytes:
-[8, 198, 126, 183,  25, 160, 166, 112,
-254, 184, 189,  47, 225, 211, 125, 210,
-132, 137, 45,  86, 169,  28,  57, 165,
-46, 253, 9, 137, 145,  42, 192, 113]
-          </pre>
-        </section>
-        <p>
-We now can use these hash values with
+We now can use this hash value with
 <a href="#hashing-ecdsa-xi-2023">Algorithm 3.5.3</a> to sign the VC.
 Executing  <a href="#credential-creation">Algorithm 3.2</a> with a
-`BitstringStatusListCredential`, we get the following JSON-LD VCs:
-        </p>
-        <section>
-          <h4>
-Example VCs
-          </h4>
-          <pre class="example nohighlight"
-title="A JSON-LD VC for a Utopia Driver's License VCB">
+`BitstringStatusListCredential`, we get the following JSON-LD VC:
+          </p>
+          <section>
+            <h5>
+Example VC
+            </h5>
+            <pre class="example nohighlight"
+  title="A JSON-LD VC for a Utopia Driver's License VCB">
 {
   "@context": [
     "https://www.w3.org/ns/credentials/v2",
@@ -1238,37 +1221,12 @@ title="A JSON-LD VC for a Utopia Driver's License VCB">
     "proofValue": "z4g6G3dAZhhtPxPWgFvkiRv7krtCaeJxjokvL46fchAFCXEY3FeX2vn46MDgBaw779g1E1jswZJxxreZDCrtHg2qH"
   }
 }
-          </pre>
-          <pre class="example nohighlight"
-          title="A JSON-LD VC for a Utopia EAD VCB">
-{
-  "@context": [
-    "https://www.w3.org/ns/credentials/v2",
-    "https://w3id.org/vc-barcodes/v1",
-    "https://w3id.org/utopia/v2"
-  ],
-  "type": [
-    "VerifiableCredential",
-    "OpticalBarcodeCredential"
-  ],
-  "credentialSubject": {
-    "type": "MachineReadableZone"
-  },
-  "issuer": "did:key:zDnaeZSD9XcuULaS8qmgDUa6TMg2QjF9xABnZK42awDH3BEzj",
-  "proof": {
-    "type": "DataIntegrityProof",
-    "verificationMethod": "did:key:zDnaeZSD9XcuULaS8qmgDUa6TMg2QjF9xABnZK42awDH3BEzj#zDnaeZSD9XcuULaS8qmgDUa6TMg2QjF9xABnZK42awDH3BEzj",
-    "cryptosuite": "ecdsa-xi-2023",
-    "proofPurpose": "assertionMethod",
-    "proofValue": "z4B8AQgjwgsEdcPEZkrkK2mTVKn7qufoDgDkv9Qitf9tjxQPMoJaGdXwDrThjp7LUdvzsDJ7UwYu6Xpm9fjbo6QnJ"
-  }
-}
-          </pre>
-        </section>
+            </pre>
+          </section>
         <section>
           <h4>CBOR-LD Compression and Encoding</h4>
           <p>
-We can now apply CBOR-LD compression to these VCs. Here we use the newest
+We can now apply CBOR-LD compression to this VC. Here we use the newest
 version of CBOR-LD, however at the end of the section we provide VCBs
 encoded using older versions of CBOR-LD for interoperability testing 
 with CBOR-LD implementations that are not up to date.
@@ -1300,7 +1258,7 @@ typeTable:
     }
 }
           </pre>
-This results in the following encoded credentials:
+This results in the following encoded credential:
           <pre class="example nohighlight"
           title="A CBOR-LD compressed Utopia Driver's License VC">
 d90664a60183198000198001198002189d82187618a418b8a3189c18a618ce18b218d01ae592208118baa2189c18a018a8447582002018be18aa18c0a5189c186c18d60418e018e618e258417ab7c2e56b49e2cce62184ce26818e15a8b173164401b5d3bb93ffd6d2b5eb8f6ac0971502ae3dd49d17ec66528164034c912685b8111bc04cdc9ec13dbadd91cc18e418ac
@@ -1323,6 +1281,130 @@ diagnostic:
   }
 )
           </pre>
+          <p>
+Encoding the Driver's License CBORLD as base64url and inserting the result into the
+PDF417 bytes in the 'ZZA' field in the 'ZZ' subfile:
+          </p>
+          <pre class="example nohighlight"
+          title="Bytes from a PDF417 including an encoded Utopia Driver's License VCB">
+bytes(@\n\x1e\rANSI000000090002DL00410267ZZ03080162DLDAQF987654321\nDCSSMITH\nDDEN\nDACJOHN\nDDFN\nDADNONE\nDDGN\nDCAC\nDCBNONE\nDCDNONE\nDBD01012024\nDBB04191988\nDBA04192030\nDBC1\nDAU069 IN\nDAYBRO\nDAG123 MAIN ST\nDAIANYVILLE\nDAJUTO\nDAKF87P20000  \nDCFUTODOCDISCRIM\nDCGUTO\nDAW158\nDCK1234567890\nDDAN\rZZZZA2QZkpgGDGYAAGYABGYACGJ2CGHYYpBi4oxicGKYYzhiyGNAa5ZIggRi6ohicGKAYqER1ggAgGL4YqhjApRicGGwY1gQY4BjmGOJYQXq3wuVrSeLM5iGEziaBjhWosXMWRAG107uT_9bSteuPasCXFQKuPdSdF-xmUoFkA0yRJoW4ERvATNyewT263ZHMGOQYrA==\r)
+          </pre>
+          <p>
+The above can now be turned into a barcode:
+          </p>
+          <figure id="dl-barcode">
+            <img style="margin: auto; display: block; border-radius:15px; width: 80%;"
+                  src="diagrams/dl-barcode.png"
+                  alt="A VCB from a Utopia driver's license.">
+            <figcaption style="text-align: center;">
+A VCB from a Utopia driver's license.
+            </figcaption>
+          </figure>
+          </section>
+        </section>
+        <section>
+          <h4>Utopia Employment Authorization Document</h4>
+        
+          <p>
+We start with the data that will be signed by the VCB (i.e an MRZ):
+          </p>
+          <pre class="example nohighlight"
+              title="A Machine Readable Zone that might appear on a Utopia EAD">
+IAUTO0000007010SRC0000000701<<
+8804192M2601058NOT<<<<<<<<<<&lt5
+SMITH&#60&#60JOHN<<<<<<<<<<<<<<<<<<<       
+          </pre>
+          <section>
+            <h5>
+Creating `opticalDataBytes`
+            </h5>
+            <p>
+For the EAD, we apply <a href="#create-opticaldatabytes">Algorithm 3.5.4.2</a>:
+            </p>
+            <pre class="example nohighlight"
+            title="Data from the canonicalization of a Utopia EAD MRZ">
+canonicalizedData = 'IAUTO0000007010SRC0000000701<<\n8804192M2601058NOT<<<<<<<<<<
+&lt5\nSMITH<&#60JOHN<<<<<<<<<<<<<<<<<<<\n'
+opticalDataBytes:
+[8, 198, 126, 183,  25, 160, 166, 112,
+254, 184, 189,  47, 225, 211, 125, 210,
+132, 137, 45,  86, 169,  28,  57, 165,
+46, 253, 9, 137, 145,  42, 192, 113]
+            </pre>
+          </section>
+          <p>
+We now can use this hash value with
+<a href="#hashing-ecdsa-xi-2023">Algorithm 3.5.3</a> to sign the VC.
+Executing  <a href="#credential-creation">Algorithm 3.2</a> without
+adding status, we get the following JSON-LD VC:
+          </p>
+          <section>
+            <h5>
+Example VC
+            </h5>
+            <pre class="example nohighlight"
+            title="A JSON-LD VC for a Utopia EAD VCB">
+{
+  "@context": [
+    "https://www.w3.org/ns/credentials/v2",
+    "https://w3id.org/vc-barcodes/v1",
+    "https://w3id.org/utopia/v2"
+  ],
+  "type": [
+    "VerifiableCredential",
+    "OpticalBarcodeCredential"
+  ],
+  "credentialSubject": {
+    "type": "MachineReadableZone"
+  },
+  "issuer": "did:key:zDnaeZSD9XcuULaS8qmgDUa6TMg2QjF9xABnZK42awDH3BEzj",
+  "proof": {
+    "type": "DataIntegrityProof",
+    "verificationMethod": "did:key:zDnaeZSD9XcuULaS8qmgDUa6TMg2QjF9xABnZK42awDH3BEzj#zDnaeZSD9XcuULaS8qmgDUa6TMg2QjF9xABnZK42awDH3BEzj",
+    "cryptosuite": "ecdsa-xi-2023",
+    "proofPurpose": "assertionMethod",
+    "proofValue": "z4B8AQgjwgsEdcPEZkrkK2mTVKn7qufoDgDkv9Qitf9tjxQPMoJaGdXwDrThjp7LUdvzsDJ7UwYu6Xpm9fjbo6QnJ"
+  }
+}
+            </pre>
+          </section>
+        </section>
+        <section>
+          <h4>CBOR-LD Compression and Encoding</h4>
+          <p>
+We can now apply CBOR-LD compression to this VC. Here we use the newest
+version of CBOR-LD, however at the end of the section we provide VCBs
+encoded using older versions of CBOR-LD for interoperability testing 
+with CBOR-LD implementations that are not up to date.
+          </p>
+          <p>
+For this specficiation, we have reserved the CBOR-LD registry entry
+with value 100 (i.e. these payloads will begin with tag 0x0664). The parameters
+to encode using CBOR-LD, which can be found in the registry in the CBOR-LD
+specification, are then as follows:
+          </p>
+          <pre class="example nohighlight"
+          title="CBOR-LD encoding parameters">
+registryEntryId: 100
+typeTable:
+{
+  "context":
+    {
+      "https://www.w3.org/ns/credentials/v2": 32768,
+      "https://w3id.org/vc-barcodes/v1": 32769,
+      "https://w3id.org/utopia/v2": 32770
+    },
+  
+  "https://w3id.org/security#cryptosuiteString":
+    {
+      "ecdsa-rdfc-2019": 1,
+      "ecdsa-sd-2023": 2,
+      "eddsa-rdfc-2022": 3,
+      "ecdsa-xi-2023": 4
+    }
+}
+          </pre>
+This results in the following encoded credential:
           <pre class="example nohighlight"
           title="A CBOR-LD compressed Utopia EAD VC">
 d90664a50183198000198001198002189d82187618a418baa1189c18a218be18ae18c0a5189c186c18d20418dc18e218de58417a9ec7f688f60caa8c757592250b3f6d6e18419941f186e1ed4245770e687502d51d01cd2c2295e4338178a51a35c2f044a85598e15db9aef00261bc5c95a744e718e018b0
@@ -1345,14 +1427,6 @@ diagnostic:
 )
           </pre>
           <p>
-Encoding the Driver's License CBORLD as base64url and inserting the result into the
-PDF417 bytes in the 'ZZA' field in the 'ZZ' subfile:
-          </p>
-          <pre class="example nohighlight"
-          title="Bytes from a PDF417 including an encoded Utopia Driver's License VCB">
-bytes(@\n\x1e\rANSI000000090002DL00410267ZZ03080162DLDAQF987654321\nDCSSMITH\nDDEN\nDACJOHN\nDDFN\nDADNONE\nDDGN\nDCAC\nDCBNONE\nDCDNONE\nDBD01012024\nDBB04191988\nDBA04192030\nDBC1\nDAU069 IN\nDAYBRO\nDAG123 MAIN ST\nDAIANYVILLE\nDAJUTO\nDAKF87P20000  \nDCFUTODOCDISCRIM\nDCGUTO\nDAW158\nDCK1234567890\nDDAN\rZZZZA2QZkpgGDGYAAGYABGYACGJ2CGHYYpBi4oxicGKYYzhiyGNAa5ZIggRi6ohicGKAYqER1ggAgGL4YqhjApRicGGwY1gQY4BjmGOJYQXq3wuVrSeLM5iGEziaBjhWosXMWRAG107uT_9bSteuPasCXFQKuPdSdF-xmUoFkA0yRJoW4ERvATNyewT263ZHMGOQYrA==\r)
-          </pre>
-          <p>
 Encoding the EAD CBORLD as base45-multibase and prepending 'VC1-':
           </p>
           <pre class="example nohighlight"
@@ -1360,16 +1434,8 @@ Encoding the EAD CBORLD as base45-multibase and prepending 'VC1-':
 VC1-RSJRPWCR803A3P0098G3A3-B02-J743853U53KGK0XJ6MKJ1OI0M.FO053.33963DN04$RAQS+4SMC8C3KM7VX4VAPL9%EILI:I1O$D:23%GJ0OUCPS0H8D2FB9D5G00U39.PXG49%SOGGB*K$Z6%GUSCLWEJ8%B95MOD0P NG-I:V8N63K53
           </pre>
           <p>
-The above can now be turned into barcodes:
+The above can now be turned into a QR code:
           </p>
-          <figure id="dl-barcode">
-            <img style="margin: auto; display: block; border-radius:15px; width: 80%;"
-                 src="diagrams/dl-barcode.png"
-                 alt="A VCB from a Utopia driver's license.">
-            <figcaption style="text-align: center;">
-A VCB from a Utopia driver's license.
-            </figcaption>
-          </figure>
         </section>
         <section>
           <h5>Employment Authorization Document</h5>
