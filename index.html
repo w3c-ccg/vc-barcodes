@@ -654,7 +654,7 @@ credentials as base64url before encoding them in a PDF417.
         </p>
         <p>
 It is REQUIRED that implementers re-encode CBOR-LD encoded `MachineReadableZone` credentials
-as base45 with the string 'VC1-' prepended before encoding them in a QR code.
+as base45-multibase with the string 'VC1-' prepended before encoding them in a QR code.
         </p>
       </section>
 
@@ -1134,9 +1134,9 @@ mandatory AAMVA fields from a PDF417):
         </p>
         <pre class="example nohighlight"
              title="A Machine Readable Zone that might appear on a Utopia EAD">
-I A U T O 0 0 0 0 0 0 7 0 1 0 S R C 0 0 0 0 0 0 0 7 0 1 < <
-8 8 0 4 1 9 2 M 2 6 0 1 0 5 8 N O T < < < < < < < < < < < 5
-S M I T H &#60 &#60 J O H N < < < < < < < < < < < < < < < < < < <       
+IAUTO0000007010SRC0000000701<<
+8804192M2601058NOT<<<<<<<<<<&lt5
+SMITH&#60&#60JOHN<<<<<<<<<<<<<<<<<<<       
         </pre>
         <pre class="example nohighlight"
         title="Fields from a PDF417 that might appear on a Utopia Driver's License">
@@ -1353,11 +1353,11 @@ PDF417 bytes in the 'ZZA' field in the 'ZZ' subfile:
 bytes(@\n\x1e\rANSI000000090002DL00410267ZZ03080162DLDAQF987654321\nDCSSMITH\nDDEN\nDACJOHN\nDDFN\nDADNONE\nDDGN\nDCAC\nDCBNONE\nDCDNONE\nDBD01012024\nDBB04191988\nDBA04192030\nDBC1\nDAU069 IN\nDAYBRO\nDAG123 MAIN ST\nDAIANYVILLE\nDAJUTO\nDAKF87P20000  \nDCFUTODOCDISCRIM\nDCGUTO\nDAW158\nDCK1234567890\nDDAN\rZZZZA2QZkpgGDGYAAGYABGYACGJ2CGHYYpBi4oxicGKYYzhiyGNAa5ZIggRi6ohicGKAYqER1ggAgGL4YqhjApRicGGwY1gQY4BjmGOJYQXq3wuVrSeLM5iGEziaBjhWosXMWRAG107uT_9bSteuPasCXFQKuPdSdF-xmUoFkA0yRJoW4ERvATNyewT263ZHMGOQYrA==\r)
           </pre>
           <p>
-Encoding the EAD CBORLD as base45 and prepending 'VC1-':
+Encoding the EAD CBORLD as base45-multibase and prepending 'VC1-':
           </p>
           <pre class="example nohighlight"
           title="An encoded Utopia EAD VCB">
-VC1-SJRPWCR803A3P0098G3A3-B02-J743853U53KGK0XJ6MKJ1OI0M.FO053.33963DN04$RAQS+4SMC8C3KM7VX4VAPL9%EILI:I1O$D:23%GJ0OUCPS0H8D2FB9D5G00U39.PXG49%SOGGB*K$Z6%GUSCLWEJ8%B95MOD0P NG-I:V8N63K53
+VC1-RSJRPWCR803A3P0098G3A3-B02-J743853U53KGK0XJ6MKJ1OI0M.FO053.33963DN04$RAQS+4SMC8C3KM7VX4VAPL9%EILI:I1O$D:23%GJ0OUCPS0H8D2FB9D5G00U39.PXG49%SOGGB*K$Z6%GUSCLWEJ8%B95MOD0P NG-I:V8N63K53
           </pre>
           <p>
 The above can now be turned into barcodes:
@@ -1540,7 +1540,7 @@ We first read the data from the QR code:
             </p>
             <pre class="example nohighlight"
             title="An encoded Utopia Driver's License EAD">
-VC1-SJRPWCR803A3P0098G3A3-B02-J743853U53KGK0XJ6MKJ1OI0M.FO053.33963DN04$RAQS+4SMC8C3KM7VX4VAPL9%EILI:I1O$D:23%GJ0OUCPS0H8D2FB9D5G00U39.PXG49%SOGGB*K$Z6%GUSCLWEJ8%B95MOD0P NG-I:V8N63K53
+VC1-RSJRPWCR803A3P0098G3A3-B02-J743853U53KGK0XJ6MKJ1OI0M.FO053.33963DN04$RAQS+4SMC8C3KM7VX4VAPL9%EILI:I1O$D:23%GJ0OUCPS0H8D2FB9D5G00U39.PXG49%SOGGB*K$Z6%GUSCLWEJ8%B95MOD0P NG-I:V8N63K53
             </pre>
             <p>
 We extract the data after 'VC1-' undoing the base encoding:
