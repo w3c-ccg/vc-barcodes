@@ -7,7 +7,7 @@
     "AamvaDriversLicenseScannableInformation": "https://w3id.org/vc-barcodes#AamvaDriversLicenseScannableInformation",
     "protectedComponentIndex": {
       "@id": "https://w3id.org/vc-barcodes#protectedComponentIndex",
-    "@type": "https://w3id.org/security#multibase"
+      "@type": "https://w3id.org/security#multibase"
     },
     "OpticalBarcodeCredential": "https://w3id.org/vc-barcodes#OpticalBarcodeCredential",
     "TerseBitstringStatusListEntry": {

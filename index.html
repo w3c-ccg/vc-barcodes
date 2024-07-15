@@ -1303,30 +1303,95 @@ typeTable:
 This results in the following encoded credentials:
           <pre class="example nohighlight"
           title="A CBOR-LD compressed Utopia Driver's License VC">
-TODO
+d90664a60183198000198001198002189d82187618a418b8a3189c18a618ce18b218d01ae592208118baa2189c18a018a8447582002018be18aa18c0a5189c186c18d60418e018e618e258417ab7c2e56b49e2cce62184ce26818e15a8b173164401b5d3bb93ffd6d2b5eb8f6ac0971502ae3dd49d17ec66528164034c912685b8111bc04cdc9ec13dbadd91cc18e418ac
+
+diagnostic:
+1636(
+  {
+    1: [32768, 32769, 32770],
+    157: [118, 164],
+    184: {156: 166, 206: 178, 208: 3851559041},
+    186: {156: 160, 168: h'75820020'},
+    190: 170,
+    192: {
+      156: 108,
+      214: 4,
+      224: 230,
+      226: h'7AB7C2E56B49E2CCE62184CE26818E15A8B173164401B5D3BB93FFD6D2B5EB8F6AC0971502AE3DD49D17EC66528164034C912685B8111BC04CDC9EC13DBADD91CC',
+      228: 172
+    }
+  }
+)
           </pre>
           <pre class="example nohighlight"
           title="A CBOR-LD compressed Utopia EAD VC">
-TODO
+d90664a50183198000198001198002189d82187618a418baa1189c18a218be18ae18c0a5189c186c18d20418dc18e218de58417a9ec7f688f60caa8c757592250b3f6d6e18419941f186e1ed4245770e687502d51d01cd2c2295e4338178a51a35c2f044a85598e15db9aef00261bc5c95a744e718e018b0
+
+diagnostic:
+1636(
+  {
+    1: [32768, 32769, 32770],
+    157: [118, 164],
+    186: {156: 162},
+    190: 174,
+    192: {
+      156: 108,
+      210: 4,
+      220: 226,
+      222: h'7A9EC7F688F60CAA8C757592250B3F6D6E18419941F186E1ED4245770E687502D51D01CD2C2295E4338178A51A35C2F044A85598E15DB9AEF00261BC5C95A744E7',
+      224: 176
+    }
+  }
+)
           </pre>
           <p>
 Encoding the Driver's License CBORLD as base64url and inserting the result into the
 PDF417 bytes in the 'ZZA' field in the 'ZZ' subfile:
           </p>
           <pre class="example nohighlight"
-          title="An encoded Utopia Driver's License VCB">
-TODO
+          title="Bytes from a PDF417 including an encoded Utopia Driver's License VCB">
+bytes(@\n\x1e\rANSI000000090002DL00410267ZZ03080162DLDAQF987654321\nDCSSMITH\nDDEN\nDACJOHN\nDDFN\nDADNONE\nDDGN\nDCAC\nDCBNONE\nDCDNONE\nDBD01012024\nDBB04191988\nDBA04192030\nDBC1\nDAU069 IN\nDAYBRO\nDAG123 MAIN ST\nDAIANYVILLE\nDAJUTO\nDAKF87P20000  \nDCFUTODOCDISCRIM\nDCGUTO\nDAW158\nDCK1234567890\nDDAN\rZZZZA2QZkpgGDGYAAGYABGYACGJ2CGHYYpBi4oxicGKYYzhiyGNAa5ZIggRi6ohicGKAYqER1ggAgGL4YqhjApRicGGwY1gQY4BjmGOJYQXq3wuVrSeLM5iGEziaBjhWosXMWRAG107uT_9bSteuPasCXFQKuPdSdF-xmUoFkA0yRJoW4ERvATNyewT263ZHMGOQYrA==\r)
           </pre>
           <p>
 Encoding the EAD CBORLD as base45 and prepending 'VC1-':
           </p>
           <pre class="example nohighlight"
-          title="An encoded Utopia Driver's License EAD">
-TODO
+          title="An encoded Utopia EAD VCB">
+VC1-SJRPWCR803A3P0098G3A3-B02-J743853U53KGK0XJ6MKJ1OI0M.FO053.33963DN04$RAQS+4SMC8C3KM7VX4VAPL9%EILI:I1O$D:23%GJ0OUCPS0H8D2FB9D5G00U39.PXG49%SOGGB*K$Z6%GUSCLWEJ8%B95MOD0P NG-I:V8N63K53
           </pre>
           <p>
-The above can now be turned into barcodes: TODO
+The above can now be turned into barcodes:
           </p>
+          <figure id="dl-barcode">
+            <img style="margin: auto; display: block; border-radius:15px; width: 80%;"
+                 src="diagrams/dl-barcode.png"
+                 alt="A VCB from a Utopia driver's license.">
+            <figcaption style="text-align: center;">
+A VCB from a Utopia driver's license.
+            </figcaption>
+          </figure>
+        </section>
+        <section>
+          <h5>Employment Authorization Document</h5>
+          <figure id="ead-qr-legacy">
+            <img style="margin: auto; display: block; border-radius:15px; width: 50%;"
+                 src="diagrams/ead-qr.png"
+                 alt="A VCB from a Utopia EAD.">
+            <figcaption style="text-align: center;">
+A VCB from a Utopia EAD.
+            </figcaption>
+          </figure>
+          <p>
+For use with the following MRZ:
+          </p>
+          <figure id="ead-back">
+            <img style="margin: auto; display: block; border-radius:15px; width: 50%;"
+                 src="diagrams/ead-back.png"
+                 alt="An MRZ on a Utopia Employment Authorization Document.">
+            <figcaption style="text-align: center;">
+An MRZ on a Utopia Employment Authorization Document.
+            </figcaption>
+          </figure>
         </section>
       </section>
       <section>
@@ -1340,15 +1405,12 @@ We now apply the reverse process to verify.
 We first read the data from the barcodes:
           </p>
           <pre class="example nohighlight"
-          title="An encoded Utopia Driver's License VCB">
-TODO
+          title="Bytes from a PDF417 including an encoded Utopia Driver's License VCB">
+bytes(@\n\x1e\rANSI000000090002DL00410267ZZ03080162DLDAQF987654321\nDCSSMITH\nDDEN\nDACJOHN\nDDFN\nDADNONE\nDDGN\nDCAC\nDCBNONE\nDCDNONE\nDBD01012024\nDBB04191988\nDBA04192030\nDBC1\nDAU069 IN\nDAYBRO\nDAG123 MAIN ST\nDAIANYVILLE\nDAJUTO\nDAKF87P20000  \nDCFUTODOCDISCRIM\nDCGUTO\nDAW158\nDCK1234567890\nDDAN\rZZZZA2QZkpgGDGYAAGYABGYACGJ2CGHYYpBi4oxicGKYYzhiyGNAa5ZIggRi6ohicGKAYqER1ggAgGL4YqhjApRicGGwY1gQY4BjmGOJYQXq3wuVrSeLM5iGEziaBjhWosXMWRAG107uT_9bSteuPasCXFQKuPdSdF-xmUoFkA0yRJoW4ERvATNyewT263ZHMGOQYrA==\r)
           </pre>
-          <p>
-Encoding the EAD CBORLD as base45 and prepending 'VC1-':
-          </p>
           <pre class="example nohighlight"
           title="An encoded Utopia Driver's License EAD">
-TODO
+VC1-SJRPWCR803A3P0098G3A3-B02-J743853U53KGK0XJ6MKJ1OI0M.FO053.33963DN04$RAQS+4SMC8C3KM7VX4VAPL9%EILI:I1O$D:23%GJ0OUCPS0H8D2FB9D5G00U39.PXG49%SOGGB*K$Z6%GUSCLWEJ8%B95MOD0P NG-I:V8N63K53
           </pre>
           <p>
 We extract the data after 'VC1-' and the data in field 'ZZA'
@@ -1356,11 +1418,11 @@ in subfile 'ZZ', undoing the base encoding:
           </p>
           <pre class="example nohighlight"
           title="A CBOR-LD compressed Utopia Driver's License VC">
-TODO
+d90664a60183198000198001198002189d82187618a418b8a3189c18a618ce18b218d01ae592208118baa2189c18a018a8447582002018be18aa18c0a5189c186c18d60418e018e618e258417ab7c2e56b49e2cce62184ce26818e15a8b173164401b5d3bb93ffd6d2b5eb8f6ac0971502ae3dd49d17ec66528164034c912685b8111bc04cdc9ec13dbadd91cc18e418ac
           </pre>
           <pre class="example nohighlight"
           title="A CBOR-LD compressed Utopia EAD VC">
-TODO
+d90664a50183198000198001198002189d82187618a418baa1189c18a218be18ae18c0a5189c186c18d20418dc18e218de58417a9ec7f688f60caa8c757592250b3f6d6e18419941f186e1ed4245770e687502d51d01cd2c2295e4338178a51a35c2f044a85598e15db9aef00261bc5c95a744e718e018b0
           </pre>
           <p>
 We now decompress with CBOR-LD to get the original JSON-LD VCs to be
