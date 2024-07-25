@@ -1365,15 +1365,11 @@ Map(97) {
 }
             </pre>
             <p>
-Note that some contexts include other contexts inside of them, nested under particular
-types of objects. These nested contexts are called "type-scoped contexts" and they only
-become active when the associated type is used in the data. This is important for term ID
-assignment because the terms in a context are only assigned IDs once that context becomes
-active. In these test vectors, this is why the maps created for the Driver's License and
-the Employment Authorization Document are different even though the two credentials use
-identical contexts.
+For more information on the above, see <a href="#implementation-notes">Section 6.3.1</a>.
             </p>
+            <p>
 This results in the following encoded credential:
+            </p>
             <pre class="example nohighlight"
             title="A CBOR-LD compressed Utopia Driver's License VC">
 d90664a60183198000198001198002189d82187618a418b8a3189c18a618ce18b218d01ae592208118baa2189c18a018a8447582002018be18aa18c0a5189c186c18d60418e018e618e258417ab7c2e56b49e2cce62184ce26818e15a8b173164401b5d3bb93ffd6d2b5eb8f6ac0971502ae3dd49d17ec66528164034c912685b8111bc04cdc9ec13dbadd91cc18e418ac
@@ -1396,11 +1392,6 @@ diagnostic:
   }
 )
             </pre>
-            <p>
-Note that odd numbers are used to express terms when the associated value is plural. In the term to ID map above,
-"type" is mapped to 156, but in places where more than one type is expressed in the VC, 157 is sometimes
-used.
-            </p>
             <p>
 Encoding the Driver's License CBORLD as base64url and inserting the result into the
 PDF417 bytes in the 'ZZA' field in the 'ZZ' subfile:
@@ -1628,15 +1619,11 @@ Map(95) {
 }
             </pre>
             <p>
-Note that some contexts include other contexts inside of them, nested under particular
-types of objects. These nested contexts are called "type-scoped contexts" and they only
-become active when the associated type is used in the data. This is important for term ID
-assignment because the terms in a context are only assigned IDs once that context becomes
-active. In these test vectors, this is why the maps created for the Driver's License and
-the Employment Authorization Document are different even though the two credentials use
-identical contexts.
+For more information on the above, see <a href="#implementation-notes">Section 6.3.1</a>.
             </p>
+            <p>
 Compression then results in the following encoded credential:
+            </p>
             <pre class="example nohighlight"
             title="A CBOR-LD compressed Utopia EAD VC">
 d90664a50183198000198001198002189d82187618a418baa1189c18a218be18ae18c0a5189c186c18d20418dc18e218de58417a9ec7f688f60caa8c757592250b3f6d6e18419941f186e1ed4245770e687502d51d01cd2c2295e4338178a51a35c2f044a85598e15db9aef00261bc5c95a744e718e018b0
@@ -1658,11 +1645,6 @@ diagnostic:
   }
 )
             </pre>
-            <p>
-Note that odd numbers are used to express terms when the associated value is plural. In the term to ID map above,
-"type" is mapped to 156, but in places where multiple types are expressed in the VC, 157 is sometimes
-used.
-            </p>
             <p>
 Encoding the EAD CBORLD as base45-multibase and prepending 'VC1-':
             </p>
@@ -1855,13 +1837,7 @@ Map(97) {
 }
             </pre>
             <p>
-Note that some contexts include other contexts inside of them, nested under particular
-types of objects. These nested contexts are called "type-scoped contexts" and they only
-become active when the associated type is used in the data. This is important for term ID
-assignment because the terms in a context are only assigned IDs once that context becomes
-active. In these test vectors, this is why the maps created for the Driver's License and
-the Employment Authorization Document are different even though the two credentials use
-identical contexts.
+For more information on the above, see <a href="#implementation-notes">Section 6.3.1</a>.
             </p>
             <p>
 Decompression then yields the following credential:
@@ -2103,13 +2079,7 @@ Map(95) {
 }
             </pre>
             <p>
-Note that some contexts include other contexts inside of them, nested under particular
-types of objects. These nested contexts are called "type-scoped contexts" and they only
-become active when the associated type is used in the data. This is important for term ID
-assignment because the terms in a context are only assigned IDs once that context becomes
-active. In these test vectors, this is why the maps created for the Driver's License and
-the Employment Authorization Document are different even though the two credentials use
-identical contexts.
+For more information on the above, see <a href="#implementation-notes">Section 6.3.1</a>.
             </p>
             <p>
 Decompression then yields the following credential:
@@ -2164,6 +2134,32 @@ We then apply <a href="#hashing-ecdsa-xi-2023">Algorithm 3.5.3</a> and
 the credential.
             </p>
           </section>
+        </section>
+      </section>
+      <section>
+        <h3>
+Implementation Notes
+        </h3>
+        <section>
+          <h4>
+CBOR-LD
+          </h4>
+          <p>
+When building maps from terms that appear in contexts to CBOR-LD integers, note that
+some contexts include other contexts inside of them, nested under particular
+types of objects. These nested contexts are called "type-scoped contexts" and they only
+become active when the associated type is used in the data. This is important for term ID
+assignment because the terms in a context are only assigned IDs once that context becomes
+active. In these test vectors, this is why the maps created for the Driver's License and
+the Employment Authorization Document are different even though the two credentials use
+identical contexts.
+            </p>
+            <p>
+In addition, note that odd numbers are used in CBOR-LD to express terms when the associated
+value is plural. For example, in the CBOR-LD term to ID and id to term maps above, "type" is
+mapped to 156, but in places where multiple types are expressed in a VC, 157 is used instead.
+            </p>
+
         </section>
       </section>
       <section>
