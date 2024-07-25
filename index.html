@@ -1364,6 +1364,15 @@ Map(97) {
   'keyAgreement' => 238
 }
             </pre>
+            <p>
+Note that some contexts include other contexts inside of them, nested under particular
+types of objects. These nested contexts are called "type-scoped contexts" and they only
+become active when the associated type is used in the data. This is important for term ID
+assignment because the terms in a context are only assigned IDs once that context becomes
+active. In these test vectors, this is why the maps created for the Driver's License and
+the Employment Authorization Document are different even though the two credentials use
+identical contexts.
+            </p>
 This results in the following encoded credential:
             <pre class="example nohighlight"
             title="A CBOR-LD compressed Utopia Driver's License VC">
@@ -1387,6 +1396,11 @@ diagnostic:
   }
 )
             </pre>
+            <p>
+Note that odd numbers are used to express terms when the associated value is plural. In the term to ID map above,
+"type" is mapped to 156, but in places where more than one type is expressed in the VC, 157 is sometimes
+used.
+            </p>
             <p>
 Encoding the Driver's License CBORLD as base64url and inserting the result into the
 PDF417 bytes in the 'ZZA' field in the 'ZZ' subfile:
@@ -1613,7 +1627,16 @@ Map(95) {
   'keyAgreement' => 234
 }
             </pre>
-This results in the following encoded credential:
+            <p>
+Note that some contexts include other contexts inside of them, nested under particular
+types of objects. These nested contexts are called "type-scoped contexts" and they only
+become active when the associated type is used in the data. This is important for term ID
+assignment because the terms in a context are only assigned IDs once that context becomes
+active. In these test vectors, this is why the maps created for the Driver's License and
+the Employment Authorization Document are different even though the two credentials use
+identical contexts.
+            </p>
+Compression then results in the following encoded credential:
             <pre class="example nohighlight"
             title="A CBOR-LD compressed Utopia EAD VC">
 d90664a50183198000198001198002189d82187618a418baa1189c18a218be18ae18c0a5189c186c18d20418dc18e218de58417a9ec7f688f60caa8c757592250b3f6d6e18419941f186e1ed4245770e687502d51d01cd2c2295e4338178a51a35c2f044a85598e15db9aef00261bc5c95a744e718e018b0
@@ -1635,6 +1658,11 @@ diagnostic:
   }
 )
             </pre>
+            <p>
+Note that odd numbers are used to express terms when the associated value is plural. In the term to ID map above,
+"type" is mapped to 156, but in places where multiple types are expressed in the VC, 157 is sometimes
+used.
+            </p>
             <p>
 Encoding the EAD CBORLD as base45-multibase and prepending 'VC1-':
             </p>
@@ -1826,6 +1854,15 @@ Map(97) {
   238 => 'keyAgreement'
 }
             </pre>
+            <p>
+Note that some contexts include other contexts inside of them, nested under particular
+types of objects. These nested contexts are called "type-scoped contexts" and they only
+become active when the associated type is used in the data. This is important for term ID
+assignment because the terms in a context are only assigned IDs once that context becomes
+active. In these test vectors, this is why the maps created for the Driver's License and
+the Employment Authorization Document are different even though the two credentials use
+identical contexts.
+            </p>
             <p>
 Decompression then yields the following credential:
             </p>
@@ -2065,6 +2102,15 @@ Map(95) {
   234 => 'keyAgreement'
 }
             </pre>
+            <p>
+Note that some contexts include other contexts inside of them, nested under particular
+types of objects. These nested contexts are called "type-scoped contexts" and they only
+become active when the associated type is used in the data. This is important for term ID
+assignment because the terms in a context are only assigned IDs once that context becomes
+active. In these test vectors, this is why the maps created for the Driver's License and
+the Employment Authorization Document are different even though the two credentials use
+identical contexts.
+            </p>
             <p>
 Decompression then yields the following credential:
             </p>
