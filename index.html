@@ -719,7 +719,7 @@ set to |statusListEntryTerse|.
           </li>
           <li>
 Set |signedStatusVc| to the result of using the algorithm in
-<a href="#add-proof-ecdsa-xi-2023">Section 3.2.1</a> to sign |opticalData|
+<a href="#add-proof-ecdsa-xi-2023"></a> to sign |opticalData|
 and |unsignedStatus|.
           </li>
           <li>
@@ -1169,7 +1169,7 @@ Assume for simplicity that the only data in the PDF417 that you want to sign is 
 name (DAC), last name (DCS), and license number (DAQ). The bitstring value for use in
 `protectedComponentIndex` is then |100000100000000000100000|, and the value of
 `protectedComponentIndex` is "uggAg". Applying
-<a href="#create-opticaldatabytes">Algorithm 3.5.4.1</a>, we get 
+<a href="#create-opticaldatabytes"></a>, we get 
             </p>
             <pre class="example nohighlight"
 title="Data from the canonicalization of a Utopia Driver's License">
@@ -1183,8 +1183,8 @@ opticalDataBytes:
           </section>
           <p>
 We now can use this hash value with
-<a href="#hashing-ecdsa-xi-2023">Algorithm 3.5.3</a> to sign the VC.
-Executing  <a href="#credential-creation">Algorithm 3.2</a> with a
+<a href="#hashing-ecdsa-xi-2023"></a> to sign the VC.
+Executing  <a href="#credential-creation"></a> with a
 `BitstringStatusListCredential`, we get the following JSON-LD VC:
           </p>
           <section>
@@ -1365,7 +1365,7 @@ Map(97) {
 }
             </pre>
             <p>
-For more information on the above, see <a href="#implementation-notes">Section 6.3.1</a>.
+For more information on the above, see <a href="#implementation-notes"></a>.
             </p>
             <p>
 This results in the following encoded credential:
@@ -1430,7 +1430,7 @@ SMITH&#60&#60JOHN<<<<<<<<<<<<<<<<<<<
 Creating `opticalDataBytes`
             </h5>
             <p>
-For the EAD, we apply <a href="#create-opticaldatabytes">Algorithm 3.5.4.2</a>:
+For the EAD, we apply <a href="#create-opticaldatabytes"></a>:
             </p>
             <pre class="example nohighlight"
             title="Data from the canonicalization of a Utopia EAD MRZ">
@@ -1444,8 +1444,8 @@ opticalDataBytes:
             </pre>
             <p>
 We now can use this hash value with
-<a href="#hashing-ecdsa-xi-2023">Algorithm 3.5.3</a> to sign the VC.
-Executing  <a href="#credential-creation">Algorithm 3.2</a> without
+<a href="#hashing-ecdsa-xi-2023"></a> to sign the VC.
+Executing  <a href="#credential-creation"></a> without
 adding status, we get the following JSON-LD VC:
             </p>
           </section>
@@ -1619,7 +1619,7 @@ Map(95) {
 }
             </pre>
             <p>
-For more information on the above, see <a href="#implementation-notes">Section 6.3.1</a>.
+For more information on the above, see <a href="#implementation-notes"></a>.
             </p>
             <p>
 Compression then results in the following encoded credential:
@@ -1837,7 +1837,7 @@ Map(97) {
 }
             </pre>
             <p>
-For more information on the above, see <a href="#implementation-notes">Section 6.3.1</a>.
+For more information on the above, see <a href="#implementation-notes"></a>.
             </p>
             <p>
 Decompression then yields the following credential:
@@ -1876,9 +1876,8 @@ Decompression then yields the following credential:
           <section>
             <h4>Verifying</h4>
             <p>
-Again we apply <a href="#create-opticaldatabytes">Algorithm 3.5.4.1</a>
-and <a href="#create-opticaldatabytes">Algorithm 3.5.4.2</a> to create
-the |opticalDataBytes| that `ecdsa-xi-2023` requires, using the
+We apply <a href="#create-opticaldatabytes"></a>
+to create the |opticalDataBytes| that `ecdsa-xi-2023` requires, using the
 scanned PDF417 and `protectedComponentIndex` as input.
             </p>
             <pre class="example nohighlight"
@@ -1892,8 +1891,8 @@ opticalDataBytes:
             </pre>
 
             <p>
-We then apply <a href="#hashing-ecdsa-xi-2023">Algorithm 3.5.3</a> and
-<a href="#verify-proof-ecdsa-xi-2023">Algorithm 3.5.2</a> to verify
+We then apply <a href="#hashing-ecdsa-xi-2023"></a> and
+<a href="#verify-proof-ecdsa-xi-2023"></a> to verify
 the credential.
             </p>
           </section>
@@ -1901,7 +1900,7 @@ the credential.
             <h4>Status Checking</h4>
             <p>
 The last step is to check the status information on the Driver's License
-credential. We apply <a href="#convert-status-list-entries">Algorithm 3.4</a>
+credential. We apply <a href="#convert-status-list-entries"></a>
 to convert the `TerseBitstringStatusListEntry` into a `BitstringStatusListEntry`.
 Here we check two status types, 'revocation' and 'suspension', passing those
 strings as values of |statusPurpose|.
@@ -2079,7 +2078,7 @@ Map(95) {
 }
             </pre>
             <p>
-For more information on the above, see <a href="#implementation-notes">Section 6.3.1</a>.
+For more information on the above, see <a href="#implementation-notes"></a>.
             </p>
             <p>
 Decompression then yields the following credential:
@@ -2113,8 +2112,7 @@ Decompression then yields the following credential:
           <section>
             <h4>Verifying</h4>
             <p>
-Again we apply <a href="#create-opticaldatabytes">Algorithm 3.5.4.1</a>
-and <a href="#create-opticaldatabytes">Algorithm 3.5.4.2</a> to create
+We apply <a href="#create-opticaldatabytes"></a> to create
 the |opticalDataBytes| that `ecdsa-xi-2023` requires,using the MRZ
 on the EAD as input for the EAD:
             </p>
@@ -2129,8 +2127,8 @@ opticalDataBytes:
 46, 253, 9, 137, 145,  42, 192, 113]
             </pre>
             <p>
-We then apply <a href="#hashing-ecdsa-xi-2023">Algorithm 3.5.3</a> and
-<a href="#verify-proof-ecdsa-xi-2023">Algorithm 3.5.2</a> to verify
+We then apply <a href="#hashing-ecdsa-xi-2023"></a> and
+<a href="#verify-proof-ecdsa-xi-2023"></a> to verify
 the credential.
             </p>
           </section>
@@ -2145,7 +2143,7 @@ Implementation Notes
 CBOR-LD
           </h4>
           <p>
-When building maps from terms that appear in contexts to CBOR-LD integers, note that
+When building maps from context terms to CBOR-LD integers, note that
 some contexts include other contexts inside of them, nested under particular
 types of objects. These nested contexts are called "type-scoped contexts" and they only
 become active when the associated type is used in the data. This is important for term ID
@@ -2153,13 +2151,12 @@ assignment because the terms in a context are only assigned IDs once that contex
 active. In these test vectors, this is why the maps created for the Driver's License and
 the Employment Authorization Document are different even though the two credentials use
 identical contexts.
-            </p>
-            <p>
+          </p>
+          <p>
 In addition, note that odd numbers are used in CBOR-LD to express terms when the associated
 value is plural. For example, in the CBOR-LD term to ID and id to term maps above, "type" is
 mapped to 156, but in places where multiple types are expressed in a VC, 157 is used instead.
-            </p>
-
+          </p>
         </section>
       </section>
       <section>
