@@ -30,8 +30,8 @@
         // previousMaturity:  "WD",
 
         // if there a publicly available Editor's Draft, this is the link
-        edDraftURI: "https://digitalbazaar.github.io/vc-barcodes/",
-        //latestVersion: "",
+        edDraftURI: "https://w3c-ccg.github.io/vc-barcodes/",
+        latestVersion: "https://w3c-ccg.github.io/vc-barcodes/",
 
         // if this is a LCWD, uncomment and set the end of its review period
         //implementationReportURI: "",
@@ -44,11 +44,21 @@
         // editors, add as many as you like
         // only "name" is required
         editors: [{
+          name: "Wesley Smith",
+          url: "https://www.linkedin.com/in/wesley-smith-phd-24973a12b/",
+          company: "Digital Bazaar",
+          companyURL: "https://digitalbazaar.com/"
+        }, {
           name: "Manu Sporny",
           url: "https://www.linkedin.com/in/manusporny/",
           company: "Digital Bazaar",
           companyURL: "https://digitalbazaar.com/",
           w3cid: 41758
+        }, {
+          name: "Yash Shah",
+          url: "https://www.linkedin.com/in/ynshah/",
+          company: "CredenceID",
+          companyURL: "https://credenceid.com/"
         }],
 
         // authors, add as many as you like.
@@ -64,8 +74,10 @@
           company: "Digital Bazaar", companyURL: "https://digitalbazaar.com/",
           w3cid: 48025
         }, {
-          name: "Wesley Smith", url: "https://www.linkedin.com/in/wesley-smith-phd-24973a12b/",
-          company: "Digital Bazaar", companyURL: "https://digitalbazaar.com/"
+          name: "Wesley Smith",
+          url: "https://www.linkedin.com/in/wesley-smith-phd-24973a12b/",
+          company: "Digital Bazaar",
+          companyURL: "https://digitalbazaar.com/"
         }],
 
         // name of the WG
@@ -497,7 +509,7 @@ The following are the design goals of the technology in this specification:
 guaranteed to have originated from the claimed issuing authority.
             </li>
             <li>
-<b>Integrity</b>: data on a document with a Verifiable Credential Barcode that 
+<b>Integrity</b>: data on a document with a Verifiable Credential Barcode that
 succesfully verifies is guaranteed to not have been modified as long as that data
 is secured by the barcode.
             </li>
@@ -513,7 +525,7 @@ new barcode in an easily consumable form (e.g. a QR code).
             </li>
             <li>
 <b>Conformance</b>: the Verifiable Credential Barcodes technology stack is aligned with
-global standards and standards-track technologies. 
+global standards and standards-track technologies.
             </li>
           </ul>
         </p>
@@ -1163,13 +1175,13 @@ DDGN
             <h5>
 Creating `opticalDataBytes`
             </h5>
-          
+
             <p>
 Assume for simplicity that the only data in the PDF417 that you want to sign is first
 name (DAC), last name (DCS), and license number (DAQ). The bitstring value for use in
 `protectedComponentIndex` is then |100000100000000000100000|, and the value of
 `protectedComponentIndex` is "uggAg". Applying
-<a href="#create-opticaldatabytes"></a>, we get 
+<a href="#create-opticaldatabytes"></a>, we get
             </p>
             <pre class="example nohighlight"
 title="Data from the canonicalization of a Utopia Driver's License">
@@ -1228,7 +1240,7 @@ Example VC
             <p>
 We can now apply CBOR-LD compression to this VC. Here we use the newest
 version of CBOR-LD, however at the end of the section we provide VCBs
-encoded using older versions of CBOR-LD for interoperability testing 
+encoded using older versions of CBOR-LD for interoperability testing
 with CBOR-LD implementations that are not up to date.
             </p>
             <p>
@@ -1248,7 +1260,7 @@ typeTable:
       "https://w3id.org/vc-barcodes/v1": 32769,
       "https://w3id.org/utopia/v2": 32770
     },
-  
+
   "https://w3id.org/security#cryptosuiteString":
     {
       "ecdsa-rdfc-2019": 1,
@@ -1415,7 +1427,7 @@ A VCB from a Utopia driver's license.
         </section>
         <section>
           <h4>Utopia Employment Authorization Document</h4>
-          
+
           <p>
 We start with the data that will be signed by the VCB (i.e an MRZ):
           </p>
@@ -1423,7 +1435,7 @@ We start with the data that will be signed by the VCB (i.e an MRZ):
               title="A Machine Readable Zone that might appear on a Utopia EAD">
 IAUTO0000007010SRC0000000701<<
 8804192M2601058NOT<<<<<<<<<<&lt5
-SMITH&#60&#60JOHN<<<<<<<<<<<<<<<<<<<       
+SMITH&#60&#60JOHN<<<<<<<<<<<<<<<<<<<
           </pre>
           <section>
             <h5>
@@ -1484,7 +1496,7 @@ Example VC
             <p>
 We can now apply CBOR-LD compression to this VC. Here we use the newest
 version of CBOR-LD, however at the end of the section we provide VCBs
-encoded using older versions of CBOR-LD for interoperability testing 
+encoded using older versions of CBOR-LD for interoperability testing
 with CBOR-LD implementations that are not up to date.
             </p>
             <p>
@@ -1504,7 +1516,7 @@ typeTable:
       "https://w3id.org/vc-barcodes/v1": 32769,
       "https://w3id.org/utopia/v2": 32770
     },
-  
+
   "https://w3id.org/security#cryptosuiteString":
     {
       "ecdsa-rdfc-2019": 1,
@@ -1696,7 +1708,7 @@ We first read the data from the PDF417:
             title="Bytes from a PDF417 including an encoded Utopia Driver's License VCB">
 bytes(@\n\x1e\rANSI 000000090002DL00410234ZZ02750202DLDAQF987654321\nDCSSMITH\nDDEN\nDACJOHN\nDDFN\nDADNONE\nDDGN\nDCAC\nDCBNONE\nDCDNONE\nDBD01012024\nDBB04191988\nDBA04192030\nDBC1\nDAU069 IN\nDAYBRO\nDAG123 MAIN ST\nDAIANYVILLE\nDAJUTO\nDAKF87P20000  \nDCFUTODOCDISCRIM\nDCGUTO\nDAW158\nDCK1234567890\nDDAN\rZZZZA2QZkpgGDGYAAGYABGYACGJ2CGHYYpBi4oxicGKYYzhiyGNAa5ZIggRi6ohicGKAYqER1ggAgGL4YqhjApRicGGwY1gQY4BjmGOJYQXq3wuVrSeLM5iGEziaBjhWosXMWRAG107uT_9bSteuPasCXFQKuPdSdF-xmUoFkA0yRJoW4ERvATNyewT263ZHMGOQYrA==\r)
             </pre>
-          
+
             <p>
 We extract the data in field 'ZZA' in subfile 'ZZ', undoing the base encoding:
             </p>
@@ -1719,7 +1731,7 @@ typeTable:
       "https://w3id.org/vc-barcodes/v1": 32769,
       "https://w3id.org/utopia/v2": 32770
     },
-  
+
   "https://w3id.org/security#cryptosuiteString":
     {
       "ecdsa-rdfc-2019": 1,
@@ -1962,7 +1974,7 @@ typeTable:
       "https://w3id.org/vc-barcodes/v1": 32769,
       "https://w3id.org/utopia/v2": 32770
     },
-  
+
   "https://w3id.org/security#cryptosuiteString":
     {
       "ecdsa-rdfc-2019": 1,
