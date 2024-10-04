@@ -13,7 +13,7 @@
 
     <script type="text/javascript" class="remove">
       var respecConfig = {
-        subtitle: "Embedding Verifiable Credentials in legacy barcodes",
+        subtitle: "Embedding Verifiable Credentials in optical barcodes",
         // specification status (e.g. WD, LCWD, NOTE, etc.). If in doubt use ED.
         group: "credentials",
         specStatus: "CG-DRAFT",
@@ -192,12 +192,12 @@ ol.algorithm li:before {
   <body>
     <section id="abstract">
       <p>
-This specification describes a mechanism to protect legacy optical barcodes,
+This specification describes a mechanism to protect optical barcodes,
 such as those found on driver's licenses (PDF417) and travel documents (MRZ),
 using Verifiable Credentials [[VC-DATA-MODEL-2.0]]. The Verifiable Credential
 representations are compact enough such that they fit in under 150 bytes and
 can thus be integrated with traditional two-dimensional barcodes that are
-printed on physical cards using legacy printing processes.
+printed on physical cards using standard printing processes.
       </p>
     </section>
 
@@ -212,7 +212,7 @@ This specification is experimental.
     <section>
       <h2>Introduction</h2>
       <p>
-Legacy documentation, such as driver's licenses, passports, and travel
+Physical credentials, such as driver's licenses, passports, and travel
 credentials often include machine-readable data that can be used to quickly read
 the information from the document. This information is encoded in formats such
 as PDF417 [[ISO15438-2015]], machine-readable zone (MRZ) [[ICAO9303-3]], and
@@ -244,14 +244,14 @@ express the information as an optical barcode, or embedded within an optical
 barcode.
       </p>
       <p>
-This specification describes a mechanism to protect legacy optical barcodes,
+This specification describes a mechanism to protect optical barcodes,
 such as those found on driver's licenses (PDF417) and travel documents (MRZ),
 by using a <a>verifiable credential</a> [[VC-DATA-MODEL-2.0]] to express
 information about the barcode, which is then secured using Data Integrity
 [[VC-DATA-INTEGRITY]], and then compressed using CBOR-LD [[CBOR-LD]]. The
 resulting <a>verifiable credential</a> representations are compact enough such
 that they fit in under 140 bytes and can thus be integrated with traditional
-two-dimensional barcodes that are printed on physical cards using legacy
+two-dimensional barcodes that are printed on physical cards using standard
 printing processes. This adds tamper resistance to the barcode while
 optionally enhancing the barcode to provide information related to whether or
 not the physical document has been revoked or suspended by the <a>issuer</a>.
