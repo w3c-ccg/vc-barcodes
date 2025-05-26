@@ -135,7 +135,7 @@
         },
         lint: {"no-unused-dfns": false},
         xref: ["INFRA", "VC-DATA-MODEL-2.0", "VC-DATA-INTEGRITY", "CID"],
-        postProcess: [],
+        postProcess: [window.respecVc.createVcExamples],
         otherLinks: [{
           key: "Related Specifications",
           data: [{
@@ -460,6 +460,76 @@ to the following output (in CBOR Diagnostic Notation):
           </pre>
 
         </section>
+
+        <section>
+          <h3>Birth Certificate</h3>
+
+          <p>
+This section provides an example on how the technology in this specification can
+be utilized to secure a birth certificate as a [=verifiable credential=], which
+is then expressed as a QR Code on the printed paper document:
+          </p>
+
+          <figure id="birth-certificate">
+            <img style="margin: auto; display: block; border-radius:15px; width: 50%;"
+                src="diagrams/bc-front.png"
+                alt="A picture of the front of a birth certificate containing information such as the newborn's name, parent's names, information about the hospital, attendees, and person responsible for the registration.">
+            <figcaption style="text-align: center;">
+The front of a birth certificate issued by a hospital in the state of Utopia.
+            </figcaption>
+          </figure>
+
+          <p>
+The QR Code encodes the following [=verifiable credential=]. The details of
+the encoding are available as separate tabs below:
+          </p>
+
+          <pre class="example vc nohighlight"
+              title="A verifiable credential expressing a short-form birth certificate"
+              data-vc-vm='https://vital-records.utopa.example/issuers/123'
+              data-vc-tabs="cbor-ld qr">
+{
+  "@context": [
+    "https://www.w3.org/ns/credentials/v2",
+    "https://w3id.org/vital-records/v1rc1"
+  ],
+  "type": [
+    "VerifiableCredential",
+    "BirthCertificateCredential"
+  ],
+  "issuer": "https://hospital.example/issuer",
+  "validFrom": "2023-09-30T11:30:00Z",
+  "credentialSubject": {
+    "type": "BirthCertificate",
+    "certificationDate": "2023-09-30T13:44:52Z",
+    "newborn": {
+      "type": "Newborn",
+      "name": "Tim Doe",
+      "gender": "Male",
+      "birthDate": "2023-10-05T14:29:00Z",
+      "birthPlace": {
+        "type": "PostalAddress",
+        "streetAddress": "123 Hospital Rd",
+        "addressLocality": "Utopia Town",
+        "addressRegion": "Utopolis",
+        "postalCode": "12345",
+        "addressCountry": "Utopia"
+      },
+      "parent": [{
+        "type": "Mother",
+        "name": "Jane Doe",
+        "namePriorToMarriage": "Jane Smith"
+      }, {
+        "type": "Father",
+        "name": "John Doe"
+      }]
+    }
+  }
+}
+          </pre>
+
+        </section>
+
       </section>
 
       <section>
@@ -693,173 +763,202 @@ proofs that protect optical information, such as barcodes and machine-readable
 zones, on physical media, such as driver's licenses and travel documents.
       </p>
 
-      <p>
-Generally speaking, the algorithms in this section are effectively the same
-as the ones in the [[[VC-DI-ECDSA]]] [[VC-DI-ECDSA]] except that the
-algorithm name is different because the cryptographic hashing process includes
-the machine-readable barcode information when calculating the digital signature
-such that the optical barcode is protected.
-      </p>
-
       <section>
-        <h3>CBOR-LD Compression</h3>
+        <h3>General Algorithms</h3>
 
         <p>
+This section contains algorithms that are general to encoding and decoding
+[=verifiable credentials=].
+        </p>
+
+        <section>
+          <h3>CBOR-LD Compression Tables</h3>
+
+          <p>
 This specification requires that an application-specific compression table is
 provided to a CBOR-LD processor when encoding and decoding
-<a>verifiable credentials</a> of type `OpticalBarcodeCredential`. A registry for
-all context URLs for various issuers is <a href="cbor-ld-compression-table.csv">
+<a>verifiable credentials</a>. A registry for all context URLs for various
+issuers is <a href="cbor-ld-compression-table.csv">
 provided as a comma-separated value file</a> and can be updated and modified via
 <a href="https://github.com/digitalbazaar/verifiable-barcodes/pulls/">
 change requests</a> to the file on an append-only and first-come-first-served
 basis. Implementations SHOULD retrieve and utilize the latest file on a monthly
 basis to ensure that compression and decompression supports the latest values.
-        </p>
+          </p>
+
+        </section>
+
+        <section>
+          <h3>Encode Verifiable Credential</h3>
+
+          <p>
+
+          </p>
+
+        </section>
+
+        <section>
+          <h3>Decode Verifiable Credential</h3>
+
+          <p>
+
+          </p>
+
+        </section>
 
       </section>
 
-      <section>
-        <h3>Credential Creation</h3>
 
-        <ol class="algorithm">
-          <li>
+      <section>
+        <h3>`OpticalBarcodeCredential` Algorithms</h3>
+
+        <p>
+This section contains algorithms that are specific to encoding and decoding
+[=verifiable credentials=] that have a `type` of `OpticalBarcodeCredential`.
+        </p>
+
+        <section>
+          <h3>Encode `OpticalBarcodeCredential`</h3>
+
+          <ol class="algorithm">
+            <li>
 Set |opticalData| to the data in the optical barcode to be secured.
-          </li>
-          <li>
+            </li>
+            <li>
 Set |statusListEntryVerbose| to the `BitstringStatusListCredential`
 (as defined in the [[[VC-BITSTRING-STATUS-LIST]]] specification) that the issuer
 wishes to add to the `OpticalBarcodeCredential`.
-          </li>
-          <li>
+            </li>
+            <li>
 Let |statusListEntryTerse| be an empty [=map=]. Set |statusListEntryTerse|.|type| to `TerseBitstringStatusListEntry` and |statusListEntryTerse|.|index| to the integer representation of |statusListEntryVerbose|.|statusListIndex|.
-          </li>
-          <li>
+            </li>
+            <li>
 Set |issuerUrl| to the URL the issuer wishes to use for credential verification.
-          </li>
-          <li>
+            </li>
+            <li>
 Set |unsignedStatus| to an `OpticalBarcodeCredential` with
 |unsignedStatus|.|issuer| set to |issuerUrl| and |unsignedStatus|.|credentialStatus|
 set to |statusListEntryTerse|.
-          </li>
-          <li>
+            </li>
+            <li>
 Set |signedStatusVc| to the result of using the algorithm in
 <a href="#add-proof-ecdsa-xi-2023"></a> to sign |opticalData|
 and |unsignedStatus|.
-          </li>
-          <li>
+            </li>
+            <li>
 Encode |signedStatusVc| using CBOR-LD [[CBOR-LD]] and add it to the designated area of the |opticalData|.
-          </li>
-          <li>
+            </li>
+            <li>
 Generate the machine-readable credential (MRZ or PDF417).
-          </li>
-        </ol>
-      </section>
+            </li>
+          </ol>
+        </section>
 
-      <section>
-        <h3>Credential Validation</h3>
+        <section>
+          <h3>Decode `OpticalBarcodeCredential`</h3>
 
-        <ol class="algorithm">
-          <li>
+          <ol class="algorithm">
+            <li>
 Set |securedDocument| to the data in the PDF417 or MRZ.
-          </li>
-          <li>
+            </li>
+            <li>
 Set |verificationResult| to the result of applying the algorithm in Section
 [[[#verify-proof-ecdsa-xi-2023]]]to |securedDocument|.
-          </li>
-          <li>
+            </li>
+            <li>
 Set |credential| to the `OpticalBarcodeCredential` in |securedDocument|.
-          </li>
-          <li>
+            </li>
+            <li>
 Set |statusListEntry| to the result of applying the algorithm in Section
 [[[#convert-status-list-entries]]] to |credential|.
-          </li>
-          <li>
+            </li>
+            <li>
 Set |statusResult| to the result of applying the algorithm in
 <a data-cite="VC-BITSTRING-STATUS-LIST#validate-algorithm">
-  Bitstring Status List v1.0: Validate Algorithm</a> to |statusListEntry|.
-          </li>
-          <li>
+Bitstring Status List v1.0: Validate Algorithm</a> to |statusListEntry|.
+            </li>
+            <li>
 Return (|validationResult|, |statusResult|).
-          </li>
-        </ol>
-      </section>
+            </li>
+          </ol>
+        </section>
 
-      <section>
-        <h3>Convert Status List Entries</h3>
+        <section>
+          <h3>Convert Status List Entries</h3>
 
-        <p>
+          <p>
 The algorithm in this section is used to convert the
 `TerseBitstringStatusListEntry` to a `BitstringStatusListEntry`, which is used
 after verification has been performed on the <a>verifiable credential</a>,
 during the validation process.
-        </p>
+          </p>
 
-        <p>
+          <p>
 After <a>verifiable credential</a> verification has been performed, the
 algorithm takes an `OpticalBarcodeCredential` <a>verifiable credential</a>
 ([=struct=] |vc|), an integer |listLength| containing the number of entries
 in the `BitstringStatusListCredential` associated with |vc|, and a string
 |statusPurpose| (e.g. 'revocation', 'suspension'...) as input and returns
 a 'BitstringStatusListEntry' object.
-        </p>
+          </p>
 
-        <ol class="algorithm">
-          <li>
+          <ol class="algorithm">
+            <li>
 Set |result| to be an empty [=map=].
-          </li>
-          <li>
+            </li>
+            <li>
 Set |listIndex| to |vc|.|credentialStatus|.|terseStatusListIndex|/|listLength| rounded down
 to the next lowest integer (i.e. apply the `floor()` operation).
-          </li>
-          <li>
+            </li>
+            <li>
 Set |statusListIndex| to |vc|.|credentialStatus|.|terseStatusListIndex| % |listLength|.
-          </li>
-          <li>
+            </li>
+            <li>
 Set |result|.|statusListCredential| to the concatenation of the following values:
 |vc|.|credentialStatus|.|terseStatusListBaseUrl|, '/', |statusPurpose|, '/', |listIndex|.
-          </li>
-          <li>
+            </li>
+            <li>
 Set |result|.|type| to 'BitstringStatusListEntry'.
-          </li>
-          <li>
+            </li>
+            <li>
 Set |result|.|statusListIndex| to |statusListIndex|.
-          </li>
+            </li>
 Set |result|.|statusPurpose| to |statusPurpose|.
-          <li>
+            <li>
 Return |result|.
-          </li>
-        </ol>
+            </li>
+          </ol>
 
-        <p>
+          <p>
 |result| can be used as input to the
 <a data-cite="VC-BITSTRING-STATUS-LIST#validate-algorithm">
 validation algorithm</a> in the [[[VC-BITSTRING-STATUS-LIST]]] specification.
-        </p>
+          </p>
 
-        <p class="note" title="Status lists are optional">
+          <p class="note" title="Status lists are optional">
 Implementers are advised that not all <a>issuers</a> will publish status
 list information for their <a>verifiable credentials</a>. Some <a>issuers</a>
 might require authorization before allowing a <a>verifier</a> to access a
 status list credential.
-        </p>
+          </p>
 
-      </section>
-
-      <section>
-        <h3>ecdsa-xi-2023</h3>
-
-        <p>
-The `ecdsa-xi-2023` is effectively the `ecdsa-rdfc-2019` algorithm
-[[VC-DI-ECDSA]] with an added step that takes some "extra information" (xi) as
-input, such as the original optical barcode data, and includes that data in the
-information that is protected by the digital signature. The algorithms in this
-section detail how such a signature is created and verified.
-        </p>
+        </section>
 
         <section>
-          <h4>Add Proof (ecdsa-xi-2023)</h4>
+          <h3>ecdsa-xi-2023</h3>
 
           <p>
+The `ecdsa-xi-2023` cryptosuite is effectively the `ecdsa-rdfc-2019`
+algorithm [[VC-DI-ECDSA]] with an added step that takes some "extra information"
+(xi) as input, such as the original optical barcode data, and includes that data
+in the information that is protected by the digital signature. The algorithms in
+this section detail how such a signature is created and verified.
+          </p>
+
+          <section>
+            <h4>Add Proof (ecdsa-xi-2023)</h4>
+
+            <p>
 To generate a proof, the algorithm in
 <a href="https://www.w3.org/TR/vc-data-integrity/#add-proof">
 Section 4.1: Add Proof</a> in the Data Integrity
@@ -876,13 +975,13 @@ hashing algorithm</a> is defined in Section
 proof serialization algorithm</a> is defined in the
 <a href="https://www.w3.org/TR/vc-di-ecdsa/#proof-serialization-ecdsa-rdfc-2019">
 Proof Serialization (ecdsa-rdfc-2019)</a> section of the [[[VC-DI-ECDSA]]].
-          </p>
-        </section>
+            </p>
+          </section>
 
-        <section>
-          <h4>Verify Proof (ecdsa-xi-2023)</h4>
+          <section>
+            <h4>Verify Proof (ecdsa-xi-2023)</h4>
 
-          <p>
+            <p>
 To verify a proof, the algorithm in
 <a href="https://www.w3.org/TR/vc-data-integrity/#verify-proof">
 Section 4.2: Verify Proof</a> in the Data Integrity [[VC-DATA-INTEGRITY]]
@@ -899,148 +998,142 @@ Section <a href="#hashing-ecdsa-xi-2023"></a>, and the
 proof verification algorithm</a> is defined in the
 <a href="https://www.w3.org/TR/vc-di-ecdsa/#proof-verification-ecdsa-rdfc-2019">
 Proof Verification (ecdsa-rdfc-2019)</a> section of the [[[VC-DI-ECDSA]]].
-          </p>
-        </section>
+            </p>
+          </section>
 
-        <section>
-          <h4>Hashing (ecdsa-xi-2023)</h4>
+          <section>
+            <h4>Hashing (ecdsa-xi-2023)</h4>
 
-          <p>
+            <p>
 The hashing algorithm is what is defined in the
 <a href="https://www.w3.org/TR/vc-di-ecdsa/#hashing-ecdsa-rdfc-2019">
 Hashing (ecdsa-rdfc-2019)</a> section of the [[[VC-DI-ECDSA]]] specification
 with the addition of the hashing of the optical data, as described below. It is
 presumed that the implementation makes the machine-readable optical data (PDF417
 or MRZ data) available to this hashing algorithm.
-          </p>
+            </p>
 
-          <p>
+            <p>
 The required inputs to this algorithm are a <em>transformed data document</em>
 (<var>transformedDocument</var>), a <em>canonical proof configuration</em>
 (<var>canonicalProofConfig</var>), and the <em>optical data</em>
 (<var>opticalDataBytes</var>). A single <em>hash data</em> value represented as
 series of bytes is produced as output.
-          </p>
+            </p>
 
-          <p>
+            <p>
 The hashing algorithm is what is defined in the
 <a href="https://www.w3.org/TR/vc-di-ecdsa/#hashing-ecdsa-rdfc-2019">
 Hashing (ecdsa-rdfc-2019)</a> section of the [[[VC-DI-ECDSA]]] with step 3
 replaced with the following two steps:
-          </p>
+            </p>
 
-          <ol class="algorithm">
-            <li>
+            <ol class="algorithm">
+              <li>
 Let <var>opticalDataHash</var> be the result of applying the same hash algorithm
 that was applied to <var>hashData</var> to the <var>opticalDataBytes</var>
 value.
-            </li>
-            <li>
+              </li>
+              <li>
 Let <var>hashData</var> be the result of joining <var>proofConfigHash</var> (the
 first hash), <var>transformedDocumentHash</var> (the second hash), and
 <var>opticalDataHash</var> (the third hash).
-            </li>
-          </ol>
+              </li>
+            </ol>
 
-        </section>
-
-        <section>
-          <h4> Create opticalDataBytes</h4>
+          </section>
 
           <section>
-            <h5>`AamvaDriversLicenseScannableInformation` Credentials</h5>
-            <ol class="algorithm">
-              <li>
+            <h4> Create opticalDataBytes</h4>
+
+            <section>
+              <h5>`AamvaDriversLicenseScannableInformation` Credentials</h5>
+              <ol class="algorithm">
+                <li>
 Set |dataToCanonicalize| to an empty array.
-              </li>
-              <li>
+                </li>
+                <li>
 Set |bitfieldDecoded| to be first 22 bits of the length 24 bitstring resulting from decoding
-`credentialSubject.protectedComponentIndex` from multibase-base64url to binary.
-              </li>
-              <li>
+  `credentialSubject.protectedComponentIndex` from multibase-base64url to binary.
+                </li>
+                <li>
 Set |fieldsAlphabetized| to be an array containing the 22 AAMVA mandatory PDF417 Element IDs
-[[aamva-dl-id-card-design-standard]] sorted in Unicode code point order (i.e. ['DAC', 'DAD' ... 'DDG']).
-              </li>
-              <li>
+  [[aamva-dl-id-card-design-standard]] sorted in Unicode code point order (i.e. ['DAC', 'DAD' ... 'DDG']).
+                </li>
+                <li>
 For each bit with value `1` in |bitfieldDecoded|:
-                <ol class="algorithm">
-                  <li>
+                  <ol class="algorithm">
+                    <li>
 Set the string |fieldName| to |fieldsAlphabetized|[|i|], where |i| is the index of the bit in |bitfieldDecoded|.
-                  </li>
-                  <li>
+                    </li>
+                    <li>
 Set the string |fieldData| to the data that will be in the PDF417 associated with that field name.
-                  </li>
-                  <li>
+                    </li>
+                    <li>
 Concatenate |fieldData| to the end of |fieldName|, concatenate a newline character (`\n`, `U+000A`) to the end,
 and append the result to |dataToCanonicalize|.
-                  </li>
-                </ol>
-              </li>
-              <li>
+                    </li>
+                  </ol>
+                </li>
+                <li>
 Set |canonicalizedData| to the result of sorting |dataToCanonicalize| in Unicode code point order and then applying a join operation
 to create a single string from the array.
-              </li>
-              <li>
+                </li>
+                <li>
 Hash |canonicalizedData| and return the result.
-              </li>
-            </ol>
-          </section>
+                </li>
+              </ol>
+            </section>
 
-          <section>
-            <h5>`MachineReadableZone` Credentials</h5>
-            <ol class="algorithm">
-              <li>
+            <section>
+              <h5>`MachineReadableZone` Credentials</h5>
+              <ol class="algorithm">
+                <li>
 Set |dataToCanonicalize| to an empty array.
-              </li>
-              <li>
+                </li>
+                <li>
 For each line in the Machine Readable Zone on the credential:
-                <ol class="algorithm">
-                  <li>
+                  <ol class="algorithm">
+                    <li>
 Set |mrzLine| to a string containing the data in that line.
-                  </li>
-                  <li>
+                    </li>
+                    <li>
 Append a newline character to the end of |mrzLine| and append |mrzLine| to |dataToCanonicalize|.
-                  </li>
-                </ol>
-              </li>
-              <li>
+                    </li>
+                  </ol>
+                </li>
+                <li>
 Set |canonicalizedData| to the result of ordering the elements of |dataToCanonicalize| to match the order they appear
 on the credential and then applying a join operation to create a single string from the array.
-              </li>
-              <li>
+                </li>
+                <li>
 Hash |canonicalizedData| and return the result.
-              </li>
-            </ol>
+                </li>
+              </ol>
+            </section>
           </section>
-        </section>
-        <section>
-          <h4>Proof Configuration (ecdsa-xi-2023)</h4>
+          <section>
+            <h4>Proof Configuration (ecdsa-xi-2023)</h4>
 
-          <p>
+            <p>
 The proof configuration algorithm is what is defined in the
 <a href="https://www.w3.org/TR/vc-di-ecdsa/#proof-configuration-ecdsa-rdfc-2019">
 Proof Configuration (ecdsa-rdfc-2019)</a> section of the [[[VC-DI-ECDSA]]] with
 step 4 replaced with the following step:
-          </p>
+            </p>
 
-          <ol class="algorithm">
-            <li>
+            <ol class="algorithm">
+              <li>
 If <var>options</var>.<var>type</var> is not set to `DataIntegrityProof` and
 <var>proofConfig</var>.<var>cryptosuite</var> is not set to `ecdsa-xi-2023`, an
 `INVALID_PROOF_CONFIGURATION` error MUST be raised.
-            </li>
-          </ol>
+              </li>
+            </ol>
 
+          </section>
         </section>
-
       </section>
-
     </section>
-
-
-
-
-
 
     <section class="informative">
       <h2>Security Considerations</h2>
@@ -1215,7 +1308,7 @@ opticalDataBytes:
           <p>
 We now can use this hash value with
 <a href="#hashing-ecdsa-xi-2023"></a> to sign the VC.
-Executing  <a href="#credential-creation"></a> with a
+Executing  <a href="#encode-opticalbarcodecredential"></a> with a
 `BitstringStatusListCredential`, we get the following JSON-LD VC:
           </p>
           <section>
@@ -1254,6 +1347,7 @@ Example VC
 }
             </pre>
           </section>
+
           <section>
             <h4>CBOR-LD Compression and Encoding</h4>
             <p>
@@ -1476,7 +1570,7 @@ opticalDataBytes:
             <p>
 We now can use this hash value with
 <a href="#hashing-ecdsa-xi-2023"></a> to sign the VC.
-Executing  <a href="#credential-creation"></a> without
+Executing  <a href="#encode-opticalbarcodecredential"></a> without
 adding status, we get the following JSON-LD VC:
             </p>
           </section>
