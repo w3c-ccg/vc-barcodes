@@ -846,6 +846,27 @@ strings, it MUST use UTF-8 encoding.
 
         <ol class="algorithm">
           <li>
+Ensure that the |inputDocument| starts with the text `VC1-R`. If it does not an
+error MUST be raised.
+          </li>
+          <li>
+Let |base45Value| be |inputDocument| with the first five characters (`VC1-R`)
+removed.
+          </li>
+          <li>
+Let |cborldDocument| be the result of the
+<a data-cite="CID#base-decode">Base Decoding</a> algorithm, passing
+|base45Value| as |sourceEncoding|, the integer `45` as |sourceBase|, and
+`0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:` as the |baseAlphabet|.
+          </li>
+          <li>
+Let |jsonldDocument| be the result of
+<a data-cite="CBOR-LD#cbor-ld-to-json-ld-decompression-algorithm">
+CBOR-LD to JSON-LD Decompression Algorithm</a>, passing |cborldDocument| as
+the input. If a decoding error occurs, an error MUST be raised.
+          </li>
+          <li>
+Return |jsonldDocument| as the decoded [=verifiable credential=].
           </li>
         </ol>
 
