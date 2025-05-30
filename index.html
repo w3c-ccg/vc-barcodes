@@ -2356,7 +2356,13 @@ mapped to 156, but in places where multiple types are expressed in a VC, 157 is 
         <h3>
 Legacy CBOR-LD encoded credentials
         </h3>
-For testing if a CBOR-LD implementation that is not fully up to date is used. The process remains
+For testing if a CBOR-LD implementation that is not fully up to date is used.
+
+        <section>
+          <h4>
+CBOR-LD Version 6.X
+          </h4>
+The process remains
 the same, with the exception of the CBOR-LD decoding step, for which the following |appContextMap|
 should be used:
           <pre class="example nohighlight"
@@ -2366,44 +2372,82 @@ appContextMap:
 ['https://w3id.org/vc-barcodes/v1', 32769],
 ['https://w3id.org/utopia/v2', 32770]]
           </pre>
-        <section>
-          <h4>Utopia Driver's License</h4>
-          <figure id="dl-barcode-legacy">
-            <img style="margin: auto; display: block; border-radius:15px; width: 80%;"
-                 src="diagrams/dl-barcode-legacy.png"
-                 alt="A VCB from a Utopia driver's license encoded with legacy CBOR-LD.">
-            <figcaption style="text-align: center;">
-A VCB from a Utopia driver's license encoded with legacy CBOR-LD.
-            </figcaption>
-          </figure>
+          <section>
+            <h4>Utopia Driver's License</h4>
+            <figure id="dl-barcode-legacy">
+              <img style="margin: auto; display: block; border-radius:15px; width: 80%;"
+                   src="diagrams/dl-barcode-cborld-6.png"
+                   alt="A VCB from a Utopia driver's license encoded with legacy CBOR-LD.">
+              <figcaption style="text-align: center;">
+  A VCB from a Utopia driver's license encoded with legacy CBOR-LD.
+              </figcaption>
+            </figure>
+          </section>
+          <section>
+            <h5>Utopia Employment Authorization Document</h5>
+            <figure id="ead-qr-legacy">
+              <img style="margin: auto; display: block; border-radius:15px; width: 50%;"
+                   src="diagrams/ead-qr-cborld-6.png"
+                   alt="A VCB from a Utopia EAD encoded with legacy CBOR-LD.">
+              <figcaption style="text-align: center;">
+  A VCB from a Utopia EAD encoded with legacy CBOR-LD.
+              </figcaption>
+            </figure>
+            <p>
+  For use with the following MRZ:
+            </p>
+            <figure id="ead-back">
+              <img style="margin: auto; display: block; border-radius:15px; width: 50%;"
+                   src="diagrams/ead-back.png"
+                   alt="An MRZ on a Utopia Employment Authorization Document.">
+              <figcaption style="text-align: center;">
+  An MRZ on a Utopia Employment Authorization Document.
+              </figcaption>
+            </figure>
+          </section>
         </section>
         <section>
-          <h5>Utopia Employment Authorization Document</h5>
-          <figure id="ead-qr-legacy">
-            <img style="margin: auto; display: block; border-radius:15px; width: 50%;"
-                 src="diagrams/ead-qr-legacy.png"
-                 alt="A VCB from a Utopia EAD encoded with legacy CBOR-LD.">
-            <figcaption style="text-align: center;">
-A VCB from a Utopia EAD encoded with legacy CBOR-LD.
-            </figcaption>
-          </figure>
-          <p>
-For use with the following MRZ:
-          </p>
-          <figure id="ead-back">
-            <img style="margin: auto; display: block; border-radius:15px; width: 50%;"
-                 src="diagrams/ead-back.png"
-                 alt="An MRZ on a Utopia Employment Authorization Document.">
-            <figcaption style="text-align: center;">
-An MRZ on a Utopia Employment Authorization Document.
-            </figcaption>
-          </figure>
+          <h4>
+CBOR-LD Version 7.X
+          </h4>
+          <section>
+            <h4>Utopia Driver's License</h4>
+            <figure id="dl-barcode-legacy">
+              <img style="margin: auto; display: block; border-radius:15px; width: 80%;"
+                   src="diagrams/dl-barcode-cborld-7.png"
+                   alt="A VCB from a Utopia driver's license encoded with legacy CBOR-LD.">
+              <figcaption style="text-align: center;">
+  A VCB from a Utopia driver's license encoded with legacy CBOR-LD.
+              </figcaption>
+            </figure>
+          </section>
+          <section>
+            <h5>Utopia Employment Authorization Document</h5>
+            <figure id="ead-qr-legacy">
+              <img style="margin: auto; display: block; border-radius:15px; width: 50%;"
+                   src="diagrams/ead-qr-cborld-7.png"
+                   alt="A VCB from a Utopia EAD encoded with legacy CBOR-LD.">
+              <figcaption style="text-align: center;">
+  A VCB from a Utopia EAD encoded with legacy CBOR-LD.
+              </figcaption>
+            </figure>
+            <p>
+  For use with the following MRZ:
+            </p>
+            <figure id="ead-back">
+              <img style="margin: auto; display: block; border-radius:15px; width: 50%;"
+                   src="diagrams/ead-back.png"
+                   alt="An MRZ on a Utopia Employment Authorization Document.">
+              <figcaption style="text-align: center;">
+  An MRZ on a Utopia Employment Authorization Document.
+              </figcaption>
+            </figure>
+          </section>
         </section>
       </section>
     </section>
     <section class="informative">
       <h2>Revision History</h2>
-
       <p>
 This section contains the substantive changes that have been made to this
 specification over time.
